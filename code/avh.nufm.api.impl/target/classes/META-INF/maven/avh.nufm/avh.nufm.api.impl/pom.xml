@@ -1,0 +1,46 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>avh.nufm</groupId>
+  <artifactId>avh.nufm.api.impl</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>avh.nufm.api.impl</name>
+  <description>nufm api implementation</description>
+  <packaging>jar</packaging>
+  <properties>
+	<java.version>17</java.version>
+	<maven.compiler.source>17</maven.compiler.source>
+	<maven.compiler.target>17</maven.compiler.target>
+  </properties>
+  <dependencies>
+	<dependency>
+		<groupId>avh.nufm</groupId>
+		<artifactId>avh.nufm.business.model</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-web</artifactId>
+		<version>2.6.7</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-security</artifactId>
+		<version>2.6.7</version>
+	</dependency>
+	<dependency>
+		<groupId>org.postgresql</groupId>
+		<artifactId>postgresql</artifactId>
+		<version>42.2.22</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-data-jpa</artifactId>
+		<version>2.5.2</version>
+	</dependency>
+	<dependency>
+		<groupId>avh.nufm</groupId>
+		<artifactId>avh.nufm.security</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</dependency>
+	</dependencies>
+</project>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+	<persistence-unit name="avh.nufm.business.model">
+		<class>avh.nufm.business.model.Attendance</class>
+		<class>avh.nufm.business.model.Contractor</class>
+		<class>avh.nufm.business.model.Equipment</class>
+		<class>avh.nufm.business.model.Facility</class>
+		<class>avh.nufm.business.model.FacilityType</class>
+		<class>avh.nufm.business.model.Invoice</class>
+		<class>avh.nufm.business.model.NufmRole</class>
+		<class>avh.nufm.business.model.NufmUser</class>
+		<class>avh.nufm.business.model.Project</class>
+		<class>avh.nufm.business.model.ProjectWorker</class>
+		<class>avh.nufm.business.model.SafetyMaterial</class>
+		<class>avh.nufm.business.model.SafetyWorker</class>
+		<class>avh.nufm.business.model.Specialization</class>
+		<class>avh.nufm.business.model.Task</class>
+		<class>avh.nufm.business.model.TaskNotification</class>
+		<class>avh.nufm.business.model.TaskRequest</class>
+		<class>avh.nufm.business.model.TaskType</class>
+		<class>avh.nufm.business.model.UserRole</class>
+		<class>avh.nufm.business.model.WorkerSchedule</class>
+		<class>avh.nufm.business.model.WorkerTask</class>
+	</persistence-unit>
+</persistence>
