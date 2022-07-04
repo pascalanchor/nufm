@@ -19,9 +19,13 @@ public class Specialization implements Serializable {
 
 	private String name;
 
-	//bi-directional many-to-one association to NufmUser
+	//bi-directional many-to-one association to UserSpecialization
 	@OneToMany(mappedBy="specialization")
-	private List<NufmUser> nufmUsers;
+	private List<UserSpecialization> userSpecializations;
+
+//	//bi-directional many-to-one association to UserSpecialization
+//	@OneToMany(mappedBy="specialization2")
+//	private List<UserSpecialization> userSpecializations2;
 
 	public Specialization() {
 	}
@@ -42,26 +46,48 @@ public class Specialization implements Serializable {
 		this.name = name;
 	}
 
-	public List<NufmUser> getNufmUsers() {
-		return this.nufmUsers;
+	public List<UserSpecialization> getUserSpecializations() {
+		return this.userSpecializations;
 	}
 
-	public void setNufmUsers(List<NufmUser> nufmUsers) {
-		this.nufmUsers = nufmUsers;
+	public void setUserSpecializations(List<UserSpecialization> userSpecializations) {
+		this.userSpecializations = userSpecializations;
 	}
 
-	public NufmUser addNufmUser(NufmUser nufmUser) {
-		getNufmUsers().add(nufmUser);
-		nufmUser.setSpecialization(this);
+	public UserSpecialization addUserSpecializations1(UserSpecialization userSpecializations) {
+		getUserSpecializations().add(userSpecializations);
+		userSpecializations.setSpecialization(this);
 
-		return nufmUser;
+		return userSpecializations;
 	}
 
-	public NufmUser removeNufmUser(NufmUser nufmUser) {
-		getNufmUsers().remove(nufmUser);
-		nufmUser.setSpecialization(null);
+	public UserSpecialization removeUserSpecializations(UserSpecialization userSpecializations) {
+		getUserSpecializations().remove(userSpecializations);
+		userSpecializations.setSpecialization(null);
 
-		return nufmUser;
+		return userSpecializations;
 	}
+
+//	public List<UserSpecialization> getUserSpecializations2() {
+//		return this.userSpecializations2;
+//	}
+//
+//	public void setUserSpecializations2(List<UserSpecialization> userSpecializations2) {
+//		this.userSpecializations2 = userSpecializations2;
+//	}
+//
+//	public UserSpecialization addUserSpecializations2(UserSpecialization userSpecializations2) {
+//		getUserSpecializations2().add(userSpecializations2);
+//		userSpecializations2.setSpecialization2(this);
+//
+//		return userSpecializations2;
+//	}
+//
+//	public UserSpecialization removeUserSpecializations2(UserSpecialization userSpecializations2) {
+//		getUserSpecializations2().remove(userSpecializations2);
+//		userSpecializations2.setSpecialization2(null);
+//
+//		return userSpecializations2;
+//	}
 
 }

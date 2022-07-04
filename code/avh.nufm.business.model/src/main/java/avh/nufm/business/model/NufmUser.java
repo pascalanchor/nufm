@@ -19,8 +19,10 @@ public class NufmUser implements Serializable {
 	@Id
 	private String eid;
 
-	@Column(name="creation_date")
-	private Timestamp creationDate;
+	@Column(name="created_at")
+	private Timestamp createdAt;
+
+	private Boolean enabled;
 
 	@Column(name="full_name")
 	private String fullName;
@@ -32,18 +34,20 @@ public class NufmUser implements Serializable {
 
 	private String phone;
 
+	@Column(name="updated_at")
+	private Timestamp updatedAt;
+
 	//bi-directional many-to-one association to Attendance
 	@OneToMany(mappedBy="nufmUser")
 	private List<Attendance> attendances;
 
+//	//bi-directional many-to-one association to ConfirmationToken
+//	@OneToMany(mappedBy="nufmUser")
+//	private List<ConfirmationToken> confirmationTokens;
+
 	//bi-directional many-to-one association to Facility
 	@OneToMany(mappedBy="nufmUser")
 	private List<Facility> facilities;
-
-	//bi-directional many-to-one association to Specialization
-	@ManyToOne
-	@JoinColumn(name="spec_id")
-	private Specialization specialization;
 
 	//bi-directional many-to-one association to ProjectWorker
 	@OneToMany(mappedBy="nufmUser")
@@ -73,6 +77,10 @@ public class NufmUser implements Serializable {
 	@OneToMany(mappedBy="nufmUser")
 	private List<UserRole> userRoles;
 
+	//bi-directional many-to-one association to UserSpecialization
+	@OneToMany(mappedBy="nufmUser")
+	private List<UserSpecialization> userSpecializations;
+
 	//bi-directional many-to-one association to WorkerSchedule
 	@OneToMany(mappedBy="nufmUser")
 	private List<WorkerSchedule> workerSchedules;
@@ -92,12 +100,20 @@ public class NufmUser implements Serializable {
 		this.eid = eid;
 	}
 
-	public Timestamp getCreationDate() {
-		return this.creationDate;
+	public Timestamp getCreatedAt() {
+		return this.createdAt;
 	}
 
-	public void setCreationDate(Timestamp creationDate) {
-		this.creationDate = creationDate;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Boolean getEnabled() {
+		return this.enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
 	}
 
 	public String getFullName() {
@@ -132,6 +148,14 @@ public class NufmUser implements Serializable {
 		this.phone = phone;
 	}
 
+	public Timestamp getUpdatedAt() {
+		return this.updatedAt;
+	}
+
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
 	public List<Attendance> getAttendances() {
 		return this.attendances;
 	}
@@ -154,6 +178,28 @@ public class NufmUser implements Serializable {
 		return attendance;
 	}
 
+//	public List<ConfirmationToken> getConfirmationTokens() {
+//		return this.confirmationTokens;
+//	}
+//
+//	public void setConfirmationTokens(List<ConfirmationToken> confirmationTokens) {
+//		this.confirmationTokens = confirmationTokens;
+//	}
+//
+//	public ConfirmationToken addConfirmationToken(ConfirmationToken confirmationToken) {
+//		getConfirmationTokens().add(confirmationToken);
+//		confirmationToken.setNufmUser(this);
+//
+//		return confirmationToken;
+//	}
+//
+//	public ConfirmationToken removeConfirmationToken(ConfirmationToken confirmationToken) {
+//		getConfirmationTokens().remove(confirmationToken);
+//		confirmationToken.setNufmUser(null);
+//
+//		return confirmationToken;
+//	}
+
 	public List<Facility> getFacilities() {
 		return this.facilities;
 	}
@@ -174,14 +220,6 @@ public class NufmUser implements Serializable {
 		facility.setNufmUser(null);
 
 		return facility;
-	}
-
-	public Specialization getSpecialization() {
-		return this.specialization;
-	}
-
-	public void setSpecialization(Specialization specialization) {
-		this.specialization = specialization;
 	}
 
 	public List<ProjectWorker> getProjectWorkers() {
@@ -336,6 +374,28 @@ public class NufmUser implements Serializable {
 		userRole.setNufmUser(null);
 
 		return userRole;
+	}
+
+	public List<UserSpecialization> getUserSpecializations() {
+		return this.userSpecializations;
+	}
+
+	public void setUserSpecializations(List<UserSpecialization> userSpecializations) {
+		this.userSpecializations = userSpecializations;
+	}
+
+	public UserSpecialization addUserSpecialization(UserSpecialization userSpecialization) {
+		getUserSpecializations().add(userSpecialization);
+		userSpecialization.setNufmUser(this);
+
+		return userSpecialization;
+	}
+
+	public UserSpecialization removeUserSpecialization(UserSpecialization userSpecialization) {
+		getUserSpecializations().remove(userSpecialization);
+		userSpecialization.setNufmUser(null);
+
+		return userSpecialization;
 	}
 
 	public List<WorkerSchedule> getWorkerSchedules() {

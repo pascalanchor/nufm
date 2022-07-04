@@ -48,6 +48,10 @@ public class NufmRepos {
 	private WorkerScheduleRepo workschrepo;
 	@Autowired
 	private WorkerTaskRepo worktaskrepo;
+	@Autowired
+	private ConfirmationTokenRepo confirmationTokenrepo;
+	@Autowired
+	private UserSpecializationRepo userSpecrepo;
 	
 	
 	// generate getters 
@@ -110,6 +114,13 @@ public class NufmRepos {
 	}
 	public WorkerTaskRepo getWorktaskrepo() {
 		return worktaskrepo;
+	}
+	public ConfirmationTokenRepo getConfirmationTokenRepo() {
+		return confirmationTokenrepo;
+	}
+	
+	public UserSpecializationRepo getUserSpecrepo() {
+		return userSpecrepo;
 	}
 	
 	

@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import avh.nufm.business.model.NufmUser;
 @Repository
 public interface NufmUserRepo extends CrudRepository<NufmUser, String>{
-
+	public NufmUser findByEid(String eid);
 }

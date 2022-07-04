@@ -2,6 +2,7 @@
 <persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
 	<persistence-unit name="avh.nufm.business.model">
 		<class>avh.nufm.business.model.Attendance</class>
+		<class>avh.nufm.business.model.ConfirmationToken</class>
 		<class>avh.nufm.business.model.Contractor</class>
 		<class>avh.nufm.business.model.Equipment</class>
 		<class>avh.nufm.business.model.Facility</class>
@@ -19,6 +20,7 @@
 		<class>avh.nufm.business.model.TaskRequest</class>
 		<class>avh.nufm.business.model.TaskType</class>
 		<class>avh.nufm.business.model.UserRole</class>
+		<class>avh.nufm.business.model.UserSpecialization</class>
 		<class>avh.nufm.business.model.WorkerSchedule</class>
 		<class>avh.nufm.business.model.WorkerTask</class>
 	</persistence-unit>
