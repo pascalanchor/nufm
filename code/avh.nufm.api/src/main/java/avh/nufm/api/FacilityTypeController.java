@@ -22,7 +22,7 @@ import avh.nufm.business.model.FacilityType;
 public class FacilityTypeController {
 	@Autowired private FacilityTypeControllerImpl fcti;
 	
-	@PostMapping("/api/public/facilityType/add")
+	@PostMapping("avh/nufm/v1/private/facilityType/add")
 	public ResponseEntity<FacilityTypeOut> addFacilityType(@RequestBody FacilityTypeIn fctin){
 		try
 		{
