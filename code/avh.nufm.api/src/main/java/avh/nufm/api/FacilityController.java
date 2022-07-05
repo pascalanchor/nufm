@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +24,7 @@ public class FacilityController {
 
 
 
-@PostMapping("avh/nufm/facility/define")//only administrator and owner can define new facility
+@PostMapping("avh/nufm/v1/public/facility/add")//only administrator and owner can define new facility
 public ResponseEntity<FacilityOut> createFacility(@RequestBody FacilityIn fc) {
 	
 	try {
@@ -37,7 +38,7 @@ public ResponseEntity<FacilityOut> createFacility(@RequestBody FacilityIn fc) {
 
 }
 
-@PutMapping("avh/nufm/facility/update")//only administrator and owner can define new facility
+@PutMapping("avh/nufm/v1/private/facility/update")//only administrator and owner can define new facility
 public ResponseEntity<FacilityOut> updateFaclity(
 		@RequestParam String facility_id,
 		@RequestBody FacilityIn fc) {
@@ -53,8 +54,8 @@ public ResponseEntity<FacilityOut> updateFaclity(
 }
 
 
-@GetMapping("avh/nufm/facility/getById")
-public ResponseEntity<FacilityOut> getFacilityById(@RequestParam("Facility_id") String fid) {
+@GetMapping("avh/nufm/v1/private/facilies/{facilityId}")
+public ResponseEntity<FacilityOut> getFacilityById(@PathVariable("facilityId") String fid) {
 	try {
 		FacilityOut res=Transformer.FacilityFromModel(fci.getFacilityById(fid));
 		return ResponseEntity.ok().body(res);
@@ -62,5 +63,7 @@ public ResponseEntity<FacilityOut> getFacilityById(@RequestParam("Facility_id") 
 		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());
 	}
 }
+
+
 
 }

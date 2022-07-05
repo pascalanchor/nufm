@@ -1,13 +1,19 @@
 package avh.nufm.api.model;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import avh.nufm.api.model.in.FacilityIn;
 import avh.nufm.api.model.in.FacilityTypeIn;
+import avh.nufm.api.model.in.SpecializationIn;
 import avh.nufm.api.model.out.FacilityOut;
 import avh.nufm.api.model.out.FacilityTypeOut;
+import avh.nufm.api.model.out.SpecializationOut;
 import avh.nufm.business.model.Facility;
 import avh.nufm.business.model.FacilityType;
 import avh.nufm.business.model.NufmUser;
+import avh.nufm.business.model.Specialization;
 
 public class Transformer {
 
@@ -58,4 +64,35 @@ public class Transformer {
 		
 		return res;
 	}
+	
+	//specialization transformers
+	
+	public static Specialization specToModel(SpecializationIn specIn) {
+		Specialization res=new Specialization();
+		res.setName(specIn.getName());
+		return res;
+	}
+	
+	public static List<FacilityTypeOut> listFTypeFromIterable(Iterable<FacilityType> ftypIt){
+		List<FacilityTypeOut> fctypeList=new ArrayList<>();
+		for(FacilityType itr:ftypIt)
+		{
+			FacilityTypeOut fcto=FacTypeFromModel(itr);
+			fctypeList.add(fcto);
+		}
+		
+		return fctypeList;
+		
+	}
+	
+	public static SpecializationOut specFromModel(Specialization spec){
+		SpecializationOut res=new SpecializationOut();
+		res.setName(spec.getName());
+		res.setEid(spec.getEid());
+		
+		return res;
+	}
+	
+	
+	
 }

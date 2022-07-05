@@ -1,5 +1,7 @@
 package avh.nufm.api;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,19 +22,29 @@ import avh.nufm.business.model.FacilityType;
 public class FacilityTypeController {
 	@Autowired private FacilityTypeControllerImpl fcti;
 	
-	@PostMapping("avh/nufm/v1/private/facilityType/add")
+	@PostMapping("/api/public/facilityType/add")
 	public ResponseEntity<FacilityTypeOut> addFacilityType(@RequestBody FacilityTypeIn fctin){
 		try
 		{
 			System.out.print("request recieved-----------------------"); 
 			FacilityType factype=Transformer.FacTypeToModel(fctin);
 			FacilityTypeOut factOut=Transformer.FacTypeFromModel(fcti.addFacType(factype));
-			factOut.setName("fuck it");
 			return ResponseEntity.ok().body(factOut);
 			
 		}catch(Exception e)
 		{
 			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());
+		}
+	}
+	
+	@GetMapping("avh/nufm/v1/private/facilityTypes")
+	public ResponseEntity<List<FacilityTypeOut>> getallFacilityTypes(){
+		try {
+			List<FacilityTypeOut> faclist=Transformer.listFTypeFromIterable(fcti.getAllFacilityTypes());
+			return ResponseEntity.ok().body(faclist);
+		}catch(Exception e)
+		{
+			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED,e.getMessage());
 		}
 	}
 	
