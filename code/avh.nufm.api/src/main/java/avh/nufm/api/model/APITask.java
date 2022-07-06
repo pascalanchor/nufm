@@ -7,7 +7,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Specialization {
-	private String name;
+public class APITask {
 
 }

@@ -1,6 +1,6 @@
 package avh.nufm.api.model.in;
 
-import avh.nufm.api.model.FacilityType;
+import avh.nufm.api.model.APITaskType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,6 +8,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class FacilityTypeIn extends FacilityType{
-	
+public class APITaskTypeIn extends APITaskType{
+
 }

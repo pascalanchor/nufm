@@ -10,8 +10,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import avh.nufm.api.impl.SpecializationControllerImpl;
 import avh.nufm.api.model.Transformer;
-import avh.nufm.api.model.in.SpecializationIn;
-import avh.nufm.api.model.out.SpecializationOut;
+import avh.nufm.api.model.in.APISpecializationIn;
+import avh.nufm.api.model.out.APISpecializationOut;
 import avh.nufm.business.model.Specialization;
 
 @RestController
@@ -20,12 +20,12 @@ public class SpecializationController {
 
 
 @PostMapping("avh/nufm/v1/private/specialization/add")
-public ResponseEntity<SpecializationOut> addSpecialization(
-		@RequestBody SpecializationIn specin){
+public ResponseEntity<APISpecializationOut> addSpecialization(
+		@RequestBody APISpecializationIn specin){
 	
 	try {
 		Specialization spec=Transformer.specToModel(specin);
-		SpecializationOut res=Transformer.specFromModel(speci.addSpecialization(spec));
+		APISpecializationOut res=Transformer.specFromModel(speci.addSpecialization(spec));
 		return ResponseEntity.ok().body(res);
 		
 	} catch (Exception e) {
