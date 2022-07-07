@@ -2,7 +2,7 @@ package avh.nufm.security.common;
 
 public interface SecurityCte {
 	//public path
-	public static final String PublicServletPath = "/api/public";
+	public static final String PublicServletPath = "/avh/nufm/v1/public";
 	//login path
 	public static final String LoginServletPath = PublicServletPath + "/login";
 	//register path
@@ -22,4 +22,6 @@ public interface SecurityCte {
 	public static final String RolePuchasingOfficer = "ROLE_PURCHASINGOFFICER";
 	public static final String RoleAdmin = "ROLE_ADMIN";
 	public static final String RoleOccupant = "ROLE_OCCUPANT";
+	//Private path
+	public static final String PrivateServletPath = "/avh/nufm/v1/private";
 }

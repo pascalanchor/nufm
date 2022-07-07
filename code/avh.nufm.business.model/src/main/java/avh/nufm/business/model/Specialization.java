@@ -19,13 +19,11 @@ public class Specialization implements Serializable {
 
 	private String name;
 
+	private String type;
+
 	//bi-directional many-to-one association to UserSpecialization
 	@OneToMany(mappedBy="specialization")
 	private List<UserSpecialization> userSpecializations;
-
-//	//bi-directional many-to-one association to UserSpecialization
-//	@OneToMany(mappedBy="specialization2")
-//	private List<UserSpecialization> userSpecializations2;
 
 	public Specialization() {
 	}
@@ -46,6 +44,14 @@ public class Specialization implements Serializable {
 		this.name = name;
 	}
 
+	public String getType() {
+		return this.type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public List<UserSpecialization> getUserSpecializations() {
 		return this.userSpecializations;
 	}
@@ -54,40 +60,18 @@ public class Specialization implements Serializable {
 		this.userSpecializations = userSpecializations;
 	}
 
-	public UserSpecialization addUserSpecializations1(UserSpecialization userSpecializations) {
-		getUserSpecializations().add(userSpecializations);
-		userSpecializations.setSpecialization(this);
+	public UserSpecialization addUserSpecialization(UserSpecialization userSpecialization) {
+		getUserSpecializations().add(userSpecialization);
+		userSpecialization.setSpecialization(this);
 
-		return userSpecializations;
+		return userSpecialization;
 	}
 
-	public UserSpecialization removeUserSpecializations(UserSpecialization userSpecializations) {
-		getUserSpecializations().remove(userSpecializations);
-		userSpecializations.setSpecialization(null);
+	public UserSpecialization removeUserSpecialization(UserSpecialization userSpecialization) {
+		getUserSpecializations().remove(userSpecialization);
+		userSpecialization.setSpecialization(null);
 
-		return userSpecializations;
+		return userSpecialization;
 	}
-
-//	public List<UserSpecialization> getUserSpecializations2() {
-//		return this.userSpecializations2;
-//	}
-//
-//	public void setUserSpecializations2(List<UserSpecialization> userSpecializations2) {
-//		this.userSpecializations2 = userSpecializations2;
-//	}
-//
-//	public UserSpecialization addUserSpecializations2(UserSpecialization userSpecializations2) {
-//		getUserSpecializations2().add(userSpecializations2);
-//		userSpecializations2.setSpecialization2(this);
-//
-//		return userSpecializations2;
-//	}
-//
-//	public UserSpecialization removeUserSpecializations2(UserSpecialization userSpecializations2) {
-//		getUserSpecializations2().remove(userSpecializations2);
-//		userSpecializations2.setSpecialization2(null);
-//
-//		return userSpecializations2;
-//	}
 
 }

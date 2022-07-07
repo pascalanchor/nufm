@@ -33,7 +33,6 @@ import avh.nufm.business.model.NufmUser;
 import avh.nufm.business.model.repository.NufmRepos;
 import avh.nufm.security.jwt.JWTProvider;
 import avh.nufm.security.common.SecurityCte;
-import avh.nufm.api.common.RandomOTPGenerator;
 import avh.nufm.api.email.EmailBuilder;
 import avh.nufm.api.email.EmailService;
 import avh.nufm.api.model.in.APIUserIn;
@@ -52,7 +51,6 @@ public class SecurityController {
 	@Autowired PasswordEncoder pHasher;
 	@Autowired EmailService emailSender;
 	@Autowired private EmailBuilder emailBuilder;
-	@Autowired private RandomOTPGenerator rog;
 	
     @PostMapping(SecurityCte.LoginServletPath)
     public ResponseEntity<APIUserOut> login(@RequestParam String username, @RequestParam String password) {
@@ -114,7 +112,7 @@ public class SecurityController {
     		ct.setToken(tok);
     		rep.getConfirmationTokenRepo().save(ct);
 
-    		String link = "http://localhost:6338/api/public/register/confirm/" + tok;
+    		String link = "http://localhost:6338"+SecurityCte.PublicServletPath+"/register/confirm/" + tok;
     		String mail = emailBuilder.activateEmail(usr.getFullName(), link);
     		emailSender.send(usr.getEmail(), mail);
     		

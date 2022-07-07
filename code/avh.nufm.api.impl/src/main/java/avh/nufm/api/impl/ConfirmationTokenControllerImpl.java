@@ -42,5 +42,11 @@ public class ConfirmationTokenControllerImpl {
 		ct.setConfirmedAt(Timestamp.valueOf(LocalDateTime.now()));
 		repo.getConfirmationTokenRepo().save(ct);
 	}
+	
+	@Transactional 
+	public void deleteToken(String id) {
+		ConfirmationToken ct = repo.getConfirmationTokenRepo().findByIid(id);
+		repo.getConfirmationTokenRepo().delete(ct);
+	}
 
 }

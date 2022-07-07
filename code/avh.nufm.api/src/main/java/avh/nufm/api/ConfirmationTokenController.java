@@ -15,6 +15,7 @@ import avh.nufm.api.impl.ConfirmationTokenControllerImpl;
 import avh.nufm.api.impl.UserControllerImpl;
 import avh.nufm.business.model.ConfirmationToken;
 import avh.nufm.business.model.NufmUser;
+import avh.nufm.security.common.SecurityCte;
 
 @RestController
 public class ConfirmationTokenController {
@@ -23,7 +24,7 @@ public class ConfirmationTokenController {
 	@Autowired
 	private UserControllerImpl userSvc;
 	
-	@GetMapping("api/public/register/confirm/{token}")
+	@GetMapping(SecurityCte.PublicServletPath+"/register/confirm/{token}")
 	public ResponseEntity<String> confirmToken(@PathVariable("token") String token) {
 		try {
 			ConfirmationToken ct = svc.getToken(token);

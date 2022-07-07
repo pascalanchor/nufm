@@ -27,11 +27,6 @@ public class UserSpecialization implements Serializable {
 	@JoinColumn(name="specialization_id")
 	private Specialization specialization;
 
-//	//bi-directional many-to-one association to Specialization
-//	@ManyToOne
-//	@JoinColumn(name="specialization_id")
-//	private Specialization specialization2;
-
 	public UserSpecialization() {
 	}
 
@@ -58,13 +53,5 @@ public class UserSpecialization implements Serializable {
 	public void setSpecialization(Specialization specialization) {
 		this.specialization = specialization;
 	}
-
-//	public Specialization getSpecialization2() {
-//		return this.specialization2;
-//	}
-//
-//	public void setSpecialization2(Specialization specialization2) {
-//		this.specialization2 = specialization2;
-//	}
 
 }
