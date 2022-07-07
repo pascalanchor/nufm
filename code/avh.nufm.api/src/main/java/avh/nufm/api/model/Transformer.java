@@ -8,11 +8,13 @@ import avh.nufm.api.model.in.APIFacilityIn;
 import avh.nufm.api.model.in.APIFacilityTypeIn;
 import avh.nufm.api.model.in.APIProjectIn;
 import avh.nufm.api.model.in.APISpecializationIn;
+import avh.nufm.api.model.in.APITaskIn;
 import avh.nufm.api.model.in.APITaskTypeIn;
 import avh.nufm.api.model.out.APIProjectOut;
 import avh.nufm.api.model.out.APIFacilityOut;
 import avh.nufm.api.model.out.APIFacilityTypeOut;
 import avh.nufm.api.model.out.APISpecializationOut;
+import avh.nufm.api.model.out.APITaskOut;
 import avh.nufm.api.model.out.APITaskTypeOut;
 import avh.nufm.business.model.Contractor;
 import avh.nufm.business.model.Facility;
@@ -20,6 +22,7 @@ import avh.nufm.business.model.FacilityType;
 import avh.nufm.business.model.NufmUser;
 import avh.nufm.business.model.Project;
 import avh.nufm.business.model.Specialization;
+import avh.nufm.business.model.Task;
 import avh.nufm.business.model.TaskType;
 
 public class Transformer {
@@ -177,4 +180,57 @@ public class Transformer {
 	}
 	
 	//------------task type --------------------
+	
+	//------------task--------------------
+	
+	public static Task TaskToModel(APITaskIn tkin) {
+		Task res=new Task();
+		res.setComment(tkin.getComment());
+		res.setDateFrom(tkin.getDate_from());
+		res.setDateTo(tkin.getDate_to());
+		res.setDocumentId(tkin.getDocument_id());
+		Facility fc=new Facility();
+		fc.setEid(tkin.getFacility_id());
+		res.setFacility(fc);
+		res.setName(tkin.getName());
+		Project prj=new Project();
+		prj.setEid(tkin.getProject_id());
+		res.setProject(prj);
+		res.setStatus(tkin.getStatus());
+		TaskType type=new TaskType();
+		type.setEid(tkin.getType_id());
+		res.setTaskType(type);
+				
+		return res;
+	}
+	
+	public static APITaskOut TastFromModel(Task tkin) {
+		APITaskOut res=new APITaskOut();
+		res.setEid(tkin.getEid());
+		res.setComment(tkin.getComment());
+		res.setDate_from(tkin.getDateFrom());
+		res.setDate_from(tkin.getDateFrom());
+		res.setDocument_id(tkin.getDocumentId());
+		res.setFacility_id(tkin.getFacility().getEid());
+		res.setName(tkin.getName());
+		Project prj=new Project();
+		res.setProject_id(tkin.getProject().getEid());
+		res.setStatus(tkin.getStatus());
+		res.setType_id(tkin.getTaskType().getEid());
+		
+		return res;
+	}
+	
+	public static List<APITaskOut> listTaskFromItr(Iterable<Task> tskitr){
+		List<APITaskOut> res=new ArrayList<>();
+		for(Task itr:tskitr) {
+			APITaskOut tsko=Transformer.TastFromModel(itr);
+			res.add(tsko);
+		}
+		
+		return res;
+	}
+	
+	
+	//------------task--------------------
 }

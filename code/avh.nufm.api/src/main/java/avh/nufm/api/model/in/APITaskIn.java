@@ -1,5 +1,6 @@
 package avh.nufm.api.model.in;
 
+import avh.nufm.api.model.APITask;
 import avh.nufm.api.model.APITaskType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class APITaskIn extends APITaskType{
+public class APITaskIn extends APITask{
 
 }
