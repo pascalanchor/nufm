@@ -7,13 +7,11 @@ import java.util.List;
 import avh.nufm.api.model.in.APIFacilityIn;
 import avh.nufm.api.model.in.APIFacilityTypeIn;
 import avh.nufm.api.model.in.APIProjectIn;
-import avh.nufm.api.model.in.APISpecializationIn;
 import avh.nufm.api.model.in.APITaskIn;
 import avh.nufm.api.model.in.APITaskTypeIn;
 import avh.nufm.api.model.out.APIProjectOut;
 import avh.nufm.api.model.out.APIFacilityOut;
 import avh.nufm.api.model.out.APIFacilityTypeOut;
-import avh.nufm.api.model.out.APISpecializationOut;
 import avh.nufm.api.model.out.APITaskOut;
 import avh.nufm.api.model.out.APITaskTypeOut;
 import avh.nufm.business.model.Contractor;
@@ -77,11 +75,7 @@ public class Transformer {
 	
 	//specialization transformers
 	
-	public static Specialization specToModel(APISpecializationIn specIn) {
-		Specialization res=new Specialization();
-		res.setName(specIn.getName());
-		return res;
-	}
+	
 	
 	public static List<APIFacilityTypeOut> listFTypeFromIterable(Iterable<FacilityType> ftypIt){
 		List<APIFacilityTypeOut> fctypeList=new ArrayList<>();
@@ -95,13 +89,6 @@ public class Transformer {
 		
 	}
 	
-	public static APISpecializationOut specFromModel(Specialization spec){
-		APISpecializationOut res=new APISpecializationOut();
-		res.setName(spec.getName());
-		res.setEid(spec.getEid());
-		
-		return res;
-	}
 	
 	//---------------------project transformer ---------------------
 	public static APIProjectOut ProjectFromModel(Project prj) {
