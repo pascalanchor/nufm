@@ -1,6 +1,5 @@
 package avh.nufm.api;
 
-import java.awt.datatransfer.SystemFlavorMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -15,7 +15,6 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import avh.nufm.api.impl.errors.BusinessException;
-import avh.nufm.api.impl.logic.Especialization;
 import avh.nufm.business.model.NufmRole;
 import avh.nufm.business.model.NufmUser;
 import avh.nufm.business.model.Specialization;

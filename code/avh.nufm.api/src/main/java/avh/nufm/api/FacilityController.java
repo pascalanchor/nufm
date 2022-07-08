@@ -3,6 +3,7 @@ package avh.nufm.api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,8 +23,8 @@ import avh.nufm.business.model.Facility;
 public class FacilityController {
 @Autowired private FacilityControllerImpl fci;
 
-
-@PostMapping("avh/nufm/v1/public/facility/add")//only administrator and owner can define new facility
+@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
+@PostMapping("avh/nufm/v1/private/facility/add")//only administrator and owner can define new facility
 public ResponseEntity<APIFacilityOut> createFacility(@RequestBody APIFacilityIn fc) {
 	
 	try {

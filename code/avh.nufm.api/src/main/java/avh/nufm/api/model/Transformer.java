@@ -19,7 +19,6 @@ import avh.nufm.business.model.Facility;
 import avh.nufm.business.model.FacilityType;
 import avh.nufm.business.model.NufmUser;
 import avh.nufm.business.model.Project;
-import avh.nufm.business.model.Specialization;
 import avh.nufm.business.model.Task;
 import avh.nufm.business.model.TaskType;
 
@@ -200,7 +199,6 @@ public class Transformer {
 		res.setDocument_id(tkin.getDocumentId());
 		res.setFacility_id(tkin.getFacility().getEid());
 		res.setName(tkin.getName());
-		Project prj=new Project();
 		res.setProject_id(tkin.getProject().getEid());
 		res.setStatus(tkin.getStatus());
 		res.setType_id(tkin.getTaskType().getEid());
