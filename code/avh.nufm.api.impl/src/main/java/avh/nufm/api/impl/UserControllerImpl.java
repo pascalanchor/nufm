@@ -32,19 +32,6 @@ public class UserControllerImpl {
 	public NufmUser createUser(NufmUser u) {
 		if(u.getFullName().equals(""))
 			throw new BusinessException("user name cannot be null !!");
-		//check if duplicated name
-		List<NufmUser> ulist=repo.getNfuserrepo().findByFullName(u.getFullName());
-		if((ulist.size()>0)&&(ulist!=null))
-			throw new BusinessException(String.format("the user name :%s is already exist", u.getFullName()));
-		//check the specialization here
-		List<UserSpecialization> speclist=u.getUserSpecializations();
-		if((speclist.size()<=0) || speclist==null)
-			throw new BusinessException("you must set the user specializations !! ");
-		//check the specialization format
-		Especialization espec=Especialization.fromString(speclist.get(0).getSpecialization().getName());
-		if(espec==null)
-			throw new BusinessException(String.format("invalid specialization format :%s", speclist.get(0).getSpecialization().getName()));
-		
 		repo.getNfuserrepo().save(u);
 		return u;
 	}

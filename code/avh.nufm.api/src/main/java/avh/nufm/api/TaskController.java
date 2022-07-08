@@ -9,11 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import avh.nufm.api.impl.TaskControllerImpl;
-import avh.nufm.api.impl.errors.BusinessException;
 import avh.nufm.api.model.Transformer;
 import avh.nufm.api.model.in.APITaskIn;
 import avh.nufm.api.model.out.APITaskOut;
@@ -58,4 +59,14 @@ public class TaskController {
 		}
 	}
 
+	@PutMapping("avh/nufm/v1/private/task/update/{taskId}")
+	public ResponseEntity<APITaskOut> updateTask(@PathVariable("taskId") String taskId,@RequestBody APITaskIn newTask){
+		try {
+			Task tsk=Transformer.TaskToModel(newTask);
+			APITaskOut res=Transformer.TastFromModel(tkimp.updateTask(taskId, tsk));
+			return ResponseEntity.ok().body(res);
+		}catch(Exception e) {
+			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED,e.getMessage());
+		}
+	}
 }

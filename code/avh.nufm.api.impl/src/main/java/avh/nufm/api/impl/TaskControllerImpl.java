@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import avh.nufm.api.impl.errors.BusinessException;
+import avh.nufm.api.impl.logic.ETaskStatus;
 import avh.nufm.business.model.Facility;
 import avh.nufm.business.model.Project;
 import avh.nufm.business.model.Task;
@@ -27,7 +28,9 @@ public Task addTask(Task tk) {
 	if(tk.getDateFrom().after(tk.getDateTo()))
 		throw new BusinessException("dateFrom cannot be after the date_to");
 	//check the task status using enum
-	//
+	ETaskStatus sts=ETaskStatus.fromString(tk.getStatus());
+	if(sts==null)
+		throw new BusinessException(String.format("the status :%s not in a valid format !!", tk.getStatus()));
 	//
 	//check the facility
 	Optional<Facility> fcop=repo.getFacrepo().findById(tk.getFacility().getEid());
@@ -72,5 +75,44 @@ public Task getTaskById(String id) {
 	return tskop.get();
 }
 	
+
+
+public Task updateTask(String id,Task newTask) {
+	if(id==null || id.equals(""))
+		throw new BusinessException("you must enter the task id !!");
+	//check the new task properties
+	if(newTask.getName()==null || newTask.getName().equals(""))
+		throw new BusinessException("you must enter the task name !!");
+	if(newTask.getDateFrom()==null || newTask.getDateTo()==null)
+		throw new BusinessException("you must enter the date_from and the date_to !!");
+	if(newTask.getDateFrom().after(newTask.getDateTo()))
+		throw new BusinessException("dateFrom cannot be after the date_to");
+	//check the task status using enum
+	//
+	//
+	//check the facility
+	Optional<Facility> fcop=repo.getFacrepo().findById(newTask.getFacility().getEid());
+	if(fcop==null || fcop.isEmpty()) 
+		throw new BusinessException(String.format("error facility id:%s", newTask.getFacility().getEid()));
 	
+	//check the project
+	Optional<Project> prjop=repo.getProjrepo().findById(newTask.getProject().getEid());
+	if(prjop==null || prjop.isEmpty()) 
+		throw new BusinessException(String.format("error project id:%s", newTask.getProject().getEid()));
+	//check the type
+	Optional<TaskType> typop=repo.getTasktyperepo().findById(newTask.getTaskType().getEid());
+	if(typop==null || typop.isEmpty()) 
+		throw new BusinessException(String.format("error task type  id:%s", newTask.getTaskType().getEid()));
+	
+	//complete definitions
+	newTask.setEid(UUID.randomUUID().toString());
+	newTask.setFacility(fcop.get());
+	newTask.setProject(prjop.get());
+	newTask.setTaskType(typop.get());
+	
+	repo.getTaskrepo().save(newTask);
+	
+	
+	return newTask;
+}
 }
