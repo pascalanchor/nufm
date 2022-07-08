@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 import avh.nufm.business.model.Facility;
 @Repository
 public interface FacilityRepo extends CrudRepository<Facility, String>{
-
 }

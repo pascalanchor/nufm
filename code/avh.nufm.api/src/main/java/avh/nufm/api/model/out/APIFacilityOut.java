@@ -13,7 +13,5 @@ import lombok.Setter;
 public class APIFacilityOut extends APIFacility{
 private String eid;
 private Timestamp createdAt;
-private String occupant_id;
-
-
+private String occupantName;
 }

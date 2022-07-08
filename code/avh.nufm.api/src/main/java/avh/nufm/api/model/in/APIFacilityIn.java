@@ -12,7 +12,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class APIFacilityIn extends APIFacility{
-
-private String parent_id;
-private String occupant_id;
+	private String occupantId;
 }

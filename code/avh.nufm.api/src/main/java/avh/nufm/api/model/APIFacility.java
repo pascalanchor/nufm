@@ -10,11 +10,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class APIFacility {
-	
+public class APIFacility {	
+	private String parentId;
 	private String name;
+	private String type;
 	private String location;
-	private String type_id;
-	
-	
 }
