@@ -47,6 +47,7 @@ public class FacilityControllerImpl {
 		
 	}
 	
+	
 	public Facility getFacilityById(String fid) {
 		if(fid==null || fid=="")
 			throw new BusinessException("facility id must not be null !!");
@@ -58,6 +59,7 @@ public class FacilityControllerImpl {
 		return fac;
 	}
 	
+	@Transactional
 	public Facility updateFacility(String fid,Facility newFacility) {
 		//get the old facility by id
 		Optional<Facility> flist=repo.getFacrepo().findById(fid);

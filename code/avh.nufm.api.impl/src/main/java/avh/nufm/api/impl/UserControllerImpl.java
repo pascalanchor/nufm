@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import avh.nufm.api.impl.errors.BusinessException;
+import avh.nufm.api.impl.logic.Especialization;
 import avh.nufm.business.model.NufmRole;
 import avh.nufm.business.model.NufmUser;
 import avh.nufm.business.model.Specialization;
@@ -29,6 +31,8 @@ public class UserControllerImpl {
 	
 	@Transactional
 	public NufmUser createUser(NufmUser u) {
+		if(u.getFullName().equals(""))
+			throw new BusinessException("user name cannot be null !!");
 		repo.getNfuserrepo().save(u);
 		return u;
 	}

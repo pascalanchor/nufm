@@ -7,6 +7,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class FacilityType {
+public class APIFacilityType {
 	private String name;
 }

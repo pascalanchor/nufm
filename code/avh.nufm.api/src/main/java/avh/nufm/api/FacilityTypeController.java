@@ -1,5 +1,7 @@
 package avh.nufm.api;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +14,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import avh.nufm.api.impl.FacilityTypeControllerImpl;
 import avh.nufm.api.model.Transformer;
-import avh.nufm.api.model.in.FacilityTypeIn;
-import avh.nufm.api.model.out.FacilityTypeOut;
+import avh.nufm.api.model.in.APIFacilityTypeIn;
+import avh.nufm.api.model.out.APIFacilityTypeOut;
 import avh.nufm.business.model.FacilityType;
 
 @RestController
@@ -21,13 +23,12 @@ public class FacilityTypeController {
 	@Autowired private FacilityTypeControllerImpl fcti;
 	
 	@PostMapping("avh/nufm/v1/private/facilityType/add")
-	public ResponseEntity<FacilityTypeOut> addFacilityType(@RequestBody FacilityTypeIn fctin){
+	public ResponseEntity<APIFacilityTypeOut> addFacilityType(@RequestBody APIFacilityTypeIn fctin){
 		try
 		{
 			System.out.print("request recieved-----------------------"); 
 			FacilityType factype=Transformer.FacTypeToModel(fctin);
-			FacilityTypeOut factOut=Transformer.FacTypeFromModel(fcti.addFacType(factype));
-			factOut.setName("fuck it");
+			APIFacilityTypeOut factOut=Transformer.FacTypeFromModel(fcti.addFacType(factype));
 			return ResponseEntity.ok().body(factOut);
 			
 		}catch(Exception e)
@@ -36,11 +37,22 @@ public class FacilityTypeController {
 		}
 	}
 	
+	@GetMapping("avh/nufm/v1/private/facilityTypes")
+	public ResponseEntity<List<APIFacilityTypeOut>> getallFacilityTypes(){
+		try {
+			List<APIFacilityTypeOut> faclist=Transformer.listFTypeFromIterable(fcti.getAllFacilityTypes());
+			return ResponseEntity.ok().body(faclist);
+		}catch(Exception e)
+		{
+			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED,e.getMessage());
+		}
+	}
+	
 	@GetMapping("avh/nufm/v1/private/facilityTypes/{typeId}")
-	public ResponseEntity<FacilityTypeOut> getFacilityTypeById(@PathVariable("typeId") String typeId) {
+	public ResponseEntity<APIFacilityTypeOut> getFacilityTypeById(@PathVariable("typeId") String typeId) {
 		try {
 			FacilityType fct = fcti.getById(typeId);
-			FacilityTypeOut fctout = Transformer.FacTypeFromModel(fct);
+			APIFacilityTypeOut fctout = Transformer.FacTypeFromModel(fct);
 			return ResponseEntity.ok().body(fctout);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());

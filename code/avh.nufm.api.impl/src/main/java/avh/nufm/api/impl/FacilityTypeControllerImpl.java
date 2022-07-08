@@ -39,4 +39,11 @@ public class FacilityTypeControllerImpl {
 		return factop.get();
 	}
 	
+	
+	public Iterable<FacilityType> getAllFacilityTypes()
+	{
+		Iterable<FacilityType> factlist=repo.getFactyperepo().findAll();
+		return factlist;
+	}
+	
 }

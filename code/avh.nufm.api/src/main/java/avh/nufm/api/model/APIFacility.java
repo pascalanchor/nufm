@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Facility {
+public class APIFacility {
 	
 	private String name;
 	private String location;
