@@ -3,6 +3,7 @@ package avh.nufm.business.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 
 /**
@@ -32,10 +33,9 @@ public class Equipment implements Serializable {
 	@Column(name="updated_at")
 	private Timestamp updatedAt;
 
-	//bi-directional many-to-one association to Facility
-	@ManyToOne
-	@JoinColumn(name="facility_id")
-	private Facility facility;
+	//bi-directional many-to-one association to FacilityEquipment
+	@OneToMany(mappedBy="equipment")
+	private List<FacilityEquipment> facilityEquipments;
 
 	public Equipment() {
 	}
@@ -96,12 +96,26 @@ public class Equipment implements Serializable {
 		this.updatedAt = updatedAt;
 	}
 
-	public Facility getFacility() {
-		return this.facility;
+	public List<FacilityEquipment> getFacilityEquipments() {
+		return this.facilityEquipments;
 	}
 
-	public void setFacility(Facility facility) {
-		this.facility = facility;
+	public void setFacilityEquipments(List<FacilityEquipment> facilityEquipments) {
+		this.facilityEquipments = facilityEquipments;
+	}
+
+	public FacilityEquipment addFacilityEquipment(FacilityEquipment facilityEquipment) {
+		getFacilityEquipments().add(facilityEquipment);
+		facilityEquipment.setEquipment(this);
+
+		return facilityEquipment;
+	}
+
+	public FacilityEquipment removeFacilityEquipment(FacilityEquipment facilityEquipment) {
+		getFacilityEquipments().remove(facilityEquipment);
+		facilityEquipment.setEquipment(null);
+
+		return facilityEquipment;
 	}
 
 }

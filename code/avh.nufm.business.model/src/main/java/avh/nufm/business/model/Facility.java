@@ -25,10 +25,6 @@ public class Facility implements Serializable {
 
 	private String name;
 
-	//bi-directional many-to-one association to Equipment
-	@OneToMany(mappedBy="facility")
-	private List<Equipment> equipments;
-
 	//bi-directional many-to-one association to Facility
 	@ManyToOne
 	@JoinColumn(name="parent_id")
@@ -47,6 +43,10 @@ public class Facility implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="occupant_id")
 	private NufmUser nufmUser;
+
+	//bi-directional many-to-one association to FacilityEquipment
+	@OneToMany(mappedBy="facility")
+	private List<FacilityEquipment> facilityEquipments;
 
 	//bi-directional many-to-one association to Project
 	@OneToMany(mappedBy="facility")
@@ -89,28 +89,6 @@ public class Facility implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public List<Equipment> getEquipments() {
-		return this.equipments;
-	}
-
-	public void setEquipments(List<Equipment> equipments) {
-		this.equipments = equipments;
-	}
-
-	public Equipment addEquipment(Equipment equipment) {
-		getEquipments().add(equipment);
-		equipment.setFacility(this);
-
-		return equipment;
-	}
-
-	public Equipment removeEquipment(Equipment equipment) {
-		getEquipments().remove(equipment);
-		equipment.setFacility(null);
-
-		return equipment;
 	}
 
 	public Facility getFacility() {
@@ -157,6 +135,28 @@ public class Facility implements Serializable {
 
 	public void setNufmUser(NufmUser nufmUser) {
 		this.nufmUser = nufmUser;
+	}
+
+	public List<FacilityEquipment> getFacilityEquipments() {
+		return this.facilityEquipments;
+	}
+
+	public void setFacilityEquipments(List<FacilityEquipment> facilityEquipments) {
+		this.facilityEquipments = facilityEquipments;
+	}
+
+	public FacilityEquipment addFacilityEquipment(FacilityEquipment facilityEquipment) {
+		getFacilityEquipments().add(facilityEquipment);
+		facilityEquipment.setFacility(this);
+
+		return facilityEquipment;
+	}
+
+	public FacilityEquipment removeFacilityEquipment(FacilityEquipment facilityEquipment) {
+		getFacilityEquipments().remove(facilityEquipment);
+		facilityEquipment.setFacility(null);
+
+		return facilityEquipment;
 	}
 
 	public List<Project> getProjects() {

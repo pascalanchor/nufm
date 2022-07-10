@@ -3,8 +3,8 @@ package avh.nufm.api.model.transformer;
 import java.util.ArrayList;
 import java.util.List;
 
-import avh.nufm.api.model.APIWorkerOut;
 import avh.nufm.api.model.in.APIWorkerIn;
+import avh.nufm.api.model.out.APIWorkerOut;
 import avh.nufm.business.model.NufmUser;
 import avh.nufm.business.model.UserSpecialization;
 

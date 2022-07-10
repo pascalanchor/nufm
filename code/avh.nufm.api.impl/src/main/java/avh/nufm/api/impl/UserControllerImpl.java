@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,17 @@ import avh.nufm.security.common.SecurityCte;
 public class UserControllerImpl {
 	@Autowired private NufmRepos repo;
 	@Autowired PasswordEncoder pHasher;
+	
+	
+	
+	//creates password using the name of user and random 4 digits next to it
+	public String createPasswordFromName(String name) {
+		String noSpacename = name.replaceAll("\\s", "");
+		Random random = new Random();
+		long fourDigits = random.nextInt(10000);
+		System.out.println(noSpacename+fourDigits);
+		return noSpacename+fourDigits;
+	}
 	
 	@Transactional
 	public NufmUser createUser(NufmUser u) {
