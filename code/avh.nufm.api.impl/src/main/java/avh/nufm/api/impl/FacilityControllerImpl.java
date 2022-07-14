@@ -2,6 +2,7 @@ package avh.nufm.api.impl;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -11,10 +12,13 @@ import java.util.stream.StreamSupport;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import avh.nufm.api.impl.errors.BusinessException;
+import avh.nufm.business.model.Equipment;
 import avh.nufm.business.model.Facility;
+import avh.nufm.business.model.FacilityEquipment;
 import avh.nufm.business.model.FacilityType;
 import avh.nufm.business.model.NufmUser;
 import avh.nufm.business.model.repository.NufmRepos;
@@ -23,7 +27,8 @@ import avh.nufm.business.model.repository.NufmRepos;
 public class FacilityControllerImpl {
 	@Autowired
 	private NufmRepos repo;
-
+	@Autowired PasswordEncoder pHasher;
+	
 	@Transactional
 	public Facility createFacility(Facility fc) {
 		if (fc.getName().equals(""))
@@ -33,19 +38,10 @@ public class FacilityControllerImpl {
 			if (itr.getName().equals(fc.getName()))
 				throw new BusinessException("facility name : " + fc.getName() + " already exists !!");
 		}
-
 		// generate new random id
 		fc.setEid(UUID.randomUUID().toString());
 		// set the date
 		fc.setCreationDate(Timestamp.valueOf(LocalDateTime.now()));
-
-		// the user entity here only contains user iid
-		// we need to get the entire user entity and assign it again to the facility
-		// foreign key
-		Optional<NufmUser> u = repo.getNfuserrepo().findById(fc.getNufmUser().getEid());
-		if (u == null || u.isEmpty())
-			throw new BusinessException("error user id !!");
-		fc.setNufmUser(u.get());
 		// find and fill the facility
 		if (fc.getFacility() == null) {
 			fc.setFacility(null);
@@ -66,6 +62,50 @@ public class FacilityControllerImpl {
 		//save to DB
 		repo.getFacrepo().save(fc);
 		return fc;
+	}
+	
+	@Transactional
+	public List<FacilityEquipment> addEquipmentToFacility(String facilityId, List<String> equipmentIds) {
+		List<FacilityEquipment> res = new ArrayList<>();
+		Optional<Facility> facility = repo.getFacrepo().findById(facilityId);
+		if(facility.isPresent()) {
+		for(String e : equipmentIds) {
+		Optional<Equipment> eqpmnt = repo.getEqmtrepo().findById(e);
+		if(eqpmnt.isPresent()) {
+			FacilityEquipment fe = new FacilityEquipment();
+			fe.setEid(UUID.randomUUID().toString());
+			fe.setEquipment(eqpmnt.get());
+			fe.setFacility(facility.get());
+			repo.getFacilityEquipmentRepo().save(fe);
+			res.add(fe);
+		}
+		}
+		return res;
+		}
+		return null;
+	}
+	
+	@Transactional
+	public List<FacilityEquipment> updateEquipmentOfFacility(String facilityId, List<String> equipmentIds) {
+		List<FacilityEquipment> res = new ArrayList<>();
+		Optional<Facility> facility = repo.getFacrepo().findById(facilityId);
+		if(facility.isPresent()) {
+			List<FacilityEquipment> oldEqpmnts = repo.getFacilityEquipmentRepo().findByFacility(facility.get());
+			repo.getFacilityEquipmentRepo().deleteAll(oldEqpmnts);
+		for(String e : equipmentIds) {
+		Optional<Equipment> eqpmnt = repo.getEqmtrepo().findById(e);
+		if(eqpmnt.isPresent()) {
+			FacilityEquipment fe = new FacilityEquipment();
+			fe.setEid(UUID.randomUUID().toString());
+			fe.setEquipment(eqpmnt.get());
+			fe.setFacility(facility.get());
+			repo.getFacilityEquipmentRepo().save(fe);
+			res.add(fe);
+		}
+		}
+		return res;
+		}
+		return null;
 	}
 
 	public Facility getFacilityById(String fid) {
@@ -88,16 +128,17 @@ public class FacilityControllerImpl {
 		Facility res = flist.get();
 		if (facilityUpdate.getName().equals(""))
 			throw new BusinessException("the facility name cannot be null");
-
-		// assign new values
+		// check if the name already exists
+		if(!facilityUpdate.getName().equals(res.getName()))
+		{for (Facility itr : repo.getFacrepo().findAll()) {
+			if (itr.getName().equals(facilityUpdate.getName()))
+				throw new BusinessException("facility name : " + res.getName() + " already exists !!");
+		}
 		res.setName(facilityUpdate.getName());
+		}
 		res.setLocation(facilityUpdate.getLocation());
-		Optional<NufmUser> u = repo.getNfuserrepo().findById(facilityUpdate.getNufmUser().getEid());
-		if (u == null || u.isEmpty())
-			throw new BusinessException("error user id !!");
-		res.setNufmUser(u.get());
 		// find and fill the facility
-		if (res.getFacility() == null) {
+		if (facilityUpdate.getFacility() == null) {
 			res.setFacility(null);
 		} else {
 			Optional<Facility> parent = repo.getFacrepo().findById(facilityUpdate.getFacility().getEid());
@@ -113,9 +154,9 @@ public class FacilityControllerImpl {
 			res.setFacilityType(ft.get());
 		else
 			throw new BusinessException("facility type does not exist");	
-
-		// now we can save the updated facility to database
-		return repo.getFacrepo().save(res);
+		//save to DB
+		repo.getFacrepo().save(res);
+		return res;
 
 	}
 
@@ -124,5 +165,23 @@ public class FacilityControllerImpl {
 				  StreamSupport.stream(repo.getFacrepo().findAll().spliterator(), false)
 				    .collect(Collectors.toList());
 		return res;
+	}
+
+	@Transactional
+	public void addOccupantToFacility(String facilityId, String occupantId) {
+		Optional<Facility> facility = repo.getFacrepo().findById(facilityId);
+		Optional<NufmUser> occupant = repo.getNfuserrepo().findById(occupantId);
+		if(facility.isPresent()) {
+			if(occupant.isPresent()) {
+				Facility res = facility.get();
+				res.setNufmUser(occupant.get());
+				repo.getFacrepo().save(res);
+			}
+			else
+				throw new BusinessException("occupant does not exist");	
+		}
+		else
+			throw new BusinessException("facility does not exist");		
+		
 	}
 }

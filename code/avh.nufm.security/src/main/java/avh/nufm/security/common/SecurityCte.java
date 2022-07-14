@@ -22,6 +22,8 @@ public interface SecurityCte {
 	public static final String RolePuchasingOfficer = "ROLE_PURCHASINGOFFICER";
 	public static final String RoleAdmin = "ROLE_ADMIN";
 	public static final String RoleOccupant = "ROLE_OCCUPANT";
+	public static final String RoleContractor = "ROLE_CONTRACTOR";
 	//Private path
 	public static final String PrivateServletPath = "/avh/nufm/v1/private";
+
 }

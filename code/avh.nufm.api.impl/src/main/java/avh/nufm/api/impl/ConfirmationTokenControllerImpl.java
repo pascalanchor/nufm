@@ -8,13 +8,27 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import avh.nufm.business.model.ConfirmationToken;
 import avh.nufm.business.model.repository.NufmRepos;
 
 @Component
 public class ConfirmationTokenControllerImpl {
 	@Autowired private NufmRepos repo;
+
+	@Transactional
+	public String createConfirmationToken(String userId) {
+		ConfirmationToken ct = new ConfirmationToken();
+		ct.setIid(UUID.randomUUID().toString());
+		ct.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
+		ct.setExpiredAt(Timestamp.valueOf(LocalDateTime.now().plusMinutes(15)));
+		ct.setUserId(userId);
+		String tok = UUID.randomUUID().toString();
+		ct.setToken(tok);
+		repo.getConfirmationTokenRepo().save(ct);
+		return ct.getToken();
+	}
+	
+
 	
 	@Transactional
 	public ConfirmationToken saveToken(ConfirmationToken ct) {

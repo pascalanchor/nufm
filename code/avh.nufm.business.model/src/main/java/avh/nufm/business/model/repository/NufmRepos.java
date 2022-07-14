@@ -3,6 +3,8 @@ package avh.nufm.business.model.repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import lombok.Getter;
+@Getter
 @Component
 public class NufmRepos {
 
@@ -52,7 +54,8 @@ public class NufmRepos {
 	private ConfirmationTokenRepo confirmationTokenrepo;
 	@Autowired
 	private UserSpecializationRepo userSpecrepo;
-	
+	@Autowired
+	private FacilityEquipmentRepo facilityEquipmentRepo;
 	
 	// generate getters 
 	public AttendanceRepo getAttrepo() {

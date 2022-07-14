@@ -3,6 +3,8 @@ package avh.nufm.api.model.in;
 
 
 
+import java.util.List;
+
 import avh.nufm.api.model.APIFacility;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,5 +14,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class APIFacilityIn extends APIFacility{
-	private String occupantId;
+	private APIOccupantIn occupant;
+	private List<String> equipments;
 }

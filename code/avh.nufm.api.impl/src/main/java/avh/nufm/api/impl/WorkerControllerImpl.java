@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,16 +26,6 @@ public class WorkerControllerImpl {
 	@Autowired UserControllerImpl ucImpl;
 	@Autowired ConfirmationTokenControllerImpl ctImpl;
 	
-	//creates password using the name of user and random 4 digits next to it
-	private String createPasswordFromName(String name) {
-		String noSpacename = name.replaceAll("\\s", "");
-		Random random = new Random();
-		long fourDigits = random.nextInt(10000);
-		System.out.println(noSpacename+fourDigits);
-		return noSpacename+fourDigits;
-	}
-	
-	
 	
 	@Transactional
 	public String createWorker(NufmUser worker) {
@@ -48,7 +37,7 @@ public class WorkerControllerImpl {
 		worker.setEnabled(false);
 		worker.setCreatedAt(new Timestamp(System.currentTimeMillis()));    		
 		worker.setUpdatedAt(new Timestamp(System.currentTimeMillis())); 
-		String pwd = createPasswordFromName(worker.getFullName());
+		String pwd = ucImpl.createPasswordFromName(worker.getFullName());
 		worker.setPassword(pHasher.encode(pwd));
 		//save worker to db
 		repo.getNfuserrepo().save(worker);
