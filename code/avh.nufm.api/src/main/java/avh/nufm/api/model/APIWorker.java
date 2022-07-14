@@ -12,7 +12,6 @@ import lombok.Setter;
 public class APIWorker {
 	/*id*/private String email;
 	private String fullName;
-	private String nationalIdentity;
 	private String phone;
 	private List<String> specializations;
 }

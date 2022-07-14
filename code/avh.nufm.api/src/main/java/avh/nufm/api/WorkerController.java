@@ -12,20 +12,25 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import avh.nufm.api.common.PathCte;
 import avh.nufm.api.email.EmailBuilder;
 import avh.nufm.api.email.EmailService;
 import avh.nufm.api.impl.UserControllerImpl;
 import avh.nufm.api.impl.WorkerControllerImpl;
-import avh.nufm.api.model.APIWorkerOut;
+import avh.nufm.api.impl.services.FileStorageService;
 import avh.nufm.api.model.in.APIWorkerIn;
+import avh.nufm.api.model.out.APIWorkerOut;
 import avh.nufm.api.model.transformer.WorkerTransformer;
 import avh.nufm.business.model.ConfirmationToken;
 import avh.nufm.business.model.NufmUser;
@@ -39,14 +44,20 @@ public class WorkerController {
 	@Autowired WorkerControllerImpl wcImpl;
 	@Autowired EmailService emailSender;
 	@Autowired private EmailBuilder emailBuilder;
+	@Autowired private FileStorageService fss;
 	
 	//ADD WORKER
 	@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
 	@PostMapping(PathCte.AddWorkerServletPath)
-    public ResponseEntity<String> createWorker(@RequestBody APIWorkerIn workerIn) {
+    public ResponseEntity<String> createWorker(@RequestParam("profileImage") MultipartFile profileImage,@RequestParam("data") String data) {
     	try {
+    		//image storage path 
+    		String path = "D:\\AVH projects\\Workspaces\\NufmWorkspace\\nufm\\code\\avh.nufm\\src\\main\\resources\\storage\\profile\\worker";
+    		APIWorkerIn workerIn = new ObjectMapper().readValue(data, APIWorkerIn.class); 
     		// create the user without roles
     		NufmUser workerModel = WorkerTransformer.ModelFromWorker(workerIn);
+    		String imagePath = fss.storeFile(profileImage, path);		
+    		workerModel.setProfileImage(imagePath);
     		String pwd = wcImpl.createWorker(workerModel);
     		// add role 'ROLE_PROPERTY_WORKER' to the created user
     		ucImpl.addRoleToUser(workerIn.getEmail(), SecurityCte.RoleWorker);
@@ -94,10 +105,10 @@ public class WorkerController {
     }
     //GET WORKER BY ID
     @PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
-    @GetMapping(PathCte.GetWorkerByIdServletPath)
-    public ResponseEntity<APIWorkerOut> getWorkerById(@RequestParam String workerId){
+    @GetMapping(PathCte.GetWorkerByIdServletPath+"/{id}")
+    public ResponseEntity<APIWorkerOut> getWorkerById(@PathVariable("id") String id){
     	try {
-    		NufmUser res = wcImpl.getWorkerById(workerId);
+    		NufmUser res = wcImpl.getWorkerById(id);
     		return ResponseEntity.ok().body(WorkerTransformer.WorkerFromModel(res));
     	} catch (Exception e) {
     		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());

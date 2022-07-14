@@ -27,8 +27,8 @@ public class NufmUser implements Serializable {
 	@Column(name="full_name")
 	private String fullName;
 
-	@Column(name="national_id")
-	private String nationalId;
+	@Column(name="profile_image")
+	private String profileImage;
 
 	private String password;
 
@@ -124,12 +124,12 @@ public class NufmUser implements Serializable {
 		this.fullName = fullName;
 	}
 
-	public String getNationalId() {
-		return this.nationalId;
+	public String getProfileImage() {
+		return this.profileImage;
 	}
 
-	public void setNationalId(String nationalId) {
-		this.nationalId = nationalId;
+	public void setProfileImage(String profileImage) {
+		this.profileImage = profileImage;
 	}
 
 	public String getPassword() {

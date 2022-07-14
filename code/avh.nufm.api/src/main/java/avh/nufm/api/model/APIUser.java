@@ -11,7 +11,5 @@ public class APIUser {
 
 /*id*/private String email;
 	private String fullName;
-	private String nationalIdentity;
-	private String specialization;
 	private String phone;
 }

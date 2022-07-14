@@ -81,7 +81,7 @@ public class WorkerControllerImpl {
 		res = ucImpl.addSpecializations(res.getEid(), specializations);
 		res.setFullName(worker.getFullName());
 		res.setPhone(worker.getPhone());
-		res.setNationalId(worker.getNationalId());
+		res.setProfileImage(worker.getProfileImage());
 		res.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 		return repo.getNfuserrepo().save(res);
 	}

@@ -12,6 +12,7 @@ import lombok.Setter;
 @Getter 
 @Setter
 public class APIUserOut extends APIUser {
+	private String profileImage;
 	private Timestamp creationDate;
 	private ArrayList<String> roles = new ArrayList<String>();
 	

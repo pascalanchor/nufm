@@ -1,7 +1,8 @@
-package avh.nufm.api.model;
+package avh.nufm.api.model.out;
 
 import java.sql.Timestamp;
 
+import avh.nufm.api.model.APIWorker;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,5 +11,6 @@ import lombok.Setter;
 @Getter 
 @Setter
 public class APIWorkerOut extends APIWorker{
+	private String profileImage;
 	private Timestamp createdAt;
 }

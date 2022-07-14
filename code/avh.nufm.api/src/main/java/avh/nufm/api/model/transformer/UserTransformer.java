@@ -11,7 +11,6 @@ public class UserTransformer {
 	public static NufmUser ModelFromUser(APIUserIn u) {
 		NufmUser res = new NufmUser();
 		res.setFullName(u.getFullName());
-		res.setNationalId(u.getNationalIdentity());
 		res.setPhone(u.getPhone());
 		return res;
 	}
@@ -20,8 +19,8 @@ public class UserTransformer {
 		APIUserOut res=new APIUserOut();
 		res.setEmail(nu.getEid());
 		res.setFullName(nu.getFullName());
-		res.setNationalIdentity(nu.getNationalId());
 		res.setPhone(nu.getPhone());
+		res.setProfileImage(nu.getProfileImage());
 		res.setCreationDate(nu.getCreatedAt());
 		return res;
 	}

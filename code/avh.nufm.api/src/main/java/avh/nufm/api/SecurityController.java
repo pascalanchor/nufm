@@ -24,7 +24,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import avh.nufm.business.model.ConfirmationToken;
 import avh.nufm.business.model.UserRole;
@@ -35,6 +38,7 @@ import avh.nufm.security.jwt.JWTProvider;
 import avh.nufm.security.common.SecurityCte;
 import avh.nufm.api.email.EmailBuilder;
 import avh.nufm.api.email.EmailService;
+import avh.nufm.api.impl.services.FileStorageService;
 import avh.nufm.api.model.in.APIUserIn;
 import avh.nufm.api.model.in.ForgetPasswordIn;
 import avh.nufm.api.model.in.ResetPasswordIn;
@@ -51,6 +55,7 @@ public class SecurityController {
 	@Autowired PasswordEncoder pHasher;
 	@Autowired EmailService emailSender;
 	@Autowired private EmailBuilder emailBuilder;
+	@Autowired private FileStorageService fss;
 	
     @PostMapping(SecurityCte.LoginServletPath)
     public ResponseEntity<APIUserOut> login(@RequestParam String username, @RequestParam String password) {
@@ -76,22 +81,27 @@ public class SecurityController {
     
     @Transactional
     @PostMapping(SecurityCte.RegisterServletPath)
-    public String registerUser(@RequestBody APIUserIn usr) {
+    public String registerUser(@RequestParam("profileImage") MultipartFile profileImage, @RequestParam("data") String data) {
     	try {
+    		String path = "D:\\AVH projects\\Workspaces\\NufmWorkspace\\nufm\\code\\avh.nufm\\src\\main\\resources\\storage\\profile\\admin";
+    		APIUserIn userIn = new ObjectMapper().readValue(data, APIUserIn.class);  
     		// any registered user with the same name ?
-    		Optional<NufmUser> ou = rep.getNfuserrepo().findById(usr.getEmail());
+    		Optional<NufmUser> ou = rep.getNfuserrepo().findById(userIn.getEmail());
     		if (ou.isPresent())
-    			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, String.format("the user %s is already registered", usr.getEmail()));
-    		// create the user without roles
-    		NufmUser res = UserTransformer.ModelFromUser(usr);
-    		res.setEid(usr.getEmail());
+    			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, String.format("the userIn %s is already registered", userIn.getEmail()));
+    		// create the userIn without roles
+    		NufmUser res = UserTransformer.ModelFromUser(userIn);
+    		String imagePath = fss.storeFile(profileImage, path);
+    		
+    		res.setProfileImage(imagePath);
+    		res.setEid(userIn.getEmail());
     		res.setEnabled(false);
     		res.setCreatedAt(new Timestamp(System.currentTimeMillis()));    		
     		res.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-    		res.setPassword(pHasher.encode(usr.getPassword()));
+    		res.setPassword(pHasher.encode(userIn.getPassword()));
     		rep.getNfuserrepo().save(res);
     		// now add the membership according to incoming roles
-    		for(String r : usr.getRoles())
+    		for(String r : userIn.getRoles())
     		{Optional<NufmRole> oRole = rep.getNfrolerepo().findById(r);
     		if(oRole.isEmpty())
     			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, String.format("the role %s cannot be found", r));
@@ -107,14 +117,14 @@ public class SecurityController {
     		ct.setIid(UUID.randomUUID().toString());
     		ct.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
     		ct.setExpiredAt(Timestamp.valueOf(LocalDateTime.now().plusMinutes(15)));
-    		ct.setUserId(usr.getEmail());
+    		ct.setUserId(userIn.getEmail());
     		String tok = UUID.randomUUID().toString();
     		ct.setToken(tok);
     		rep.getConfirmationTokenRepo().save(ct);
 
     		String link = "http://localhost:6338"+SecurityCte.PublicServletPath+"/register/confirm/" + tok;
-    		String mail = emailBuilder.activateEmail(usr.getFullName(), link);
-    		emailSender.send(usr.getEmail(), mail);
+    		String mail = emailBuilder.activateEmail(userIn.getFullName(), link);
+    		emailSender.send(userIn.getEmail(), mail);
     		
     		return tok;
     	} catch (Exception e) {
