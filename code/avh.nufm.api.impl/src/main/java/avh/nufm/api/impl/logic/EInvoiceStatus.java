@@ -1,12 +1,13 @@
 package avh.nufm.api.impl.logic;
 
-public enum ETaskStatus {
-    inprogress("inprogress"),
-	finished("done");
+public enum EInvoiceStatus {
+
+	Paid("Paid"),
+	Unpaid("Unpaid");
 	
 	private String label;
 	
-	private ETaskStatus(String label) {
+	private EInvoiceStatus(String label) {
 		this.label = label;
 	}
 	
@@ -14,8 +15,8 @@ public enum ETaskStatus {
 		return this.label;
 	}
 	
-	public static ETaskStatus fromString(String lb) {
-		for (ETaskStatus res : ETaskStatus.values())
+	public static EInvoiceStatus fromString(String lb) {
+		for (EInvoiceStatus res : EInvoiceStatus.values())
 			if (res.getLabel().equals(lb))
 				return res;
 		return null;

@@ -1,6 +1,6 @@
 package avh.nufm.api.model.in;
 
-import avh.nufm.api.model.APIInvoice;
+import avh.nufm.api.model.APIAttendance;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,6 +8,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class APIInvoiceIn extends APIInvoice{
-
+public class APIAttendanceIn extends APIAttendance{
+private String eid;
+private String workerId;
 }

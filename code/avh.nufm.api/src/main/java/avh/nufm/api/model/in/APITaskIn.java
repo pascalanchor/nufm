@@ -9,5 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class APITaskIn extends APITask{
-
+	
+	private String WorkerName;
+	private String comment;
 }

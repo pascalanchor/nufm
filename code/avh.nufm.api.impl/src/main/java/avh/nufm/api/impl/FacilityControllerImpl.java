@@ -39,7 +39,7 @@ public class FacilityControllerImpl {
 		// set the date
 		fc.setCreationDate(Timestamp.valueOf(LocalDateTime.now()));
 
-		// the user entity here only contains user iid
+		// the user entity here only contains user id
 		// we need to get the entire user entity and assign it again to the facility
 		// foreign key
 		Optional<NufmUser> u = repo.getNfuserrepo().findById(fc.getNufmUser().getEid());

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import avh.nufm.api.impl.errors.BusinessException;
 import avh.nufm.business.model.ConfirmationToken;
 import avh.nufm.business.model.NufmRole;
 import avh.nufm.business.model.NufmUser;
@@ -93,7 +94,14 @@ public class WorkerControllerImpl {
 	}
 
 
-	
+	@Transactional
+	public NufmUser getWorkerByName(String wrkName)
+	{
+		List<NufmUser> res=repo.getNfuserrepo().findByFullName(wrkName);
+		if(res==null || res.size()<=0)
+			throw new BusinessException(String.format("there is no worker with this name: %s", wrkName));
+		return res.get(0);
+	}
 	
 	
 }
