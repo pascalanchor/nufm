@@ -11,5 +11,6 @@ import lombok.Setter;
 @Getter 
 @Setter
 public class APIOccupantOut extends APIOccupant{
+	private String profileImage;
 	private Timestamp createdAt;
 }

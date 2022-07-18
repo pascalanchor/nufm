@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import avh.nufm.api.impl.errors.BusinessException;
 import avh.nufm.business.model.Equipment;
 import avh.nufm.business.model.Facility;
+import avh.nufm.business.model.FacilityDocument;
 import avh.nufm.business.model.FacilityEquipment;
 import avh.nufm.business.model.FacilityType;
 import avh.nufm.business.model.NufmUser;
@@ -118,6 +119,18 @@ public class FacilityControllerImpl {
 
 		return fac;
 	}
+	
+	public List<String> getFacilityDocuments(String id){
+		Optional<Facility> facility = repo.getFacrepo().findById(id);
+		List<String> res = new ArrayList<>();
+		if(facility.isPresent()) {
+			List<FacilityDocument> list = repo.getFacilityDocumentRepo().findByFacilityId(id);
+			list.stream().forEach(e-> res.add(e.getDocPath()));
+			return res;
+		}
+		else 
+			throw new BusinessException("facility does not exist");
+	}
 
 	@Transactional
 	public Facility updateFacility(String id, Facility facilityUpdate) {
@@ -178,10 +191,23 @@ public class FacilityControllerImpl {
 				repo.getFacrepo().save(res);
 			}
 			else
-				throw new BusinessException("occupant does not exist");	
+				throw new BusinessException("occupant was not registered");	
 		}
 		else
 			throw new BusinessException("facility does not exist");		
 		
+	}
+	
+	@Transactional
+	public void addFacilityDoc(String id, String docPath) {
+		Optional<Facility> facility = repo.getFacrepo().findById(id);
+		if(facility.isPresent()) {
+			FacilityDocument fd = new FacilityDocument();
+			fd.setFacilityId(id);
+			fd.setDocPath(docPath);
+			repo.getFacilityDocumentRepo().save(fd);
+			}
+			else
+				throw new BusinessException(String.format("file was not uploaded"));	
 	}
 }

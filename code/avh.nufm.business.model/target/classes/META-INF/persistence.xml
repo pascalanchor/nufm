@@ -24,5 +24,6 @@
 		<class>avh.nufm.business.model.UserSpecialization</class>
 		<class>avh.nufm.business.model.WorkerSchedule</class>
 		<class>avh.nufm.business.model.WorkerTask</class>
+		<class>avh.nufm.business.model.FacilityDocument</class>
 	</persistence-unit>
 </persistence>

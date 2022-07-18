@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import avh.nufm.api.impl.errors.BusinessException;
 import avh.nufm.business.model.ConfirmationToken;
 import avh.nufm.business.model.NufmRole;
 import avh.nufm.business.model.NufmUser;
@@ -81,7 +82,7 @@ public class ContractorControllerImpl {
 		res = ucImpl.addSpecializations(res.getEid(), specializations);
 		res.setFullName(contractor.getFullName());
 		res.setPhone(contractor.getPhone());
-		res.setNationalId(contractor.getNationalId());
+		res.setProfileImage(contractor.getProfileImage());
 		res.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 		return repo.getNfuserrepo().save(res);
 	}
@@ -89,9 +90,12 @@ public class ContractorControllerImpl {
 	@Transactional
 	public NufmUser getContractorById(String contractorId) {
 		NufmUser res = repo.getNfuserrepo().findByEid(contractorId);
-		return res;
+		List<String> roles = new ArrayList<>();
+		res.getUserRoles().stream().forEach(e->roles.add(e.getNufmRole().getName()));
+		if(roles.contains(SecurityCte.RoleContractor))
+			{return res;}
+		else {throw new BusinessException(String.format("user %s is not a contractor", res.getFullName()));}
 	}
-
 
 	
 	

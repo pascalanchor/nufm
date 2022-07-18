@@ -14,6 +14,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class APIFacilityIn extends APIFacility{
-	private APIOccupantIn occupant;
 	private List<String> equipments;
 }

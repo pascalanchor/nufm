@@ -10,11 +10,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import avh.nufm.api.email.EmailBuilder;
 import avh.nufm.api.email.EmailService;
@@ -22,9 +23,11 @@ import avh.nufm.api.impl.ConfirmationTokenControllerImpl;
 import avh.nufm.api.impl.FacilityControllerImpl;
 import avh.nufm.api.impl.OccupantControllerImpl;
 import avh.nufm.api.impl.UserControllerImpl;
-//import avh.nufm.api.model.Transformer;
+import avh.nufm.api.impl.services.FileStorageService;
 import avh.nufm.api.model.in.APIFacilityIn;
+import avh.nufm.api.model.in.APIOccupantIn;
 import avh.nufm.api.model.out.APIFacilityOut;
+import avh.nufm.api.model.out.APIOccupantOut;
 import avh.nufm.api.model.transformer.FacilityTransformer;
 import avh.nufm.api.model.transformer.OccupantTransformer;
 import avh.nufm.business.model.Facility;
@@ -39,67 +42,86 @@ public class FacilityController {
 	@Autowired EmailService emailSender;
 	@Autowired private EmailBuilder emailBuilder;
 	@Autowired private ConfirmationTokenControllerImpl ctImpl;
+	@Autowired private FileStorageService fss;
+	
 	@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
-	@PostMapping("avh/nufm/v1/private/facility/add")//only administrator and owner can define new facility
-	public ResponseEntity<APIFacilityOut> createFacility(@RequestBody APIFacilityIn fc) {
+	@PostMapping("avh/nufm/v1/private/facility")//only administrator and owner can define new facility
+	public ResponseEntity<APIFacilityOut> createFacility(@RequestParam("profileImage") MultipartFile profileImage,
+			@RequestParam("facilityDoc1") MultipartFile facilityDoc1,
+			@RequestParam("facilityData") String facilityData,
+			@RequestParam("occupantData") String occupantData) {
 	try {
+		//image storage path 
+		String ipath = "D:\\AVH projects\\Workspaces\\NufmWorkspace\\nufm\\code\\avh.nufm\\src\\main\\resources\\storage\\profile\\occupant";
+		//facility docs path
+		String fpath = "D:\\AVH projects\\Workspaces\\NufmWorkspace\\nufm\\code\\avh.nufm\\src\\main\\resources\\storage\\facility\\docs";
+		APIOccupantIn occupantIn = new ObjectMapper().readValue(occupantData, APIOccupantIn.class);	
+		APIFacilityIn fc = new ObjectMapper().readValue(facilityData, APIFacilityIn.class);
 		//1-create the facility
 		Facility fct= FacilityTransformer.FacilityToModel(fc);
 		fct = fci.createFacility(fct);
-		System.out.println(fct.getEid());
+		fci.addFacilityDoc(fct.getEid(), fss.storeFile(facilityDoc1, fpath));
+		//add occupant profile photo
+		String imagePath = fss.storeFile(profileImage, ipath);	
 		APIFacilityOut res=FacilityTransformer.FacilityFromModel(fct);
 		//2-add equipments to facility
 		fci.addEquipmentToFacility(fct.getEid(), fc.getEquipments());
 		 // create and send confirmation token to user
 		//3-create the occupant
-		NufmUser occupant = ocImpl.occupantExists(fc.getOccupant().getEmail());
+		NufmUser occupant = ocImpl.occupantExists(occupantIn.getEmail());
 		if(occupant == null)
-		{NufmUser occupantModel = OccupantTransformer.ModelFromOccupant(fc.getOccupant());
-		String pwd = ocImpl.createOccupant(occupantModel);
-		ucImpl.addRoleToUser(fc.getOccupant().getEmail(), SecurityCte.RoleOccupant);
-		String tok = ctImpl.createConfirmationToken(fc.getOccupant().getEmail());
+		{NufmUser occupantModel = OccupantTransformer.ModelFromOccupant(occupantIn);
+		String pwd = ocImpl.createOccupant(occupantModel,imagePath);
+		ucImpl.addRoleToUser(occupantIn.getEmail(), SecurityCte.RoleOccupant);
+		String tok = ctImpl.createConfirmationToken(occupantIn.getEmail());
 		String link = "http://localhost:6338"+SecurityCte.PublicServletPath+"/register/confirm/" + tok;
-		String mail = emailBuilder.confirmOccupant(fc.getOccupant().getFullName(),fc.getOccupant().getEmail(),pwd,link);
-		emailSender.send(fc.getOccupant().getEmail(), mail);
+		String mail = emailBuilder.confirmOccupant(occupantIn.getFullName(),occupantIn.getEmail(),pwd,link);
+		emailSender.send(occupantIn.getEmail(), mail);
 		fci.addOccupantToFacility(fct.getEid(),occupantModel.getEid());
-        res.setOccupantName(occupantModel.getFullName());}
-		fci.addOccupantToFacility(fct.getEid(), fc.getOccupant().getEmail());
-		res.setOccupantName(fc.getOccupant().getFullName());
+		APIOccupantOut occupantOut = OccupantTransformer.OccupantFromModel(occupantModel);
+		occupantOut.setProfileImage(imagePath);
+        res.setOccupant(occupantOut);}
+		APIOccupantOut occupantOut = OccupantTransformer.OccupantFromModel(occupant);
+		occupantOut.setProfileImage(imagePath);
+		fci.addOccupantToFacility(fct.getEid(), occupantIn.getEmail());
+		res.setOccupant(occupantOut);
+		List<String> docs = fci.getFacilityDocuments(fct.getEid());
+		res.setDocs(docs);
 		return ResponseEntity.ok().body(res);
 	} catch (Exception e) {
 		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());
 	}
 }
 
-@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
-@PutMapping("avh/nufm/v1/private/facility/update")//only administrator and owner can define new facility
-public ResponseEntity<APIFacilityOut> updateFaclity(@RequestParam String facility_id, @RequestBody APIFacilityIn fc) {
-	
-	try {
-		//1-update the facility
-		Facility facility = fci.updateFacility(facility_id, FacilityTransformer.FacilityToModel(fc));
-		//2-add equipments to facility
-		fci.updateEquipmentOfFacility(facility_id, fc.getEquipments());
-		//3-update occupant and create the res
-		NufmUser occupant = ocImpl.occupantExists(fc.getOccupant().getEmail());
-		APIFacilityOut res = FacilityTransformer.FacilityFromModel(facility);
-		if(occupant == null)
-		{NufmUser occupantModel = OccupantTransformer.ModelFromOccupant(fc.getOccupant());
-		String pwd = ocImpl.createOccupant(occupantModel);
-		ucImpl.addRoleToUser(fc.getOccupant().getEmail(), SecurityCte.RoleOccupant);
-		String tok = ctImpl.createConfirmationToken(fc.getOccupant().getEmail());
-		String link = "http://localhost:6338"+SecurityCte.PublicServletPath+"/register/confirm/" + tok;
-		String mail = emailBuilder.confirmOccupant(fc.getOccupant().getFullName(),fc.getOccupant().getEmail(),pwd,link);
-		emailSender.send(fc.getOccupant().getEmail(), mail);
-		fci.addOccupantToFacility(facility_id,occupantModel.getEid());
-        res.setOccupantName(occupantModel.getFullName());}
-		fci.addOccupantToFacility(facility_id, fc.getOccupant().getEmail());
-		res.setOccupantName(fc.getOccupant().getFullName());
-		return ResponseEntity.ok().body(res);
-	} catch (Exception e) {
-		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());
-	}	
-}
+//@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
+//@PutMapping("avh/nufm/v1/private/facility/update")//only administrator and owner can define new facility
+//public ResponseEntity<APIFacilityOut> updateFaclity(@RequestParam String facility_id, @RequestBody APIFacilityIn fc) {
+//	
+//	try {
+//		//1-update the facility
+//		Facility facility = fci.updateFacility(facility_id, FacilityTransformer.FacilityToModel(fc));
+//		//2-add equipments to facility
+//		fci.updateEquipmentOfFacility(facility_id, fc.getEquipments());
+//		//3-update occupant and create the res
+//		NufmUser occupant = ocImpl.occupantExists(fc.getOccupant().getEmail());
+//		APIFacilityOut res = FacilityTransformer.FacilityFromModel(facility);
+//		if(occupant == null)
+//		{NufmUser occupantModel = OccupantTransformer.ModelFromOccupant(fc.getOccupant());
+//		String pwd = ocImpl.createOccupant(occupantModel);
+//		ucImpl.addRoleToUser(fc.getOccupant().getEmail(), SecurityCte.RoleOccupant);
+//		String tok = ctImpl.createConfirmationToken(fc.getOccupant().getEmail());
+//		String link = "http://localhost:6338"+SecurityCte.PublicServletPath+"/register/confirm/" + tok;
+//		String mail = emailBuilder.confirmOccupant(fc.getOccupant().getFullName(),fc.getOccupant().getEmail(),pwd,link);
+//		emailSender.send(fc.getOccupant().getEmail(), mail);
+//		fci.addOccupantToFacility(facility_id,occupantModel.getEid());
+//        res.setOccupantName(occupantModel.getFullName());}
+//		fci.addOccupantToFacility(facility_id, fc.getOccupant().getEmail());
+//		res.setOccupantName(fc.getOccupant().getFullName());
+//		return ResponseEntity.ok().body(res);
+//	} catch (Exception e) {
+//		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());
+//	}	
+//}
 
 @PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
 @GetMapping("avh/nufm/v1/private/facilities/{facilityId}")

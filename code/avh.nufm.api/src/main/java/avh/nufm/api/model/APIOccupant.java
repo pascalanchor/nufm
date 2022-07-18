@@ -12,6 +12,5 @@ import lombok.Setter;
 public class APIOccupant {
 	/*id*/private String email;
 	private String fullName;
-	private String nationalIdentity;
 	private String phone;
 }

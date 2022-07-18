@@ -11,7 +11,6 @@ public class OccupantTransformer {
 		NufmUser res = new NufmUser();
 		res.setEid(occupantIn.getEmail());
 		res.setFullName(occupantIn.getFullName());
-		res.setNationalId(occupantIn.getNationalIdentity());
 		res.setPhone(occupantIn.getPhone());
 		return res;
 	}
@@ -20,7 +19,7 @@ public class OccupantTransformer {
 		APIOccupantOut res = new APIOccupantOut();
 		res.setEmail(occupant.getEid());
 		res.setFullName(occupant.getFullName());
-		res.setNationalIdentity(occupant.getNationalId());
+		res.setProfileImage(occupant.getProfileImage());
 		res.setPhone(occupant.getPhone());
 		res.setCreatedAt(occupant.getCreatedAt());
 		return res;

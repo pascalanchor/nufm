@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import avh.nufm.api.impl.errors.BusinessException;
 import avh.nufm.business.model.ConfirmationToken;
 import avh.nufm.business.model.NufmRole;
 import avh.nufm.business.model.NufmUser;
@@ -75,10 +76,15 @@ public class WorkerControllerImpl {
 		return repo.getNfuserrepo().save(res);
 	}
 	
+
 	@Transactional
 	public NufmUser getWorkerById(String workerId) {
 		NufmUser res = repo.getNfuserrepo().findByEid(workerId);
-		return res;
+		List<String> roles = new ArrayList<>();
+		res.getUserRoles().stream().forEach(e->roles.add(e.getNufmRole().getName()));
+		if(roles.contains(SecurityCte.RoleWorker))
+			{return res;}
+		else {throw new BusinessException(String.format("user %s is not a worker", res.getFullName()));}
 	}
 
 

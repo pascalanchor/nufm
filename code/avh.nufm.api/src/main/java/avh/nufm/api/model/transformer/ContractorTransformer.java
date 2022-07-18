@@ -13,7 +13,6 @@ public class ContractorTransformer {
 		NufmUser res = new NufmUser();
 		res.setEid(contractorIn.getEmail());
 		res.setFullName(contractorIn.getFullName());
-		res.setNationalId(contractorIn.getNationalIdentity());
 		res.setPhone(contractorIn.getPhone());
 		return res;
 	}
@@ -22,7 +21,7 @@ public class ContractorTransformer {
 		APIContractorOut res = new APIContractorOut();
 		res.setEmail(contractor.getEid());
 		res.setFullName(contractor.getFullName());
-		res.setNationalIdentity(contractor.getNationalId());
+		res.setProfileImage(contractor.getProfileImage());
 		res.setPhone(contractor.getPhone());
 		List<String> specList = new ArrayList<>();
 		for(UserSpecialization us: contractor.getUserSpecializations()) {

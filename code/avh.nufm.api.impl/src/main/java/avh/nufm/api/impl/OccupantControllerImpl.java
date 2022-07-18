@@ -10,6 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import avh.nufm.api.impl.errors.BusinessException;
 import avh.nufm.business.model.ConfirmationToken;
 import avh.nufm.business.model.NufmRole;
 import avh.nufm.business.model.NufmUser;
@@ -35,11 +37,12 @@ public class OccupantControllerImpl {
 	}
 	
 	@Transactional
-	public String createOccupant(NufmUser occupant) {
+	public String createOccupant(NufmUser occupant,String imagePath) {
 		//continue filling the occupant data
 		occupant.setEnabled(false);
 		occupant.setCreatedAt(new Timestamp(System.currentTimeMillis()));    		
 		occupant.setUpdatedAt(new Timestamp(System.currentTimeMillis())); 
+		occupant.setProfileImage(imagePath);
 		String pwd = ucImpl.createPasswordFromName(occupant.getFullName());
 		occupant.setPassword(pHasher.encode(pwd));
 		//save occupant to db
@@ -73,7 +76,7 @@ public class OccupantControllerImpl {
 		res = ucImpl.addSpecializations(res.getEid(), specializations);
 		res.setFullName(occupant.getFullName());
 		res.setPhone(occupant.getPhone());
-		res.setNationalId(occupant.getNationalId());
+		res.setProfileImage(occupant.getProfileImage());
 		res.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 		return repo.getNfuserrepo().save(res);
 	}
@@ -81,8 +84,13 @@ public class OccupantControllerImpl {
 	@Transactional
 	public NufmUser getOccupantById(String occupantId) {
 		NufmUser res = repo.getNfuserrepo().findByEid(occupantId);
-		return res;
+		List<String> roles = new ArrayList<>();
+		res.getUserRoles().stream().forEach(e->roles.add(e.getNufmRole().getName()));
+		if(roles.contains(SecurityCte.RoleOccupant))
+			{return res;}
+		else {throw new BusinessException(String.format("user %s is not an occupant", res.getFullName()));}
 	}
+	
 
 
 	

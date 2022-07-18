@@ -81,10 +81,10 @@ public class WorkerController {
     }
     //DELETE WORKER
 	@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
-	@DeleteMapping(PathCte.DeleteWorkerServletPath)
-    public ResponseEntity<String> deleteWorker(@RequestParam String workerId){
+	@DeleteMapping(PathCte.DeleteWorkerServletPath+"/{id}")
+    public ResponseEntity<String> deleteWorker(@PathVariable("id") String id){
     	try {
-    		wcImpl.deleteWorker(workerId);
+    		wcImpl.deleteWorker(id);
     		return ResponseEntity.ok().body("worker has been deleted successfully");
     	} catch (Exception e) {
     		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());

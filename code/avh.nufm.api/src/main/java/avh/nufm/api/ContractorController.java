@@ -16,13 +16,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import avh.nufm.api.common.PathCte;
 import avh.nufm.api.email.EmailBuilder;
 import avh.nufm.api.email.EmailService;
 import avh.nufm.api.impl.UserControllerImpl;
+import avh.nufm.api.impl.services.FileStorageService;
 import avh.nufm.api.impl.ContractorControllerImpl;
 import avh.nufm.api.model.in.APIContractorIn;
 import avh.nufm.api.model.out.APIContractorOut;
@@ -36,18 +41,23 @@ import avh.nufm.security.common.SecurityCte;
 public class ContractorController {
 	@Autowired NufmRepos rep;
 	@Autowired UserControllerImpl ucImpl;
-	@Autowired ContractorControllerImpl wcImpl;
+	@Autowired ContractorControllerImpl ccImpl;
 	@Autowired EmailService emailSender;
 	@Autowired private EmailBuilder emailBuilder;
-	
+	@Autowired private FileStorageService fss;
 	//ADD WORKER
 	@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
 	@PostMapping(PathCte.AddContractorServletPath)
-    public ResponseEntity<String> createContractor(@RequestBody APIContractorIn contractorIn) {
+    public ResponseEntity<String> createContractor(@RequestParam("profileImage") MultipartFile profileImage,@RequestParam("data") String data) {
     	try {
+    		//image storage path 
+    		String path = "D:\\AVH projects\\Workspaces\\NufmWorkspace\\nufm\\code\\avh.nufm\\src\\main\\resources\\storage\\profile\\contractor";
+    		APIContractorIn contractorIn = new ObjectMapper().readValue(data, APIContractorIn.class);
     		// create the user without roles
     		NufmUser contractorModel = ContractorTransformer.ModelFromContractor(contractorIn);
-    		String pwd = wcImpl.createContractor(contractorModel);
+    		String imagePath = fss.storeFile(profileImage, path);		
+    		contractorModel.setProfileImage(imagePath);
+    		String pwd = ccImpl.createContractor(contractorModel);
     		// add role 'ROLE_PROPERTY_WORKER' to the created user
     		ucImpl.addRoleToUser(contractorIn.getEmail(), SecurityCte.RoleContractor);
     		// add specializations to contractor
@@ -70,10 +80,10 @@ public class ContractorController {
     }
     //DELETE WORKER
 	@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
-	@DeleteMapping(PathCte.DeleteContractorServletPath+"/{contractorId}")
-    public ResponseEntity<String> deleteContractor(@PathVariable("contractorId") String contractorId){
+	@DeleteMapping(PathCte.DeleteContractorServletPath+"/{id}")
+    public ResponseEntity<String> deleteContractor(@PathVariable("id") String id){
     	try {
-    		wcImpl.deleteContractor(contractorId);
+    		ccImpl.deleteContractor(id);
     		return ResponseEntity.ok().body("contractor has been deleted successfully");
     	} catch (Exception e) {
     		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());
@@ -84,7 +94,7 @@ public class ContractorController {
     @GetMapping(PathCte.GetContractorsServletPath)
     public ResponseEntity<List<APIContractorOut>> getContractors(){
     	try {
-    		List<NufmUser> contractors = wcImpl.getContractors();
+    		List<NufmUser> contractors = ccImpl.getContractors();
     		List<APIContractorOut> res = new ArrayList<>();
     		contractors.stream().forEach(e-> res.add(ContractorTransformer.ContractorFromModel(e)));
     		return ResponseEntity.ok().body(res);
@@ -94,10 +104,10 @@ public class ContractorController {
     }
     //GET WORKER BY ID
     @PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
-    @GetMapping(PathCte.ContractorServletPath+"/{contractorId}")
-    public ResponseEntity<APIContractorOut> getContractorById(@PathVariable("contractorId") String contractorId){
+    @GetMapping(PathCte.ContractorServletPath+"/{id}")
+    public ResponseEntity<APIContractorOut> getContractorById(@PathVariable("id") String id){
     	try {
-    		NufmUser res = wcImpl.getContractorById(contractorId);
+    		NufmUser res = ccImpl.getContractorById(id);
     		return ResponseEntity.ok().body(ContractorTransformer.ContractorFromModel(res));
     	} catch (Exception e) {
     		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());
@@ -109,7 +119,7 @@ public class ContractorController {
     public ResponseEntity<APIContractorOut> updateContractor(@RequestBody APIContractorIn contractorUpdate){
     	try {
     		NufmUser contractor = ContractorTransformer.ModelFromContractor(contractorUpdate);
-    	    NufmUser res = wcImpl.updateContractor(contractor, contractorUpdate.getSpecializations());
+    	    NufmUser res = ccImpl.updateContractor(contractor, contractorUpdate.getSpecializations());
     	    return ResponseEntity.ok().body(ContractorTransformer.ContractorFromModel(res));
     	} catch (Exception e) {
     		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());

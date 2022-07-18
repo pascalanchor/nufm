@@ -35,7 +35,7 @@ public class FacilityTransformer {
 			res.setParentId("No parent");
 		res.setName(facility.getName());
 		res.setType(facility.getFacilityType().getName());
-		res.setLocation(facility.getLocation());
+		res.setLocation(facility.getLocation());	
 		res.setCreatedAt(facility.getCreationDate());
 		return res;
 	}

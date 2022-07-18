@@ -11,5 +11,6 @@ import lombok.Setter;
 @Getter 
 @Setter
 public class APIContractorOut extends APIContractor{
+	private String profileImage;
 	private Timestamp createdAt;
 }

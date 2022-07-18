@@ -56,6 +56,8 @@ public class NufmRepos {
 	private UserSpecializationRepo userSpecrepo;
 	@Autowired
 	private FacilityEquipmentRepo facilityEquipmentRepo;
+	@Autowired 
+	private FacilityDocumentRepo facilityDocumentRepo;
 	
 	// generate getters 
 	public AttendanceRepo getAttrepo() {

@@ -10,6 +10,13 @@ public interface PathCte {
 	public static final String DeleteWorkerServletPath = WorkerServletPath+"/delete";
 	public static final String GetWorkersServletPath = PrivateServletPath+"/workers";
 	public static final String GetWorkerByIdServletPath = WorkerServletPath;
+	//contractor management
+	public static final String ContractorServletPath = PrivateServletPath+"/contractor";
+	public static final String AddContractorServletPath = ContractorServletPath;
+	public static final String EditContractorServletPath = ContractorServletPath+"/edit";
+	public static final String DeleteContractorServletPath = ContractorServletPath+"/delete";
+	public static final String GetContractorsServletPath = PrivateServletPath+"/contractors";
+	public static final String GetContractorByIdServletPath = ContractorServletPath;
 	//facility management 
 	public static final String FacilityServletPath = PrivateServletPath+"/facility";
 	public static final String AddFacilityServletPath = FacilityServletPath+"/add";
