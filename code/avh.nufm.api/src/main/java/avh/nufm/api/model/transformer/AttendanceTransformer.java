@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import avh.nufm.api.model.out.APIAttendanceOut;
 import avh.nufm.business.model.Attendance;
+import avh.nufm.business.model.UserSpecialization;
 
 
 public class AttendanceTransformer {
@@ -13,7 +14,14 @@ public class AttendanceTransformer {
 		res.setEid(atd.getEid());
 		res.setStatus(atd.getStatus());
 		res.setWorkerName(atd.getNufmUser().getFullName());
-		
+		res.setPhoneNumber(atd.getNufmUser().getPhone());
+		res.setName(atd.getNufmUser().getFullName());
+		res.setEmail(atd.getEid());
+		List<String> specList=new ArrayList<String>();
+		for(UserSpecialization spec:atd.getNufmUser().getUserSpecializations()) {
+			specList.add(spec.getSpecialization().getName());
+		}
+		res.setSpecializations(specList);
 		return res;
 	}
 	

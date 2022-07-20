@@ -2,6 +2,8 @@ package avh.nufm.api.model;
 
 
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,5 +18,6 @@ private String projectName;
 private String name;
 private String status;
 private String creationDate;
+private List<String> workersName;
 
 }

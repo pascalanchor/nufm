@@ -28,6 +28,7 @@ public class AttendanceController {
 		try {
 			List<APIAttendanceOut> res=AttendanceTransformer.
 					listAttendanceFromIterable(atcimp.getALLWorkersAttendance());
+			
 			return ResponseEntity.ok().body(res);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED,e.getMessage());

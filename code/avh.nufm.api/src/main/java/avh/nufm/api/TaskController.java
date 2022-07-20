@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import avh.nufm.api.impl.TaskControllerImpl;
+import avh.nufm.api.impl.WorkerTaskControllerImpl;
 import avh.nufm.api.model.transformer.TaskTransformer;
 import avh.nufm.api.model.in.APITaskIn;
 import avh.nufm.api.model.out.APITaskOut;
@@ -26,13 +27,17 @@ import avh.nufm.api.common.PathCte;
 @RestController
 public class TaskController {
 	@Autowired private TaskControllerImpl tkimp;
+	@Autowired private WorkerTaskControllerImpl wrktskimp;
 	
 	@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
 	@PostMapping(PathCte.AddTaskServletPath)	
 	public ResponseEntity<APITaskOut> addTask(@RequestBody APITaskIn tkin){
 		try {
 			Task tsk=TaskTransformer.taskToModel(tkin);
-			APITaskOut res=TaskTransformer.taskFromModel(tkimp.addTask(tsk));
+			System.out.println("in add task api-----------befor");
+			APITaskOut res=TaskTransformer.taskFromModel(tkimp.addTask(tsk,tkin.getWorkersName()));
+			System.out.println("in add task api-----------after");
+			res.setWorkersName(wrktskimp.getWorkersForTask(tsk.getEid()));
 			return ResponseEntity.ok().body(res);
 		}catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED,e.getMessage());
@@ -44,6 +49,9 @@ public class TaskController {
 	public ResponseEntity<List<APITaskOut>> getAllTasks(){
 		try {
 			List<APITaskOut> res=TaskTransformer.listTaskFromItr(tkimp.getAllTasks());
+			for(APITaskOut tsk:res) {
+				tsk.setWorkersName(wrktskimp.getWorkersForTask(tsk.getEid()));
+			}
 			return ResponseEntity.ok().body(res);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED,e.getMessage());
@@ -57,6 +65,7 @@ public class TaskController {
 		try {
 			System.out.print("in get task by id --");
 			APITaskOut res=TaskTransformer.taskFromModel(tkimp.getTaskById(id));
+			res.setWorkersName(wrktskimp.getWorkersForTask(id));
 			return ResponseEntity.ok().body(res);
 		}catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED,e.getMessage());
@@ -69,7 +78,8 @@ public class TaskController {
 	public ResponseEntity<APITaskOut> updateTask(@RequestParam String taskId,@RequestBody APITaskIn newTask){
 		try {
 			Task tsk=TaskTransformer.taskToModel(newTask);
-			APITaskOut res=TaskTransformer.taskFromModel(tkimp.updateTask(taskId, tsk));
+			APITaskOut res=TaskTransformer.taskFromModel(tkimp.updateTask(taskId, tsk,newTask.getWorkersName()));
+			res.setWorkersName(wrktskimp.getWorkersForTask(taskId));
 			return ResponseEntity.ok().body(res);
 		}catch(Exception e) {
 			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED,e.getMessage());
