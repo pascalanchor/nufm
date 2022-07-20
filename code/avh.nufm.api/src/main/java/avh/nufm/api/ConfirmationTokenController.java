@@ -39,7 +39,7 @@ public class ConfirmationTokenController {
 				throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, String.format("Token expired"));
 			}
 			svc.updateToken(ct,ct.getIid(),token,ct.getCreatedAt());
-			NufmUser user = userSvc.getUser(ct.getUserId());
+			NufmUser user = userSvc.getUser(ct.getNufmUser().getEid());
 			userSvc.updateUserEnabled(user);
 			return ResponseEntity.ok().body("Confirmed");
 		} catch (Exception e) {

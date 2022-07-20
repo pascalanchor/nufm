@@ -124,7 +124,7 @@ public class FacilityControllerImpl {
 		Optional<Facility> facility = repo.getFacrepo().findById(id);
 		List<String> res = new ArrayList<>();
 		if(facility.isPresent()) {
-			List<FacilityDocument> list = repo.getFacilityDocumentRepo().findByFacilityId(id);
+			List<FacilityDocument> list = repo.getFacilityDocumentRepo().findByFacility(facility.get());
 			list.stream().forEach(e-> res.add(e.getDocPath()));
 			return res;
 		}
@@ -203,11 +203,21 @@ public class FacilityControllerImpl {
 		Optional<Facility> facility = repo.getFacrepo().findById(id);
 		if(facility.isPresent()) {
 			FacilityDocument fd = new FacilityDocument();
-			fd.setFacilityId(id);
+			fd.setFacility(facility.get());
 			fd.setDocPath(docPath);
 			repo.getFacilityDocumentRepo().save(fd);
 			}
 			else
 				throw new BusinessException(String.format("file was not uploaded"));	
+	}
+	
+	@Transactional
+	public void deleteFacility(String id) {
+		Optional<Facility> facility = repo.getFacrepo().findById(id);
+		if(facility.isPresent()) {
+			repo.getFacrepo().delete(facility.get());
+			}
+			else
+				throw new BusinessException(String.format("Facility was not deleted. Check if it is used in any projects or tasks then try again"));	
 	}
 }

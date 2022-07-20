@@ -38,6 +38,7 @@ import avh.nufm.security.jwt.JWTProvider;
 import avh.nufm.security.common.SecurityCte;
 import avh.nufm.api.email.EmailBuilder;
 import avh.nufm.api.email.EmailService;
+import avh.nufm.api.impl.UserControllerImpl;
 import avh.nufm.api.impl.services.FileStorageService;
 import avh.nufm.api.model.in.APIUserIn;
 import avh.nufm.api.model.in.ForgetPasswordIn;
@@ -56,6 +57,7 @@ public class SecurityController {
 	@Autowired EmailService emailSender;
 	@Autowired private EmailBuilder emailBuilder;
 	@Autowired private FileStorageService fss;
+	@Autowired private UserControllerImpl ucImpl;
 	
     @PostMapping(SecurityCte.LoginServletPath)
     public ResponseEntity<APIUserOut> login(@RequestParam String username, @RequestParam String password) {
@@ -84,11 +86,10 @@ public class SecurityController {
     public String registerUser(@RequestParam("profileImage") MultipartFile profileImage, @RequestParam("data") String data) {
     	try {
     		String path = "D:\\AVH projects\\Workspaces\\NufmWorkspace\\nufm\\code\\avh.nufm\\src\\main\\resources\\storage\\profile\\admin";
-    		APIUserIn userIn = new ObjectMapper().readValue(data, APIUserIn.class);  
-    		// any registered user with the same name ?
+    		APIUserIn userIn = new ObjectMapper().readValue(data, APIUserIn.class);  		// any registered user with the same name ?
     		Optional<NufmUser> ou = rep.getNfuserrepo().findById(userIn.getEmail());
     		if (ou.isPresent())
-    			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, String.format("the userIn %s is already registered", userIn.getEmail()));
+    			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, String.format("the user %s is already registered", userIn.getEmail()));
     		// create the userIn without roles
     		NufmUser res = UserTransformer.ModelFromUser(userIn);
     		String imagePath = fss.storeFile(profileImage, path);
@@ -100,24 +101,18 @@ public class SecurityController {
     		res.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
     		res.setPassword(pHasher.encode(userIn.getPassword()));
     		rep.getNfuserrepo().save(res);
-    		// now add the membership according to incoming roles
-    		for(String r : userIn.getRoles())
-    		{Optional<NufmRole> oRole = rep.getNfrolerepo().findById(r);
-    		if(oRole.isEmpty())
-    			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, String.format("the role %s cannot be found", r));
-    		NufmRole role = oRole.get();
+    		NufmRole role = rep.getNfrolerepo().findById(SecurityCte.RoleAdmin).get();
     		UserRole mb = new UserRole();
     		mb.setEid(UUID.randomUUID().toString());
     		mb.setNufmRole(role);
     		mb.setNufmUser(res);  
     		mb.setCreationDate(Timestamp.valueOf(LocalDateTime.now()));
-    		rep.getUserrolerepo().save(mb);}
-
+    		rep.getUserrolerepo().save(mb);
     		ConfirmationToken ct = new ConfirmationToken();
     		ct.setIid(UUID.randomUUID().toString());
     		ct.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
     		ct.setExpiredAt(Timestamp.valueOf(LocalDateTime.now().plusMinutes(15)));
-    		ct.setUserId(userIn.getEmail());
+    		ct.setNufmUser(ucImpl.getUser(userIn.getEmail()));
     		String tok = UUID.randomUUID().toString();
     		ct.setToken(tok);
     		rep.getConfirmationTokenRepo().save(ct);
@@ -128,7 +123,7 @@ public class SecurityController {
     		
     		return tok;
     	} catch (Exception e) {
-    		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());
+    		throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, e.getMessage());
     	}
     }
     
@@ -165,7 +160,7 @@ public class SecurityController {
     		ct.setIid(UUID.randomUUID().toString());
     		ct.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
     		ct.setExpiredAt(Timestamp.valueOf(LocalDateTime.now().plusMinutes(15)));
-    		ct.setUserId(nu.getEid());
+    		ct.setNufmUser(ucImpl.getUser(usr.getEmail()));
     		String tok = UUID.randomUUID().toString();
     		ct.setToken(tok);
     		rep.getConfirmationTokenRepo().save(ct);
@@ -196,9 +191,9 @@ public class SecurityController {
 			}
 			ct.setConfirmedAt(Timestamp.valueOf(LocalDateTime.now()));
 			rep.getConfirmationTokenRepo().save(ct);
-			NufmUser user = rep.getNfuserrepo().findByEid(ct.getUserId());
+			NufmUser user = rep.getNfuserrepo().findByEid(ct.getNufmUser().getEid());
 			if(user.equals(null)) {
-            	throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format("the user %s does not exist", ct.getUserId()));
+            	throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format("the user %s does not exist", ct.getNufmUser().getEid()));
             }
 			boolean match = pHasher.matches(fpi.getNewPassword(), user.getPassword());
             if(match == true) {

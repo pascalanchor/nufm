@@ -45,7 +45,7 @@ public class ContractorController {
 	@Autowired EmailService emailSender;
 	@Autowired private EmailBuilder emailBuilder;
 	@Autowired private FileStorageService fss;
-	//ADD WORKER
+	//ADD CONTRACTOR
 	@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
 	@PostMapping(PathCte.AddContractorServletPath)
     public ResponseEntity<String> createContractor(@RequestParam("profileImage") MultipartFile profileImage,@RequestParam("data") String data) {
@@ -58,7 +58,7 @@ public class ContractorController {
     		String imagePath = fss.storeFile(profileImage, path);		
     		contractorModel.setProfileImage(imagePath);
     		String pwd = ccImpl.createContractor(contractorModel);
-    		// add role 'ROLE_PROPERTY_WORKER' to the created user
+    		// add role 'ROLE_PROPERTY_CONTRACTOR' to the created user
     		ucImpl.addRoleToUser(contractorIn.getEmail(), SecurityCte.RoleContractor);
     		// add specializations to contractor
     		ucImpl.addSpecializations(contractorIn.getEmail(), contractorIn.getSpecializations());
@@ -66,19 +66,19 @@ public class ContractorController {
     		ct.setIid(UUID.randomUUID().toString());
     		ct.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
     		ct.setExpiredAt(Timestamp.valueOf(LocalDateTime.now().plusMinutes(15)));
-    		ct.setUserId(contractorIn.getEmail());
+    		ct.setNufmUser(ccImpl.getContractorById(contractorIn.getEmail()));
     		String tok = UUID.randomUUID().toString();
     		ct.setToken(tok);
     		rep.getConfirmationTokenRepo().save(ct);
     		String link = "http://localhost:6338"+SecurityCte.PublicServletPath+"/register/confirm/" + tok;
     		String mail = emailBuilder.confirmContractor(contractorIn.getFullName(),contractorIn.getEmail(),pwd,link);
     		emailSender.send(contractorIn.getEmail(), mail);    		
-    		return ResponseEntity.ok().body("A confirmation email is sent to  "+contractorIn.getFullName()+"||token = "+tok);
+    		return ResponseEntity.ok().body("A confirmation email is sent to  "+contractorIn.getEmail()+"||token = "+tok);
     	} catch (Exception e) {
     		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());
     	}
     }
-    //DELETE WORKER
+    //DELETE CONTRACTOR
 	@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
 	@DeleteMapping(PathCte.DeleteContractorServletPath+"/{id}")
     public ResponseEntity<String> deleteContractor(@PathVariable("id") String id){
@@ -89,7 +89,7 @@ public class ContractorController {
     		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());
     	}
     }
-    //GET WORKERS
+    //GET CONTRACTORS
 	@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
     @GetMapping(PathCte.GetContractorsServletPath)
     public ResponseEntity<List<APIContractorOut>> getContractors(){
@@ -102,7 +102,7 @@ public class ContractorController {
     		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());
     	}
     }
-    //GET WORKER BY ID
+    //GET CONTRACTOR BY ID
     @PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
     @GetMapping(PathCte.ContractorServletPath+"/{id}")
     public ResponseEntity<APIContractorOut> getContractorById(@PathVariable("id") String id){
@@ -113,18 +113,18 @@ public class ContractorController {
     		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());
     	}
     }
-    //UPDATE WORKER
-    @PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
-    @PutMapping(PathCte.EditContractorServletPath)
-    public ResponseEntity<APIContractorOut> updateContractor(@RequestBody APIContractorIn contractorUpdate){
-    	try {
-    		NufmUser contractor = ContractorTransformer.ModelFromContractor(contractorUpdate);
-    	    NufmUser res = ccImpl.updateContractor(contractor, contractorUpdate.getSpecializations());
-    	    return ResponseEntity.ok().body(ContractorTransformer.ContractorFromModel(res));
-    	} catch (Exception e) {
-    		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());
-    	}
-    }
+//    //UPDATE CONTRACTOR
+//    @PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
+//    @PutMapping(PathCte.EditContractorServletPath)
+//    public ResponseEntity<APIContractorOut> updateContractor(@RequestBody APIContractorIn contractorUpdate){
+//    	try {
+//    		NufmUser contractor = ContractorTransformer.ModelFromContractor(contractorUpdate);
+//    	    NufmUser res = ccImpl.updateContractor(contractor, contractorUpdate.getSpecializations());
+//    	    return ResponseEntity.ok().body(ContractorTransformer.ContractorFromModel(res));
+//    	} catch (Exception e) {
+//    		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());
+//    	}
+//    }
     
     
     

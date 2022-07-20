@@ -19,5 +19,9 @@ public interface PathCte {
 	public static final String GetContractorByIdServletPath = ContractorServletPath;
 	//facility management 
 	public static final String FacilityServletPath = PrivateServletPath+"/facility";
-	public static final String AddFacilityServletPath = FacilityServletPath+"/add";
+	public static final String AddFacilityServletPath = FacilityServletPath;
+	public static final String EditFacilityServletPath = FacilityServletPath+"/edit";
+	public static final String DeleteFacilityServletPath = FacilityServletPath+"/delete";
+	public static final String GetFacilitiesServletPath = PrivateServletPath+"/facilities";
+	public static final String GetFacilityByIdServletPath = FacilityServletPath;
 }

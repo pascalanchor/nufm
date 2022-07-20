@@ -29,8 +29,10 @@ public class ConfirmationToken implements Serializable {
 
 	private String token;
 
-	@Column(name="user_id")
-	private String userId;
+	//bi-directional many-to-one association to NufmUser
+	@ManyToOne
+	@JoinColumn(name="user_id")
+	private NufmUser nufmUser;
 
 	public ConfirmationToken() {
 	}
@@ -75,12 +77,12 @@ public class ConfirmationToken implements Serializable {
 		this.token = token;
 	}
 
-	public String getUserId() {
-		return this.userId;
+	public NufmUser getNufmUser() {
+		return this.nufmUser;
 	}
 
-	public void setUserId(String id) {
-		this.userId = id;
+	public void setNufmUser(NufmUser nufmUser) {
+		this.nufmUser = nufmUser;
 	}
 
 }

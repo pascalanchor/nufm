@@ -6,6 +6,7 @@
 		<class>avh.nufm.business.model.Contractor</class>
 		<class>avh.nufm.business.model.Equipment</class>
 		<class>avh.nufm.business.model.Facility</class>
+		<class>avh.nufm.business.model.FacilityDocument</class>
 		<class>avh.nufm.business.model.FacilityEquipment</class>
 		<class>avh.nufm.business.model.FacilityType</class>
 		<class>avh.nufm.business.model.Invoice</class>
@@ -24,6 +25,5 @@
 		<class>avh.nufm.business.model.UserSpecialization</class>
 		<class>avh.nufm.business.model.WorkerSchedule</class>
 		<class>avh.nufm.business.model.WorkerTask</class>
-		<class>avh.nufm.business.model.FacilityDocument</class>
 	</persistence-unit>
 </persistence>

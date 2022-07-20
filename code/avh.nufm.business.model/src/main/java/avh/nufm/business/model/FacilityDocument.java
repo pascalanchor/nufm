@@ -18,8 +18,10 @@ public class FacilityDocument implements Serializable {
 	@Column(name="doc_path")
 	private String docPath;
 
-	@Column(name="facility_id")
-	private String facilityId;
+	//bi-directional many-to-one association to Facility
+	@ManyToOne
+	@JoinColumn(name="facility_id")
+	private Facility facility;
 
 	public FacilityDocument() {
 	}
@@ -32,12 +34,12 @@ public class FacilityDocument implements Serializable {
 		this.docPath = docPath;
 	}
 
-	public String getFacilityId() {
-		return this.facilityId;
+	public Facility getFacility() {
+		return this.facility;
 	}
 
-	public void setFacilityId(String facilityId) {
-		this.facilityId = facilityId;
+	public void setFacility(Facility facility) {
+		this.facility = facility;
 	}
 
 }

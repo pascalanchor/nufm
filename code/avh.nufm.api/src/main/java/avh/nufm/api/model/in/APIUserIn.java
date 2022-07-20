@@ -12,5 +12,4 @@ import lombok.Setter;
 @Setter
 public class APIUserIn extends APIUser {
 	private String password;
-	private ArrayList<String> roles = new ArrayList<String>();
 }

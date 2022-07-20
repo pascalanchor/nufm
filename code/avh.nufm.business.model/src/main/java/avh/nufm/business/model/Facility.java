@@ -40,9 +40,13 @@ public class Facility implements Serializable {
 	private FacilityType facilityType;
 
 	//bi-directional many-to-one association to NufmUser
-	@ManyToOne
+	@ManyToOne(cascade= {CascadeType.REMOVE})
 	@JoinColumn(name="occupant_id")
 	private NufmUser nufmUser;
+
+	//bi-directional many-to-one association to FacilityDocument
+	@OneToMany(mappedBy="facility")
+	private List<FacilityDocument> facilityDocuments;
 
 	//bi-directional many-to-one association to FacilityEquipment
 	@OneToMany(mappedBy="facility")
@@ -135,6 +139,28 @@ public class Facility implements Serializable {
 
 	public void setNufmUser(NufmUser nufmUser) {
 		this.nufmUser = nufmUser;
+	}
+
+	public List<FacilityDocument> getFacilityDocuments() {
+		return this.facilityDocuments;
+	}
+
+	public void setFacilityDocuments(List<FacilityDocument> facilityDocuments) {
+		this.facilityDocuments = facilityDocuments;
+	}
+
+	public FacilityDocument addFacilityDocument(FacilityDocument facilityDocument) {
+		getFacilityDocuments().add(facilityDocument);
+		facilityDocument.setFacility(this);
+
+		return facilityDocument;
+	}
+
+	public FacilityDocument removeFacilityDocument(FacilityDocument facilityDocument) {
+		getFacilityDocuments().remove(facilityDocument);
+		facilityDocument.setFacility(null);
+
+		return facilityDocument;
 	}
 
 	public List<FacilityEquipment> getFacilityEquipments() {

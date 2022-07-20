@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import avh.nufm.api.common.PathCte;
 import avh.nufm.api.email.EmailBuilder;
 import avh.nufm.api.email.EmailService;
 import avh.nufm.api.impl.ConfirmationTokenControllerImpl;
@@ -45,7 +47,7 @@ public class FacilityController {
 	@Autowired private FileStorageService fss;
 	
 	@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
-	@PostMapping("avh/nufm/v1/private/facility")//only administrator and owner can define new facility
+	@PostMapping(PathCte.AddFacilityServletPath)//only administrator and owner can define new facility
 	public ResponseEntity<APIFacilityOut> createFacility(@RequestParam("profileImage") MultipartFile profileImage,
 			@RequestParam("facilityDoc1") MultipartFile facilityDoc1,
 			@RequestParam("facilityData") String facilityData,
@@ -81,15 +83,16 @@ public class FacilityController {
 		APIOccupantOut occupantOut = OccupantTransformer.OccupantFromModel(occupantModel);
 		occupantOut.setProfileImage(imagePath);
         res.setOccupant(occupantOut);}
+		else {
 		APIOccupantOut occupantOut = OccupantTransformer.OccupantFromModel(occupant);
 		occupantOut.setProfileImage(imagePath);
 		fci.addOccupantToFacility(fct.getEid(), occupantIn.getEmail());
-		res.setOccupant(occupantOut);
+		res.setOccupant(occupantOut);}
 		List<String> docs = fci.getFacilityDocuments(fct.getEid());
 		res.setDocs(docs);
 		return ResponseEntity.ok().body(res);
 	} catch (Exception e) {
-		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());
+		throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, e.getMessage());
 	}
 }
 
@@ -124,29 +127,46 @@ public class FacilityController {
 //}
 
 @PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
-@GetMapping("avh/nufm/v1/private/facilities/{facilityId}")
+@GetMapping(PathCte.GetFacilityByIdServletPath+"/{facilityId}")
 public ResponseEntity<APIFacilityOut> getFacilityById(@PathVariable("facilityId") String fid) {
 	try {
+		Facility facility = fci.getFacilityById(fid);
 		APIFacilityOut res= FacilityTransformer.FacilityFromModel(fci.getFacilityById(fid));
+		res.setOccupant(OccupantTransformer.OccupantFromModel(facility.getNufmUser()));
+		res.setDocs(fci.getFacilityDocuments(fid));
 		return ResponseEntity.ok().body(res);
 	} catch (Exception e) {
-		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());
+		throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, e.getMessage());
 	}
 }
 
 @PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
-@GetMapping("avh/nufm/v1/private/facilities")
+@GetMapping(PathCte.GetFacilitiesServletPath)
 public ResponseEntity<List<APIFacilityOut>> getFacilities() {
 	try {
 		List<APIFacilityOut> res = new ArrayList<>();
 		List<Facility> fList = fci.getAllFacilities();
-		fList.stream().forEach(e-> res.add(FacilityTransformer.FacilityFromModel(e)));
+		fList.stream().forEach((e)->{
+		APIFacilityOut facilityOut = FacilityTransformer.FacilityFromModel(e);
+		facilityOut.setOccupant(OccupantTransformer.OccupantFromModel(e.getNufmUser()));
+		facilityOut.setDocs(fci.getFacilityDocuments(e.getEid()));
+		res.add(facilityOut);
+		});
 		return ResponseEntity.ok().body(res);
 	} catch (Exception e) {
-		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());
+		throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, e.getMessage());
 	}
 }
-
+@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
+@DeleteMapping(PathCte.DeleteFacilityServletPath+"/{id}")
+public ResponseEntity<String> deleteFacility(@PathVariable("id") String id){
+	try {
+		fci.deleteFacility(id);
+		return ResponseEntity.ok().body("facility was deleted successfully");
+	} catch (Exception e) {
+		throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, e.getMessage());
+	}
+}
 
 
 }

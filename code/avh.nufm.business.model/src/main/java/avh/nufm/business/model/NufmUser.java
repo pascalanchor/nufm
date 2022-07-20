@@ -27,12 +27,12 @@ public class NufmUser implements Serializable {
 	@Column(name="full_name")
 	private String fullName;
 
-	@Column(name="profile_image")
-	private String profileImage;
-
 	private String password;
 
 	private String phone;
+
+	@Column(name="profile_image")
+	private String profileImage;
 
 	@Column(name="updated_at")
 	private Timestamp updatedAt;
@@ -41,9 +41,9 @@ public class NufmUser implements Serializable {
 	@OneToMany(mappedBy="nufmUser")
 	private List<Attendance> attendances;
 
-//	//bi-directional many-to-one association to ConfirmationToken
-//	@OneToMany(mappedBy="nufmUser")
-//	private List<ConfirmationToken> confirmationTokens;
+	//bi-directional many-to-one association to ConfirmationToken
+	@OneToMany(mappedBy="nufmUser")
+	private List<ConfirmationToken> confirmationTokens;
 
 	//bi-directional many-to-one association to Facility
 	@OneToMany(mappedBy="nufmUser")
@@ -124,14 +124,6 @@ public class NufmUser implements Serializable {
 		this.fullName = fullName;
 	}
 
-	public String getProfileImage() {
-		return this.profileImage;
-	}
-
-	public void setProfileImage(String profileImage) {
-		this.profileImage = profileImage;
-	}
-
 	public String getPassword() {
 		return this.password;
 	}
@@ -146,6 +138,14 @@ public class NufmUser implements Serializable {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	public String getProfileImage() {
+		return this.profileImage;
+	}
+
+	public void setProfileImage(String profileImage) {
+		this.profileImage = profileImage;
 	}
 
 	public Timestamp getUpdatedAt() {
@@ -178,27 +178,27 @@ public class NufmUser implements Serializable {
 		return attendance;
 	}
 
-//	public List<ConfirmationToken> getConfirmationTokens() {
-//		return this.confirmationTokens;
-//	}
-//
-//	public void setConfirmationTokens(List<ConfirmationToken> confirmationTokens) {
-//		this.confirmationTokens = confirmationTokens;
-//	}
-//
-//	public ConfirmationToken addConfirmationToken(ConfirmationToken confirmationToken) {
-//		getConfirmationTokens().add(confirmationToken);
-//		confirmationToken.setNufmUser(this);
-//
-//		return confirmationToken;
-//	}
-//
-//	public ConfirmationToken removeConfirmationToken(ConfirmationToken confirmationToken) {
-//		getConfirmationTokens().remove(confirmationToken);
-//		confirmationToken.setNufmUser(null);
-//
-//		return confirmationToken;
-//	}
+	public List<ConfirmationToken> getConfirmationTokens() {
+		return this.confirmationTokens;
+	}
+
+	public void setConfirmationTokens(List<ConfirmationToken> confirmationTokens) {
+		this.confirmationTokens = confirmationTokens;
+	}
+
+	public ConfirmationToken addConfirmationToken(ConfirmationToken confirmationToken) {
+		getConfirmationTokens().add(confirmationToken);
+		confirmationToken.setNufmUser(this);
+
+		return confirmationToken;
+	}
+
+	public ConfirmationToken removeConfirmationToken(ConfirmationToken confirmationToken) {
+		getConfirmationTokens().remove(confirmationToken);
+		confirmationToken.setNufmUser(null);
+
+		return confirmationToken;
+	}
 
 	public List<Facility> getFacilities() {
 		return this.facilities;

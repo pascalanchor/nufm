@@ -48,10 +48,6 @@ public class WorkerControllerImpl {
 	@Transactional
 	public void deleteWorker(String workerId) {
 		NufmUser worker = repo.getNfuserrepo().findByEid(workerId);
-		ucImpl.removeRoleFromUser(worker, SecurityCte.RoleWorker);
-		ucImpl.deleteAllUserSpecs(worker);
-		List<ConfirmationToken> ctList = repo.getConfirmationTokenRepo().findByUserId(workerId);
-		repo.getConfirmationTokenRepo().deleteAll(ctList);
 		repo.getNfuserrepo().delete(worker);	
 	}
 	
@@ -79,12 +75,16 @@ public class WorkerControllerImpl {
 
 	@Transactional
 	public NufmUser getWorkerById(String workerId) {
-		NufmUser res = repo.getNfuserrepo().findByEid(workerId);
+		Optional<NufmUser> res = repo.getNfuserrepo().findById(workerId);
+		if(res.isPresent())
+		{List<UserRole> list = repo.getUserrolerepo().findByNufmUser(res.get());
 		List<String> roles = new ArrayList<>();
-		res.getUserRoles().stream().forEach(e->roles.add(e.getNufmRole().getName()));
+		list.stream().forEach(e->roles.add(e.getNufmRole().getName()));
 		if(roles.contains(SecurityCte.RoleWorker))
-			{return res;}
-		else {throw new BusinessException(String.format("user %s is not a worker", res.getFullName()));}
+			{return res.get();}
+		else {throw new BusinessException(String.format("user %s is not a worker", res.get().getFullName()));}
+		}
+		else throw new BusinessException(String.format("user does not exist"));
 	}
 
 

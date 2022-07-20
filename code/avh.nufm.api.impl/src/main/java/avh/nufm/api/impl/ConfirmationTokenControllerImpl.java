@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import avh.nufm.business.model.ConfirmationToken;
+import avh.nufm.business.model.NufmUser;
 import avh.nufm.business.model.repository.NufmRepos;
 
 @Component
@@ -18,10 +19,11 @@ public class ConfirmationTokenControllerImpl {
 	@Transactional
 	public String createConfirmationToken(String userId) {
 		ConfirmationToken ct = new ConfirmationToken();
+		NufmUser user = repo.getNfuserrepo().findByEid(userId);
 		ct.setIid(UUID.randomUUID().toString());
 		ct.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
 		ct.setExpiredAt(Timestamp.valueOf(LocalDateTime.now().plusMinutes(15)));
-		ct.setUserId(userId);
+		ct.setNufmUser(user);
 		String tok = UUID.randomUUID().toString();
 		ct.setToken(tok);
 		repo.getConfirmationTokenRepo().save(ct);

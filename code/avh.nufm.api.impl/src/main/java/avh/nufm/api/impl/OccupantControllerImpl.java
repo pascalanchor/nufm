@@ -31,7 +31,7 @@ public class OccupantControllerImpl {
 		//check if user already exists
 		Optional<NufmUser> ou = repo.getNfuserrepo().findById(id);
 		if (ou.isPresent())
-			return ou.get();
+			throw new BusinessException("occupant is in a facility already");
 		else 
 			return null;
 	}
@@ -55,7 +55,7 @@ public class OccupantControllerImpl {
 		NufmUser occupant = repo.getNfuserrepo().findByEid(occupantId);
 		ucImpl.removeRoleFromUser(occupant, SecurityCte.RoleOccupant);
 		ucImpl.deleteAllUserSpecs(occupant);
-		List<ConfirmationToken> ctList = repo.getConfirmationTokenRepo().findByUserId(occupantId);
+		List<ConfirmationToken> ctList = repo.getConfirmationTokenRepo().findByNufmUser(occupant);
 		repo.getConfirmationTokenRepo().deleteAll(ctList);
 		repo.getNfuserrepo().delete(occupant);	
 	}

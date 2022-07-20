@@ -59,10 +59,6 @@ public class ContractorControllerImpl {
 	@Transactional
 	public void deleteContractor(String contractorId) {
 		NufmUser contractor = repo.getNfuserrepo().findByEid(contractorId);
-		ucImpl.removeRoleFromUser(contractor, SecurityCte.RoleContractor);
-		ucImpl.deleteAllUserSpecs(contractor);
-		List<ConfirmationToken> ctList = repo.getConfirmationTokenRepo().findByUserId(contractorId);
-		repo.getConfirmationTokenRepo().deleteAll(ctList);
 		repo.getNfuserrepo().delete(contractor);	
 	}
 	
@@ -89,12 +85,16 @@ public class ContractorControllerImpl {
 	
 	@Transactional
 	public NufmUser getContractorById(String contractorId) {
-		NufmUser res = repo.getNfuserrepo().findByEid(contractorId);
+		Optional<NufmUser> res = repo.getNfuserrepo().findById(contractorId);
+		if(res.isPresent())
+		{List<UserRole> list = repo.getUserrolerepo().findByNufmUser(res.get());
 		List<String> roles = new ArrayList<>();
-		res.getUserRoles().stream().forEach(e->roles.add(e.getNufmRole().getName()));
+		list.stream().forEach(e->roles.add(e.getNufmRole().getName()));
 		if(roles.contains(SecurityCte.RoleContractor))
-			{return res;}
-		else {throw new BusinessException(String.format("user %s is not a contractor", res.getFullName()));}
+			{return res.get();}
+		else {throw new BusinessException(String.format("user %s is not a contractor", res.get().getFullName()));}
+		}
+		else throw new BusinessException(String.format("user does not exist"));
 	}
 
 	
