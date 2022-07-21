@@ -25,7 +25,12 @@ public class UserSpecialization implements Serializable {
 	//bi-directional many-to-one association to Specialization
 	@ManyToOne
 	@JoinColumn(name="specialization_id")
-	private Specialization specialization;
+	private Specialization specialization1;
+
+	//bi-directional many-to-one association to Specialization
+	@ManyToOne
+	@JoinColumn(name="specialization_id")
+	private Specialization specialization2;
 
 	public UserSpecialization() {
 	}
@@ -46,12 +51,20 @@ public class UserSpecialization implements Serializable {
 		this.nufmUser = nufmUser;
 	}
 
-	public Specialization getSpecialization() {
-		return this.specialization;
+	public Specialization getSpecialization1() {
+		return this.specialization1;
 	}
 
-	public void setSpecialization(Specialization specialization) {
-		this.specialization = specialization;
+	public void setSpecialization1(Specialization specialization1) {
+		this.specialization1 = specialization1;
+	}
+
+	public Specialization getSpecialization2() {
+		return this.specialization2;
+	}
+
+	public void setSpecialization2(Specialization specialization2) {
+		this.specialization2 = specialization2;
 	}
 
 }

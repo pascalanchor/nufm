@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import avh.nufm.api.impl.errors.BusinessException;
 import avh.nufm.api.impl.logic.EMaterialStatus;
 import avh.nufm.business.model.SafetyMaterial;
+import avh.nufm.business.model.SafetyMaterialType;
 import avh.nufm.business.model.SafetyWorker;
 import avh.nufm.business.model.repository.NufmRepos;
 
@@ -27,8 +28,9 @@ public SafetyMaterial addSafetyMaterial(SafetyMaterial sft,List<String> workerNa
 	if(sft.getName()==null || sft.getName().equals(""))
 		throw new BusinessException("the safety material name cannot be empty !!");
 	//check type
-	if(sft.getType()==null || sft.getType().equals(""))
-		throw new BusinessException("the safety material type cannot be empty !!");
+	Optional<SafetyMaterialType> mtrtype=repo.getSafmtrTyperepo().findById(sft.getSafetyMaterialType().getEid());
+	if(mtrtype==null || mtrtype.isEmpty())
+		throw new BusinessException(String.format("invalid safety material type id:%s", sft.getSafetyMaterialType().getEid()));
 	//check the status
 	EMaterialStatus sts=EMaterialStatus.fromString(sft.getStatus());
 	if(sts==null)
@@ -45,6 +47,7 @@ public SafetyMaterial addSafetyMaterial(SafetyMaterial sft,List<String> workerNa
 	
 	return sft;
 }
+
 
 
 public Iterable<SafetyMaterial> getAllSafetyMaterials(){
@@ -65,8 +68,9 @@ public SafetyMaterial updateSafetyMaterial(String sftId,SafetyMaterial newSafety
 	if(newSafetyMaterial.getName()==null || newSafetyMaterial.getName().equals(""))
 		throw new BusinessException("the safety material name cannot be empty !!");
 	//check type
-	if(newSafetyMaterial.getType()==null || newSafetyMaterial.getType().equals(""))
-		throw new BusinessException("the safety material type cannot be empty !!");
+	Optional<SafetyMaterialType> mtrtype=repo.getSafmtrTyperepo().findById(newSafetyMaterial.getSafetyMaterialType().getEid());
+	if(mtrtype==null || mtrtype.isEmpty())
+		throw new BusinessException(String.format("invalid safety material type id:%s", newSafetyMaterial.getSafetyMaterialType().getEid()));
 	//check the status
 	EMaterialStatus sts=EMaterialStatus.fromString(newSafetyMaterial.getStatus());
 	if(sts==null)
@@ -75,8 +79,8 @@ public SafetyMaterial updateSafetyMaterial(String sftId,SafetyMaterial newSafety
 	//complete the safetyMaterial definitions
 	updatedSft.setName(newSafetyMaterial.getName());
 	updatedSft.setStatus(newSafetyMaterial.getStatus());
-	updatedSft.setType(newSafetyMaterial.getType());
-	
+	updatedSft.setSafetyMaterialType(newSafetyMaterial.getSafetyMaterialType());
+	updatedSft.setDocumentid(newSafetyMaterial.getDocumentid());
 	//we can save this material to database then assign the workers to it
 	repo.getSafmtrrepo().save(updatedSft);
 	//now we need to delete the old assigned workers

@@ -10,4 +10,5 @@ import lombok.Setter;
 @Setter
 public class APISafetyMaterialOut extends APISafetyMaterial{
 private String eid;
+
 }

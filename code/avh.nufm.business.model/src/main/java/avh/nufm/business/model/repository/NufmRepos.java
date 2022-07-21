@@ -58,8 +58,13 @@ public class NufmRepos {
 	private FacilityEquipmentRepo facilityEquipmentRepo;
 	@Autowired 
 	private FacilityDocumentRepo facilityDocumentRepo;
+	@Autowired
+	private SafetyMaterialTypeRepo safmtrTyperepo;
+	
 	
 	// generate getters 
+	
+	
 	public AttendanceRepo getAttrepo() {
 		return attrepo;
 	}
@@ -127,6 +132,11 @@ public class NufmRepos {
 	public UserSpecializationRepo getUserSpecrepo() {
 		return userSpecrepo;
 	}
+	public SafetyMaterialTypeRepo getMaterialTypeRepo() {
+		return safmtrTyperepo;
+	}
+	
+	
 	
 	
 	

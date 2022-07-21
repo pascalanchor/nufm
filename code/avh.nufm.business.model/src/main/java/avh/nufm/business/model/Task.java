@@ -53,20 +53,12 @@ public class Task implements Serializable {
 	@JoinColumn(name="type_id")
 	private TaskType taskType;
 
-	//bi-directional many-to-one association to TaskNotification
-	@OneToMany(mappedBy="task")
-	private List<TaskNotification> taskNotifications;
-
-	//bi-directional many-to-one association to TaskRequest
-	@OneToMany(mappedBy="task")
-	private List<TaskRequest> taskRequests;
-
 	//bi-directional many-to-one association to WorkerSchedule
 	@OneToMany(mappedBy="task")
 	private List<WorkerSchedule> workerSchedules;
 
 	//bi-directional many-to-one association to WorkerTask
-	@OneToMany(mappedBy="task",cascade = {CascadeType.REMOVE})
+	@OneToMany(mappedBy="task")
 	private List<WorkerTask> workerTasks;
 
 	public Task() {
@@ -158,50 +150,6 @@ public class Task implements Serializable {
 
 	public void setTaskType(TaskType taskType) {
 		this.taskType = taskType;
-	}
-
-	public List<TaskNotification> getTaskNotifications() {
-		return this.taskNotifications;
-	}
-
-	public void setTaskNotifications(List<TaskNotification> taskNotifications) {
-		this.taskNotifications = taskNotifications;
-	}
-
-	public TaskNotification addTaskNotification(TaskNotification taskNotification) {
-		getTaskNotifications().add(taskNotification);
-		taskNotification.setTask(this);
-
-		return taskNotification;
-	}
-
-	public TaskNotification removeTaskNotification(TaskNotification taskNotification) {
-		getTaskNotifications().remove(taskNotification);
-		taskNotification.setTask(null);
-
-		return taskNotification;
-	}
-
-	public List<TaskRequest> getTaskRequests() {
-		return this.taskRequests;
-	}
-
-	public void setTaskRequests(List<TaskRequest> taskRequests) {
-		this.taskRequests = taskRequests;
-	}
-
-	public TaskRequest addTaskRequest(TaskRequest taskRequest) {
-		getTaskRequests().add(taskRequest);
-		taskRequest.setTask(this);
-
-		return taskRequest;
-	}
-
-	public TaskRequest removeTaskRequest(TaskRequest taskRequest) {
-		getTaskRequests().remove(taskRequest);
-		taskRequest.setTask(null);
-
-		return taskRequest;
 	}
 
 	public List<WorkerSchedule> getWorkerSchedules() {

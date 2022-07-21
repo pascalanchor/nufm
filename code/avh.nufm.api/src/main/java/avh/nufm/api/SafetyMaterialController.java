@@ -13,11 +13,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import avh.nufm.api.common.PathCte;
 import avh.nufm.api.impl.SafetyMaterialControllerImpl;
 import avh.nufm.api.impl.SafetyWorkerControllerImpl;
+import avh.nufm.api.impl.services.FileStorageService;
 import avh.nufm.api.model.in.APISafetyMaterialIn;
 import avh.nufm.api.model.out.APISafetyMaterialOut;
 import avh.nufm.api.model.transformer.SafetyMaterialTransformer;
@@ -27,15 +31,21 @@ import avh.nufm.business.model.SafetyMaterial;
 public class SafetyMaterialController {
 @Autowired SafetyMaterialControllerImpl sftimpl;
 @Autowired SafetyWorkerControllerImpl sftwrimpl;
-
+@Autowired private FileStorageService fss;
 
 
 @PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
 @PostMapping(PathCte.AddSafetyMaterialServletPath)
-public ResponseEntity<APISafetyMaterialOut> addSafetyMaterial(@RequestBody APISafetyMaterialIn sftin){
+public ResponseEntity<APISafetyMaterialOut> addSafetyMaterial(@RequestParam("materialImage") MultipartFile materialImage,@RequestParam("data") String data){
 	try {
 		APISafetyMaterialOut res;
+		//image storage path 
+		String path = "D:\\AVH projects\\Workspaces\\NufmWorkspace\\nufm\\code\\avh.nufm\\src\\main\\resources\\storage\\safety";
+		 APISafetyMaterialIn sftin=new ObjectMapper().readValue(data, APISafetyMaterialIn.class);
 		SafetyMaterial sft=SafetyMaterialTransformer.sftToModel(sftin);
+		//save and assign the image
+		String imagePath = fss.storeFile(materialImage, path);
+		sft.setDocumentid(imagePath);
 		res=SafetyMaterialTransformer.sftFromModel(sftimpl.addSafetyMaterial(sft, sftin.getWorkers()));
 		res.setWorkers(sftwrimpl.getWorkersForMaterial(res.getEid()));
 		return ResponseEntity.ok().body(res);
@@ -62,10 +72,15 @@ public ResponseEntity<List<APISafetyMaterialOut>> getAllSafetyMaterials(){
 
 @PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
 @PutMapping(PathCte.UpdateSafetyMaterialServletPath)
-public ResponseEntity<APISafetyMaterialOut> updateSafetyMaterials(@RequestBody APISafetyMaterialIn sftin,@RequestParam String oldSftId){
+public ResponseEntity<APISafetyMaterialOut> updateSafetyMaterials(@RequestParam("materialImage") MultipartFile materialImage,@RequestParam("data") String data,@RequestParam String oldSftId){
 	try {
 		APISafetyMaterialOut res;
+		String path = "D:\\AVH projects\\Workspaces\\NufmWorkspace\\nufm\\code\\avh.nufm\\src\\main\\resources\\storage\\safety";
+		APISafetyMaterialIn sftin=new ObjectMapper().readValue(data, APISafetyMaterialIn.class);
 		SafetyMaterial sft=SafetyMaterialTransformer.sftToModel(sftin);
+		//save and assign the image
+		String imagePath = fss.storeFile(materialImage, path);
+		sft.setDocumentid(imagePath);
 		res=SafetyMaterialTransformer.sftFromModel(sftimpl.updateSafetyMaterial(oldSftId,sft, sftin.getWorkers()));
 		res.setWorkers(sftwrimpl.getWorkersForMaterial(res.getEid()));
 		return ResponseEntity.ok().body(res);

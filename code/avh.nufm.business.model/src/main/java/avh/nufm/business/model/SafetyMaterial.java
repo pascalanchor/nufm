@@ -18,15 +18,20 @@ public class SafetyMaterial implements Serializable {
 	@Id
 	private String eid;
 
+	private String documentid;
+
 	private String name;
 
 	private String status;
 
-	private String type;
-
 	//bi-directional many-to-one association to SafetyWorker
-	@OneToMany(mappedBy="safetyMaterial",cascade = {CascadeType.REMOVE})
+	@OneToMany(mappedBy="safetyMaterial")
 	private List<SafetyWorker> safetyWorkers;
+
+	//bi-directional many-to-one association to SafetyMaterialType
+	@ManyToOne
+	@JoinColumn(name="type")
+	private SafetyMaterialType safetyMaterialType;
 
 	public SafetyMaterial() {
 	}
@@ -37,6 +42,14 @@ public class SafetyMaterial implements Serializable {
 
 	public void setEid(String eid) {
 		this.eid = eid;
+	}
+
+	public String getDocumentid() {
+		return this.documentid;
+	}
+
+	public void setDocumentid(String documentid) {
+		this.documentid = documentid;
 	}
 
 	public String getName() {
@@ -53,14 +66,6 @@ public class SafetyMaterial implements Serializable {
 
 	public void setStatus(String status) {
 		this.status = status;
-	}
-
-	public String getType() {
-		return this.type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
 	}
 
 	public List<SafetyWorker> getSafetyWorkers() {
@@ -83,6 +88,14 @@ public class SafetyMaterial implements Serializable {
 		safetyWorker.setSafetyMaterial(null);
 
 		return safetyWorker;
+	}
+
+	public SafetyMaterialType getSafetyMaterialType() {
+		return this.safetyMaterialType;
+	}
+
+	public void setSafetyMaterialType(SafetyMaterialType safetyMaterialType) {
+		this.safetyMaterialType = safetyMaterialType;
 	}
 
 }

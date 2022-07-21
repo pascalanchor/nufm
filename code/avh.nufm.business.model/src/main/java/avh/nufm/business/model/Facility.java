@@ -40,17 +40,9 @@ public class Facility implements Serializable {
 	private FacilityType facilityType;
 
 	//bi-directional many-to-one association to NufmUser
-	@ManyToOne(cascade= {CascadeType.REMOVE})
+	@ManyToOne
 	@JoinColumn(name="occupant_id")
 	private NufmUser nufmUser;
-
-	//bi-directional many-to-one association to FacilityDocument
-	@OneToMany(mappedBy="facility")
-	private List<FacilityDocument> facilityDocuments;
-
-	//bi-directional many-to-one association to FacilityEquipment
-	@OneToMany(mappedBy="facility")
-	private List<FacilityEquipment> facilityEquipments;
 
 	//bi-directional many-to-one association to Project
 	@OneToMany(mappedBy="facility")
@@ -59,6 +51,14 @@ public class Facility implements Serializable {
 	//bi-directional many-to-one association to Task
 	@OneToMany(mappedBy="facility")
 	private List<Task> tasks;
+
+	//bi-directional many-to-one association to FacilityDocument
+	@OneToMany(mappedBy="facility")
+	private List<FacilityDocument> facilityDocuments;
+
+	//bi-directional many-to-one association to FacilityEquipment
+	@OneToMany(mappedBy="facility")
+	private List<FacilityEquipment> facilityEquipments;
 
 	public Facility() {
 	}
@@ -141,50 +141,6 @@ public class Facility implements Serializable {
 		this.nufmUser = nufmUser;
 	}
 
-	public List<FacilityDocument> getFacilityDocuments() {
-		return this.facilityDocuments;
-	}
-
-	public void setFacilityDocuments(List<FacilityDocument> facilityDocuments) {
-		this.facilityDocuments = facilityDocuments;
-	}
-
-	public FacilityDocument addFacilityDocument(FacilityDocument facilityDocument) {
-		getFacilityDocuments().add(facilityDocument);
-		facilityDocument.setFacility(this);
-
-		return facilityDocument;
-	}
-
-	public FacilityDocument removeFacilityDocument(FacilityDocument facilityDocument) {
-		getFacilityDocuments().remove(facilityDocument);
-		facilityDocument.setFacility(null);
-
-		return facilityDocument;
-	}
-
-	public List<FacilityEquipment> getFacilityEquipments() {
-		return this.facilityEquipments;
-	}
-
-	public void setFacilityEquipments(List<FacilityEquipment> facilityEquipments) {
-		this.facilityEquipments = facilityEquipments;
-	}
-
-	public FacilityEquipment addFacilityEquipment(FacilityEquipment facilityEquipment) {
-		getFacilityEquipments().add(facilityEquipment);
-		facilityEquipment.setFacility(this);
-
-		return facilityEquipment;
-	}
-
-	public FacilityEquipment removeFacilityEquipment(FacilityEquipment facilityEquipment) {
-		getFacilityEquipments().remove(facilityEquipment);
-		facilityEquipment.setFacility(null);
-
-		return facilityEquipment;
-	}
-
 	public List<Project> getProjects() {
 		return this.projects;
 	}
@@ -227,6 +183,50 @@ public class Facility implements Serializable {
 		task.setFacility(null);
 
 		return task;
+	}
+
+	public List<FacilityDocument> getFacilityDocuments() {
+		return this.facilityDocuments;
+	}
+
+	public void setFacilityDocuments(List<FacilityDocument> facilityDocuments) {
+		this.facilityDocuments = facilityDocuments;
+	}
+
+	public FacilityDocument addFacilityDocument(FacilityDocument facilityDocument) {
+		getFacilityDocuments().add(facilityDocument);
+		facilityDocument.setFacility(this);
+
+		return facilityDocument;
+	}
+
+	public FacilityDocument removeFacilityDocument(FacilityDocument facilityDocument) {
+		getFacilityDocuments().remove(facilityDocument);
+		facilityDocument.setFacility(null);
+
+		return facilityDocument;
+	}
+
+	public List<FacilityEquipment> getFacilityEquipments() {
+		return this.facilityEquipments;
+	}
+
+	public void setFacilityEquipments(List<FacilityEquipment> facilityEquipments) {
+		this.facilityEquipments = facilityEquipments;
+	}
+
+	public FacilityEquipment addFacilityEquipment(FacilityEquipment facilityEquipment) {
+		getFacilityEquipments().add(facilityEquipment);
+		facilityEquipment.setFacility(this);
+
+		return facilityEquipment;
+	}
+
+	public FacilityEquipment removeFacilityEquipment(FacilityEquipment facilityEquipment) {
+		getFacilityEquipments().remove(facilityEquipment);
+		facilityEquipment.setFacility(null);
+
+		return facilityEquipment;
 	}
 
 }
