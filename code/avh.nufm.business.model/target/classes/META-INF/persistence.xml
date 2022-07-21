@@ -10,16 +10,16 @@
 		<class>avh.nufm.business.model.FacilityEquipment</class>
 		<class>avh.nufm.business.model.FacilityType</class>
 		<class>avh.nufm.business.model.Invoice</class>
+		<class>avh.nufm.business.model.Notification</class>
 		<class>avh.nufm.business.model.NufmRole</class>
 		<class>avh.nufm.business.model.NufmUser</class>
 		<class>avh.nufm.business.model.Project</class>
 		<class>avh.nufm.business.model.ProjectWorker</class>
 		<class>avh.nufm.business.model.SafetyMaterial</class>
+		<class>avh.nufm.business.model.SafetyMaterialType</class>
 		<class>avh.nufm.business.model.SafetyWorker</class>
 		<class>avh.nufm.business.model.Specialization</class>
 		<class>avh.nufm.business.model.Task</class>
-		<class>avh.nufm.business.model.TaskNotification</class>
-		<class>avh.nufm.business.model.TaskRequest</class>
 		<class>avh.nufm.business.model.TaskType</class>
 		<class>avh.nufm.business.model.UserRole</class>
 		<class>avh.nufm.business.model.UserSpecialization</class>

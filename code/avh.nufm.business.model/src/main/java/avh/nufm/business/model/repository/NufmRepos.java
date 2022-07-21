@@ -37,11 +37,7 @@ public class NufmRepos {
 	@Autowired
 	private SpecializationRepo specrepo;
 	@Autowired
-	private TaskNotificationRepo tasknotrepo;
-	@Autowired
 	private TaskRepo taskrepo;
-	@Autowired
-	private TaskRequestRepo taskreqrepo;
 	@Autowired
 	private TaskTypeRepo tasktyperepo;
 	@Autowired
@@ -58,6 +54,8 @@ public class NufmRepos {
 	private FacilityEquipmentRepo facilityEquipmentRepo;
 	@Autowired 
 	private FacilityDocumentRepo facilityDocumentRepo;
+	@Autowired
+	private NotificationRepo notificationRepo;
 	
 	// generate getters 
 	public AttendanceRepo getAttrepo() {
@@ -99,15 +97,11 @@ public class NufmRepos {
 	public SpecializationRepo getSpecrepo() {
 		return specrepo;
 	}
-	public TaskNotificationRepo getTasknotrepo() {
-		return tasknotrepo;
-	}
+
 	public TaskRepo getTaskrepo() {
 		return taskrepo;
 	}
-	public TaskRequestRepo getTaskreqrepo() {
-		return taskreqrepo;
-	}
+
 	public TaskTypeRepo getTasktyperepo() {
 		return tasktyperepo;
 	}

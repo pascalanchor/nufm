@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import avh.nufm.api.impl.errors.BusinessException;
-import avh.nufm.business.model.ConfirmationToken;
+
 import avh.nufm.business.model.NufmRole;
 import avh.nufm.business.model.NufmUser;
 import avh.nufm.business.model.UserRole;

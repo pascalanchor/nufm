@@ -40,7 +40,7 @@ public class Facility implements Serializable {
 	private FacilityType facilityType;
 
 	//bi-directional many-to-one association to NufmUser
-	@ManyToOne(cascade= {CascadeType.REMOVE})
+	@ManyToOne
 	@JoinColumn(name="occupant_id")
 	private NufmUser nufmUser;
 

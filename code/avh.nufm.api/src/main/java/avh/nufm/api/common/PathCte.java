@@ -24,4 +24,8 @@ public interface PathCte {
 	public static final String DeleteFacilityServletPath = FacilityServletPath+"/delete";
 	public static final String GetFacilitiesServletPath = PrivateServletPath+"/facilities";
 	public static final String GetFacilityByIdServletPath = FacilityServletPath;
+	//notification 
+	public static final String NotificationServletPath = PrivateServletPath+"/notification";
+	public static final String AddNotificationServletPath = NotificationServletPath;
+	public static final String GetNotificationsByIdServletPath = PrivateServletPath+"/notifications";
 }

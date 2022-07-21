@@ -57,22 +57,6 @@ public class NufmUser implements Serializable {
 	@OneToMany(mappedBy="nufmUser")
 	private List<SafetyWorker> safetyWorkers;
 
-	//bi-directional many-to-one association to TaskNotification
-	@OneToMany(mappedBy="nufmUser1")
-	private List<TaskNotification> taskNotifications1;
-
-	//bi-directional many-to-one association to TaskNotification
-	@OneToMany(mappedBy="nufmUser2")
-	private List<TaskNotification> taskNotifications2;
-
-	//bi-directional many-to-one association to TaskRequest
-	@OneToMany(mappedBy="nufmUser1")
-	private List<TaskRequest> taskRequests1;
-
-	//bi-directional many-to-one association to TaskRequest
-	@OneToMany(mappedBy="nufmUser2")
-	private List<TaskRequest> taskRequests2;
-
 	//bi-directional many-to-one association to UserRole
 	@OneToMany(mappedBy="nufmUser")
 	private List<UserRole> userRoles;
@@ -264,94 +248,6 @@ public class NufmUser implements Serializable {
 		safetyWorker.setNufmUser(null);
 
 		return safetyWorker;
-	}
-
-	public List<TaskNotification> getTaskNotifications1() {
-		return this.taskNotifications1;
-	}
-
-	public void setTaskNotifications1(List<TaskNotification> taskNotifications1) {
-		this.taskNotifications1 = taskNotifications1;
-	}
-
-	public TaskNotification addTaskNotifications1(TaskNotification taskNotifications1) {
-		getTaskNotifications1().add(taskNotifications1);
-		taskNotifications1.setNufmUser1(this);
-
-		return taskNotifications1;
-	}
-
-	public TaskNotification removeTaskNotifications1(TaskNotification taskNotifications1) {
-		getTaskNotifications1().remove(taskNotifications1);
-		taskNotifications1.setNufmUser1(null);
-
-		return taskNotifications1;
-	}
-
-	public List<TaskNotification> getTaskNotifications2() {
-		return this.taskNotifications2;
-	}
-
-	public void setTaskNotifications2(List<TaskNotification> taskNotifications2) {
-		this.taskNotifications2 = taskNotifications2;
-	}
-
-	public TaskNotification addTaskNotifications2(TaskNotification taskNotifications2) {
-		getTaskNotifications2().add(taskNotifications2);
-		taskNotifications2.setNufmUser2(this);
-
-		return taskNotifications2;
-	}
-
-	public TaskNotification removeTaskNotifications2(TaskNotification taskNotifications2) {
-		getTaskNotifications2().remove(taskNotifications2);
-		taskNotifications2.setNufmUser2(null);
-
-		return taskNotifications2;
-	}
-
-	public List<TaskRequest> getTaskRequests1() {
-		return this.taskRequests1;
-	}
-
-	public void setTaskRequests1(List<TaskRequest> taskRequests1) {
-		this.taskRequests1 = taskRequests1;
-	}
-
-	public TaskRequest addTaskRequests1(TaskRequest taskRequests1) {
-		getTaskRequests1().add(taskRequests1);
-		taskRequests1.setNufmUser1(this);
-
-		return taskRequests1;
-	}
-
-	public TaskRequest removeTaskRequests1(TaskRequest taskRequests1) {
-		getTaskRequests1().remove(taskRequests1);
-		taskRequests1.setNufmUser1(null);
-
-		return taskRequests1;
-	}
-
-	public List<TaskRequest> getTaskRequests2() {
-		return this.taskRequests2;
-	}
-
-	public void setTaskRequests2(List<TaskRequest> taskRequests2) {
-		this.taskRequests2 = taskRequests2;
-	}
-
-	public TaskRequest addTaskRequests2(TaskRequest taskRequests2) {
-		getTaskRequests2().add(taskRequests2);
-		taskRequests2.setNufmUser2(this);
-
-		return taskRequests2;
-	}
-
-	public TaskRequest removeTaskRequests2(TaskRequest taskRequests2) {
-		getTaskRequests2().remove(taskRequests2);
-		taskRequests2.setNufmUser2(null);
-
-		return taskRequests2;
 	}
 
 	public List<UserRole> getUserRoles() {

@@ -1,15 +1,12 @@
 package avh.nufm.api.model.in;
 
-
-
-import avh.nufm.api.model.APIUser;
+import avh.nufm.api.model.APINotification;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 @NoArgsConstructor
-@Getter 
+@Getter
 @Setter
-public class APIUserIn extends APIUser {
-	private String password;
+public class APINotificationIn extends APINotification {
+
 }

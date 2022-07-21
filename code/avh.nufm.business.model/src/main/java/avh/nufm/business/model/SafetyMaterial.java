@@ -22,7 +22,10 @@ public class SafetyMaterial implements Serializable {
 
 	private String status;
 
-	private String type;
+	//bi-directional many-to-one association to SafetyMaterialType
+	@ManyToOne
+	@JoinColumn(name="type")
+	private SafetyMaterialType safetyMaterialType;
 
 	//bi-directional many-to-one association to SafetyWorker
 	@OneToMany(mappedBy="safetyMaterial")
@@ -55,12 +58,12 @@ public class SafetyMaterial implements Serializable {
 		this.status = status;
 	}
 
-	public String getType() {
-		return this.type;
+	public SafetyMaterialType getSafetyMaterialType() {
+		return this.safetyMaterialType;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setSafetyMaterialType(SafetyMaterialType safetyMaterialType) {
+		this.safetyMaterialType = safetyMaterialType;
 	}
 
 	public List<SafetyWorker> getSafetyWorkers() {
