@@ -36,4 +36,9 @@ public interface PathCte {
 	public static final String GetAllInvoiceServletPath =PrivateServletPath +"/invoices";
 	public static final String SearchInvoiceServletPath =PrivateServletPath +"/invoice/search";
 	
+	//safetyMaterial management
+	public static final String AddSafetyMaterialServletPath =PrivateServletPath +"/safetyMaterial/add";
+	public static final String GetAllSafetyMaterialsServletPath =PrivateServletPath +"/safetyMaterials";
+	public static final String UpdateSafetyMaterialServletPath =PrivateServletPath +"/safetyMaterial/update";
+	public static final String deleteSafetyMaterialServletPath =PrivateServletPath +"/safetyMaterial/delete";
 }

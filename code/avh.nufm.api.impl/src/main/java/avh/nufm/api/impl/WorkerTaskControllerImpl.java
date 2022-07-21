@@ -21,7 +21,7 @@ public class WorkerTaskControllerImpl {
 @Autowired private NufmRepos repo;
 
 
-public WorkerTask assignWorker(Task tk,NufmUser worker) {
+public WorkerTask assignWorkerToTask(Task tk,NufmUser worker) {
 	//check the task
 	Optional<Task> tskop=repo.getTaskrepo().findById(tk.getEid());
 	if(tskop==null || tskop.isEmpty())
@@ -46,8 +46,11 @@ public WorkerTask assignWorker(Task tk,NufmUser worker) {
 	
 }
 
+
+
+
 public List<String> getWorkersForTask(String tskId) {
-	
+	//check the task
 	Optional<Task> tskop=repo.getTaskrepo().findById(tskId);
 	if(tskop==null || tskop.isEmpty())
 		throw new BusinessException(String.format("invalid task id:%s", tskId));

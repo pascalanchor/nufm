@@ -91,7 +91,7 @@ public Task addTask(Task tk ,List<String> WorkersName) {
 	repo.getTaskrepo().save(tk);
 	//now we can assign the workers
 	for(NufmUser w:workers) {
-		wrktaskCont.assignWorker(tk, w);
+		wrktaskCont.assignWorkerToTask(tk, w);
 	}
 	
 	return tk;
@@ -204,7 +204,7 @@ public Task updateTask(String id,Task newTask,List<String> WorkersName) {
 	
 	//now assign the new workers
 	for(NufmUser w:workers) {
-		wrktaskCont.assignWorker(updatedTask, w);
+		wrktaskCont.assignWorkerToTask(updatedTask, w);
 	}
 	
 	return updatedTask;
