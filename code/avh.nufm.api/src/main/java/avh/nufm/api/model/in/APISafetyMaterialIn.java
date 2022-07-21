@@ -1,8 +1,6 @@
 package avh.nufm.api.model.in;
 
-
-
-import avh.nufm.api.model.APITask;
+import avh.nufm.api.model.APISafetyMaterial;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +8,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class APITaskIn extends APITask{
-	private String comment;
+public class APISafetyMaterialIn extends APISafetyMaterial{
+
 }

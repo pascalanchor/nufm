@@ -1,6 +1,7 @@
 package avh.nufm.security.common;
 
 public interface SecurityCte {
+	
 	//public path
 	public static final String PublicServletPath = "/avh/nufm/v1/public";
 	//login path

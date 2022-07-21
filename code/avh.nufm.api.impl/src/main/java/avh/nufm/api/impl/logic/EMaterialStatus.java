@@ -1,12 +1,12 @@
 package avh.nufm.api.impl.logic;
 
-public enum ETaskStatus {
-    inprogress("inprogress"),
-	finished("done");
+public enum EMaterialStatus {
+used("used"),
+free("free");
 	
 	private String label;
 	
-	private ETaskStatus(String label) {
+	private EMaterialStatus(String label) {
 		this.label = label;
 	}
 	
@@ -14,8 +14,8 @@ public enum ETaskStatus {
 		return this.label;
 	}
 	
-	public static ETaskStatus fromString(String lb) {
-		for (ETaskStatus res : ETaskStatus.values())
+	public static EMaterialStatus fromString(String lb) {
+		for (EMaterialStatus res : EMaterialStatus.values())
 			if (res.getLabel().equals(lb))
 				return res;
 		return null;
