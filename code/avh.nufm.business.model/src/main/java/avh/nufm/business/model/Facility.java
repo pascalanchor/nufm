@@ -40,12 +40,12 @@ public class Facility implements Serializable {
 	private FacilityType facilityType;
 
 	//bi-directional many-to-one association to NufmUser
-	@ManyToOne
+	@ManyToOne(cascade = {CascadeType.REMOVE})
 	@JoinColumn(name="occupant_id")
 	private NufmUser nufmUser;
 
 	//bi-directional many-to-one association to FacilityDocument
-	@OneToMany(mappedBy="facility")
+	@OneToMany(mappedBy="facility",cascade = {CascadeType.REMOVE})
 	private List<FacilityDocument> facilityDocuments;
 
 	//bi-directional many-to-one association to FacilityEquipment
@@ -53,11 +53,11 @@ public class Facility implements Serializable {
 	private List<FacilityEquipment> facilityEquipments;
 
 	//bi-directional many-to-one association to Project
-	@OneToMany(mappedBy="facility")
+	@OneToMany(mappedBy="facility",cascade = {CascadeType.REMOVE})
 	private List<Project> projects;
 
 	//bi-directional many-to-one association to Task
-	@OneToMany(mappedBy="facility")
+	@OneToMany(mappedBy="facility",cascade = {CascadeType.REMOVE})
 	private List<Task> tasks;
 
 	public Facility() {

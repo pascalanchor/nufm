@@ -135,10 +135,10 @@ public class FacilityControllerImpl {
 	@Transactional
 	public Facility updateFacility(String id, Facility facilityUpdate) {
 		// get the old facility by id
-		Optional<Facility> flist = repo.getFacrepo().findById(id);
-		if (flist.isEmpty())
+		Optional<Facility> oldFacility = repo.getFacrepo().findById(id);
+		if (oldFacility.isEmpty())
 			throw new BusinessException(String.format("the facility id:%s is not valid ", id));
-		Facility res = flist.get();
+		Facility res = oldFacility.get();
 		if (facilityUpdate.getName().equals(""))
 			throw new BusinessException("the facility name cannot be null");
 		// check if the name already exists
@@ -202,6 +202,8 @@ public class FacilityControllerImpl {
 	public void addFacilityDoc(String id, String docPath) {
 		Optional<Facility> facility = repo.getFacrepo().findById(id);
 		if(facility.isPresent()) {
+			List<FacilityDocument> list = repo.getFacilityDocumentRepo().findByFacility(facility.get());
+			repo.getFacilityDocumentRepo().deleteAll(list);
 			FacilityDocument fd = new FacilityDocument();
 			fd.setFacility(facility.get());
 			fd.setDocPath(docPath);

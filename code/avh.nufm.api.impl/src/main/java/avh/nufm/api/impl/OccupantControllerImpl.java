@@ -16,6 +16,7 @@ import avh.nufm.business.model.ConfirmationToken;
 import avh.nufm.business.model.NufmRole;
 import avh.nufm.business.model.NufmUser;
 import avh.nufm.business.model.UserRole;
+import avh.nufm.business.model.UserSpecialization;
 import avh.nufm.business.model.repository.NufmRepos;
 import avh.nufm.security.common.SecurityCte;
 
@@ -48,6 +49,22 @@ public class OccupantControllerImpl {
 		//save occupant to db
 		repo.getNfuserrepo().save(occupant);
 		return pwd;
+	}
+	
+	@Transactional
+	public void updateOccupant(NufmUser occupantUpdate,String imagePath) {
+		//continue filling the occupant data  	
+		NufmUser occupant = repo.getNfuserrepo().findByEid(occupantUpdate.getEid());
+		occupantUpdate.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+		occupantUpdate.setPassword(occupant.getPassword());
+		occupantUpdate.setCreatedAt(occupant.getCreatedAt());
+		occupantUpdate.setEnabled(true);
+		occupantUpdate.setProfileImage(imagePath);
+		//save occupant to db
+		repo.getNfuserrepo().save(occupantUpdate);
+		List<UserSpecialization> specList = repo.getUserSpecrepo().findByNufmUser(occupant);
+		repo.getUserSpecrepo().deleteAll(specList);
+		return;
 	}
 	
 	@Transactional

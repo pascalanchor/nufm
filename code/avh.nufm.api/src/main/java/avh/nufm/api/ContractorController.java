@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,8 +29,10 @@ import avh.nufm.api.impl.UserControllerImpl;
 import avh.nufm.api.impl.services.FileStorageService;
 import avh.nufm.api.impl.ContractorControllerImpl;
 import avh.nufm.api.model.in.APIContractorIn;
+
 import avh.nufm.api.model.out.APIContractorOut;
 import avh.nufm.api.model.transformer.ContractorTransformer;
+
 import avh.nufm.business.model.ConfirmationToken;
 import avh.nufm.business.model.NufmUser;
 import avh.nufm.business.model.repository.NufmRepos;
@@ -112,19 +114,28 @@ public class ContractorController {
     		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());
     	}
     }
-//    //UPDATE CONTRACTOR
-//    @PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
-//    @PutMapping(PathCte.EditContractorServletPath)
-//    public ResponseEntity<APIContractorOut> updateContractor(@RequestBody APIContractorIn contractorUpdate){
-//    	try {
-//    		NufmUser contractor = ContractorTransformer.ModelFromContractor(contractorUpdate);
-//    	    NufmUser res = ccImpl.updateContractor(contractor, contractorUpdate.getSpecializations());
-//    	    return ResponseEntity.ok().body(ContractorTransformer.ContractorFromModel(res));
-//    	} catch (Exception e) {
-//    		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());
-//    	}
-//    }
+    //UPDATE WORKER
+    @PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
+    @PutMapping(PathCte.EditContractorServletPath)
+    public ResponseEntity<String> updateContractor(@RequestParam("profileImage") MultipartFile profileImage,@RequestParam("data") String data){
+    	try {
+    	//image storage path 
+		String path = "D:\\AVH projects\\Workspaces\\NufmWorkspace\\nufm\\code\\avh.nufm\\src\\main\\resources\\storage\\profile\\contractor";
+		APIContractorIn contractorIn = new ObjectMapper().readValue(data, APIContractorIn.class); 
+		// create the user without roles
+		NufmUser contractorModel = ContractorTransformer.ModelFromContractor(contractorIn);
+		String imagePath = fss.storeFile(profileImage, path);		
+		contractorModel.setProfileImage(imagePath);
+		ccImpl.updateContractor(contractorModel);
+		// add specializations to contractor
+		ucImpl.addSpecializations(contractorIn.getEmail(), contractorIn.getSpecializations());		
+		return ResponseEntity.ok().body("contractor is updated");
+	} catch(Exception e) {
+		throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, e.getMessage());
+	}
+    }
+    }
     
     
     
-}
+

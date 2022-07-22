@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -96,35 +97,43 @@ public class FacilityController {
 	}
 }
 
-//@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
-//@PutMapping("avh/nufm/v1/private/facility/update")//only administrator and owner can define new facility
-//public ResponseEntity<APIFacilityOut> updateFaclity(@RequestParam String facility_id, @RequestBody APIFacilityIn fc) {
-//	
-//	try {
-//		//1-update the facility
-//		Facility facility = fci.updateFacility(facility_id, FacilityTransformer.FacilityToModel(fc));
-//		//2-add equipments to facility
-//		fci.updateEquipmentOfFacility(facility_id, fc.getEquipments());
-//		//3-update occupant and create the res
-//		NufmUser occupant = ocImpl.occupantExists(fc.getOccupant().getEmail());
-//		APIFacilityOut res = FacilityTransformer.FacilityFromModel(facility);
-//		if(occupant == null)
-//		{NufmUser occupantModel = OccupantTransformer.ModelFromOccupant(fc.getOccupant());
-//		String pwd = ocImpl.createOccupant(occupantModel);
-//		ucImpl.addRoleToUser(fc.getOccupant().getEmail(), SecurityCte.RoleOccupant);
-//		String tok = ctImpl.createConfirmationToken(fc.getOccupant().getEmail());
-//		String link = "http://localhost:6338"+SecurityCte.PublicServletPath+"/register/confirm/" + tok;
-//		String mail = emailBuilder.confirmOccupant(fc.getOccupant().getFullName(),fc.getOccupant().getEmail(),pwd,link);
-//		emailSender.send(fc.getOccupant().getEmail(), mail);
-//		fci.addOccupantToFacility(facility_id,occupantModel.getEid());
-//        res.setOccupantName(occupantModel.getFullName());}
-//		fci.addOccupantToFacility(facility_id, fc.getOccupant().getEmail());
-//		res.setOccupantName(fc.getOccupant().getFullName());
-//		return ResponseEntity.ok().body(res);
-//	} catch (Exception e) {
-//		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());
-//	}	
-//}
+@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
+@PutMapping(PathCte.EditFacilityServletPath)//only administrator and owner can define new facility
+public ResponseEntity<APIFacilityOut> updateFaclity(@RequestParam("profileImage") MultipartFile profileImage,
+		@RequestParam("facilityId") String id,
+		@RequestParam("facilityDoc1") MultipartFile facilityDoc1,
+		@RequestParam("facilityData") String facilityData,
+		@RequestParam("occupantData") String occupantData) {
+	
+	try {
+		//image storage path 
+		String ipath = "D:\\AVH projects\\Workspaces\\NufmWorkspace\\nufm\\code\\avh.nufm\\src\\main\\resources\\storage\\profile\\occupant";
+		//facility docs path
+		String fpath = "D:\\AVH projects\\Workspaces\\NufmWorkspace\\nufm\\code\\avh.nufm\\src\\main\\resources\\storage\\facility\\docs";
+		APIOccupantIn occupantIn = new ObjectMapper().readValue(occupantData, APIOccupantIn.class);	
+		APIFacilityIn fc = new ObjectMapper().readValue(facilityData, APIFacilityIn.class);
+		//1-create the facility
+		Facility fct= FacilityTransformer.FacilityToModel(fc);
+		fct = fci.updateFacility(id,fct);
+		fci.addFacilityDoc(fct.getEid(), fss.storeFile(facilityDoc1, fpath));
+		//add occupant profile photo
+		String imagePath = fss.storeFile(profileImage, ipath);	
+		APIFacilityOut res=FacilityTransformer.FacilityFromModel(fct);
+		//2-add equipments to facility
+		fci.addEquipmentToFacility(fct.getEid(), fc.getEquipments());
+		//3-update the occupant
+        NufmUser occupantModel = OccupantTransformer.ModelFromOccupant(occupantIn);
+		ocImpl.updateOccupant(occupantModel,imagePath);
+		APIOccupantOut occupantOut = OccupantTransformer.OccupantFromModel(occupantModel);
+		occupantOut.setProfileImage(imagePath);
+        res.setOccupant(occupantOut);
+		List<String> docs = fci.getFacilityDocuments(fct.getEid());
+		res.setDocs(docs);
+		return ResponseEntity.ok().body(res);
+	} catch (Exception e) {
+		throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, e.getMessage());
+	}
+}
 
 @PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
 @GetMapping(PathCte.GetFacilityByIdServletPath+"/{facilityId}")

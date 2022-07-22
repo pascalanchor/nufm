@@ -17,6 +17,7 @@ import avh.nufm.api.impl.errors.BusinessException;
 import avh.nufm.business.model.NufmRole;
 import avh.nufm.business.model.NufmUser;
 import avh.nufm.business.model.UserRole;
+import avh.nufm.business.model.UserSpecialization;
 import avh.nufm.business.model.repository.NufmRepos;
 import avh.nufm.security.common.SecurityCte;
 
@@ -71,15 +72,18 @@ public class ContractorControllerImpl {
 	}
 	
 	@Transactional
-	public NufmUser updateContractor(NufmUser contractor,List<String> specializations) {
-		NufmUser res = repo.getNfuserrepo().findByEid(contractor.getEid());
-		ucImpl.deleteAllUserSpecs(res);
-		res = ucImpl.addSpecializations(res.getEid(), specializations);
-		res.setFullName(contractor.getFullName());
-		res.setPhone(contractor.getPhone());
-		res.setProfileImage(contractor.getProfileImage());
-		res.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-		return repo.getNfuserrepo().save(res);
+	public void updateContractor(NufmUser contractorUpdate) {
+		//continue filling the contractor data  	
+		NufmUser contractor = repo.getNfuserrepo().findByEid(contractorUpdate.getEid());
+		contractorUpdate.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+		contractorUpdate.setPassword(contractor.getPassword());
+		contractorUpdate.setCreatedAt(contractor.getCreatedAt());
+		contractorUpdate.setEnabled(true);
+		//save contractor to db
+		repo.getNfuserrepo().save(contractorUpdate);
+		List<UserSpecialization> specList = repo.getUserSpecrepo().findByNufmUser(contractor);
+		repo.getUserSpecrepo().deleteAll(specList);
+		return;
 	}
 	
 	@Transactional
@@ -93,9 +97,10 @@ public class ContractorControllerImpl {
 			{return res.get();}
 		else {throw new BusinessException(String.format("user %s is not a contractor", res.get().getFullName()));}
 		}
-		else throw new BusinessException(String.format("user does not exist"));
+		else throw new BusinessException(String.format("user does not exist 1"));
 	}
 
+	
 	
 	
 	

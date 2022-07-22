@@ -17,6 +17,7 @@ import avh.nufm.api.impl.errors.BusinessException;
 import avh.nufm.business.model.NufmRole;
 import avh.nufm.business.model.NufmUser;
 import avh.nufm.business.model.UserRole;
+import avh.nufm.business.model.UserSpecialization;
 import avh.nufm.business.model.repository.NufmRepos;
 import avh.nufm.security.common.SecurityCte;
 
@@ -46,6 +47,22 @@ public class WorkerControllerImpl {
 	}
 	
 	@Transactional
+	public void updateWorker(NufmUser workerUpdate) {
+		//continue filling the worker data  	
+		NufmUser worker = repo.getNfuserrepo().findByEid(workerUpdate.getEid());
+		workerUpdate.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+		workerUpdate.setPassword(worker.getPassword());
+		workerUpdate.setCreatedAt(worker.getCreatedAt());
+		workerUpdate.setEnabled(true);
+		//save worker to db
+		repo.getNfuserrepo().save(workerUpdate);
+		List<UserSpecialization> specList = repo.getUserSpecrepo().findByNufmUser(worker);
+		repo.getUserSpecrepo().deleteAll(specList);
+		return;
+	}
+	
+	
+	@Transactional
 	public void deleteWorker(String workerId) {
 		NufmUser worker = repo.getNfuserrepo().findByEid(workerId);
 		repo.getNfuserrepo().delete(worker);	
@@ -58,18 +75,6 @@ public class WorkerControllerImpl {
 		List<NufmUser> res = new ArrayList<>();
 		ur.stream().forEach(e-> res.add(e.getNufmUser()));
 		return res;
-	}
-	
-	@Transactional
-	public NufmUser updateWorker(NufmUser worker,List<String> specializations) {
-		NufmUser res = repo.getNfuserrepo().findByEid(worker.getEid());
-		ucImpl.deleteAllUserSpecs(res);
-		res = ucImpl.addSpecializations(res.getEid(), specializations);
-		res.setFullName(worker.getFullName());
-		res.setPhone(worker.getPhone());
-		res.setProfileImage(worker.getProfileImage());
-		res.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-		return repo.getNfuserrepo().save(res);
 	}
 	
 

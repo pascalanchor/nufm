@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -112,19 +113,26 @@ public class WorkerController {
     		throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, e.getMessage());
     	}
     }
-//    //UPDATE WORKER
-//    @PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
-//    @PutMapping(PathCte.EditWorkerServletPath)
-//    public ResponseEntity<APIWorkerOut> updateWorker(@RequestBody APIWorkerIn workerUpdate){
-//    	try {
-//    		NufmUser worker = WorkerTransformer.ModelFromWorker(workerUpdate);
-//    	    NufmUser res = wcImpl.updateWorker(worker, workerUpdate.getSpecializations());
-//    	    return ResponseEntity.ok().body(WorkerTransformer.WorkerFromModel(res));
-//    	} catch (Exception e) {
-//    		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());
-//    	}
-//    }
     
-    
-    
-}
+    //UPDATE WORKER
+    @PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
+    @PutMapping(PathCte.EditWorkerServletPath)
+    public ResponseEntity<String> updateWorker(@RequestParam("profileImage") MultipartFile profileImage,@RequestParam("data") String data){
+    	try {
+    	//image storage path 
+		String path = "D:\\AVH projects\\Workspaces\\NufmWorkspace\\nufm\\code\\avh.nufm\\src\\main\\resources\\storage\\profile\\worker";
+		APIWorkerIn workerIn = new ObjectMapper().readValue(data, APIWorkerIn.class); 
+		// create the user without roles
+		NufmUser workerModel = WorkerTransformer.ModelFromWorker(workerIn);
+		String imagePath = fss.storeFile(profileImage, path);		
+		workerModel.setProfileImage(imagePath);
+		wcImpl.updateWorker(workerModel);
+		// add specializations to worker
+		ucImpl.addSpecializations(workerIn.getEmail(), workerIn.getSpecializations());		
+		return ResponseEntity.ok().body("worker is updated");
+	} catch(Exception e) {
+		throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, e.getMessage());
+	}
+    }
+    }
+
