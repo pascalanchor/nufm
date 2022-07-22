@@ -14,5 +14,5 @@ private String name;
 private String status;
 private String type;
 private List<String> workers;
-private List<String> documents;
+private String materialImage;
 }
