@@ -2,6 +2,9 @@ package avh.nufm.business.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import org.hibernate.annotations.OnDelete;
+
 import java.sql.Timestamp;
 
 
@@ -27,7 +30,7 @@ public class WorkerTask implements Serializable {
 	private NufmUser nufmUser;
 
 	//bi-directional many-to-one association to Task
-	@ManyToOne
+	@ManyToOne()
 	@JoinColumn(name="task_id")
 	private Task task;
 

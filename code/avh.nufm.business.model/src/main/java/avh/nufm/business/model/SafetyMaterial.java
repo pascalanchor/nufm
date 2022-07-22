@@ -28,7 +28,7 @@ public class SafetyMaterial implements Serializable {
 	private SafetyMaterialType safetyMaterialType;
 
 	//bi-directional many-to-one association to SafetyWorker
-	@OneToMany(mappedBy="safetyMaterial")
+	@OneToMany(mappedBy="safetyMaterial",cascade = {CascadeType.REMOVE})
 	private List<SafetyWorker> safetyWorkers;
 
 	public SafetyMaterial() {

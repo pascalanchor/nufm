@@ -1,6 +1,5 @@
 package avh.nufm.api.model;
 
-import java.security.Timestamp;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,14 +9,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class APIInvoice {
-private String invoice_to;
-private String deliver_to;
+private String invoiceTo;
+private String deliverTo;
 private double quantity;
 private double price;
 private String description;
-private double sub_total;
-private double sales_tax;
-private double invoice_total;
+private double subTotal;
+private double salesTax;
+private double invoiceTotal;
 private String status;
-private Timestamp date;
 }

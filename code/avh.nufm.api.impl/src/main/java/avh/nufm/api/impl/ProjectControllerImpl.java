@@ -3,6 +3,8 @@ package avh.nufm.api.impl;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +19,7 @@ import avh.nufm.business.model.repository.NufmRepos;
 public class ProjectControllerImpl {
 @Autowired private NufmRepos repo;
 
-
+@Transactional
 public Project addProject(Project prj){
 	
 	if(prj.getFacility().getEid().equals("")
@@ -47,6 +49,7 @@ public Project addProject(Project prj){
 	repo.getProjrepo().save(prj);
 	return prj;
 }
+
 
 public Iterable<Project> getAllProjects(){
 Iterable<Project> res=repo.getProjrepo().findAll();
