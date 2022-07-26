@@ -93,7 +93,14 @@ public class WorkerControllerImpl {
 	}
 
 
-	
+	@Transactional
+	public NufmUser getWorkerByName(String wrkName)
+	{
+		List<NufmUser> res=repo.getNfuserrepo().findByFullName(wrkName);
+		if(res==null || res.size()<=0)
+			throw new BusinessException(String.format("there is no worker with this name: %s", wrkName));
+		return res.get(0);
+	}
 	
 	
 }

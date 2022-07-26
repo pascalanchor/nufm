@@ -2,7 +2,6 @@ package avh.nufm.business.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 
@@ -29,19 +28,19 @@ public class Invoice implements Serializable {
 	private String invoiceTo;
 
 	@Column(name="invoice_total")
-	private BigDecimal invoiceTotal;
+	private double invoiceTotal;
 
-	private BigDecimal price;
+	private double price;
 
-	private BigDecimal quantity;
+	private double quantity;
 
 	@Column(name="sales_tax")
-	private BigDecimal salesTax;
+	private double salesTax;
 
 	private String status;
 
 	@Column(name="sub_total")
-	private BigDecimal subTotal;
+	private double subTotal;
 
 	public Invoice() {
 	}
@@ -86,35 +85,35 @@ public class Invoice implements Serializable {
 		this.invoiceTo = invoiceTo;
 	}
 
-	public BigDecimal getInvoiceTotal() {
+	public double getInvoiceTotal() {
 		return this.invoiceTotal;
 	}
 
-	public void setInvoiceTotal(BigDecimal invoiceTotal) {
+	public void setInvoiceTotal(double invoiceTotal) {
 		this.invoiceTotal = invoiceTotal;
 	}
 
-	public BigDecimal getPrice() {
+	public double getPrice() {
 		return this.price;
 	}
 
-	public void setPrice(BigDecimal price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 
-	public BigDecimal getQuantity() {
+	public double getQuantity() {
 		return this.quantity;
 	}
 
-	public void setQuantity(BigDecimal quantity) {
+	public void setQuantity(double quantity) {
 		this.quantity = quantity;
 	}
 
-	public BigDecimal getSalesTax() {
+	public double getSalesTax() {
 		return this.salesTax;
 	}
 
-	public void setSalesTax(BigDecimal salesTax) {
+	public void setSalesTax(double salesTax) {
 		this.salesTax = salesTax;
 	}
 
@@ -126,11 +125,11 @@ public class Invoice implements Serializable {
 		this.status = status;
 	}
 
-	public BigDecimal getSubTotal() {
+	public double getSubTotal() {
 		return this.subTotal;
 	}
 
-	public void setSubTotal(BigDecimal subTotal) {
+	public void setSubTotal(double subTotal) {
 		this.subTotal = subTotal;
 	}
 

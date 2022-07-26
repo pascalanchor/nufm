@@ -1,6 +1,6 @@
 package avh.nufm.api.model;
 
-
+import java.util.List;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,11 +9,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class APIProject {
-private String facility_id;
-private String contractor_id;
-private String document_id;
+public class APISafetyMaterial {
 private String name;
 private String status;
-private String comment;
+private String type;
+private List<String> workers;
+private String materialImage;
 }

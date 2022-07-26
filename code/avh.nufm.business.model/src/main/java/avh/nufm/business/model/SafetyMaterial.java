@@ -18,6 +18,9 @@ public class SafetyMaterial implements Serializable {
 	@Id
 	private String eid;
 
+	@Column(name="document_id")
+	private String documentId;
+
 	private String name;
 
 	private String status;
@@ -40,6 +43,14 @@ public class SafetyMaterial implements Serializable {
 
 	public void setEid(String eid) {
 		this.eid = eid;
+	}
+
+	public String getDocumentId() {
+		return this.documentId;
+	}
+
+	public void setDocumentId(String documentId) {
+		this.documentId = documentId;
 	}
 
 	public String getName() {
