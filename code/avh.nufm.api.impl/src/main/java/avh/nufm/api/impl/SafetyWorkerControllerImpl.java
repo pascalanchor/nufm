@@ -26,10 +26,10 @@ public SafetyWorker assignWorkerToMaterial(SafetyMaterial sft,String workerName)
 		throw new BusinessException(String.format("invalid material id :%s", sft.getEid()));
 	
 	//check worker
-	List<NufmUser> users=repo.getNfuserrepo().findByFullName(workerName);
-	if(users==null || users.isEmpty())
+	Optional<NufmUser> ouser=repo.getNfuserrepo().findById(workerName);
+	if(ouser.isEmpty())
 		throw new BusinessException(String.format("invalid user id :%s",workerName));
-	NufmUser worker=users.get(0);
+	NufmUser worker= ouser.get();
 	//check the user role (must be ROLE_WORKER)
 	List<UserRole> roles;
 	roles=repo.getUserrolerepo().findByNufmUser(worker);

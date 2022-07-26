@@ -58,7 +58,7 @@ public class Task implements Serializable {
 	private List<WorkerSchedule> workerSchedules;
 
 	//bi-directional many-to-one association to WorkerTask
-	@OneToMany(mappedBy="task",cascade = {CascadeType.REMOVE})
+	@OneToMany(mappedBy="task")
 	private List<WorkerTask> workerTasks;
 
 	public Task() {

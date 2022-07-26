@@ -18,10 +18,12 @@ public class SafetyMaterial implements Serializable {
 	@Id
 	private String eid;
 
+	@Column(name="document_id")
+	private String documentId;
+
 	private String name;
 
 	private String status;
-	private String documentid;
 
 	//bi-directional many-to-one association to SafetyMaterialType
 	@ManyToOne
@@ -29,16 +31,8 @@ public class SafetyMaterial implements Serializable {
 	private SafetyMaterialType safetyMaterialType;
 
 	//bi-directional many-to-one association to SafetyWorker
-	@OneToMany(mappedBy="safetyMaterial",cascade = {CascadeType.REMOVE})
+	@OneToMany(mappedBy="safetyMaterial")
 	private List<SafetyWorker> safetyWorkers;
-
-	public String getDocumentid() {
-		return documentid;
-	}
-
-	public void setDocumentid(String documentid) {
-		this.documentid = documentid;
-	}
 
 	public SafetyMaterial() {
 	}
@@ -49,6 +43,14 @@ public class SafetyMaterial implements Serializable {
 
 	public void setEid(String eid) {
 		this.eid = eid;
+	}
+
+	public String getDocumentId() {
+		return this.documentId;
+	}
+
+	public void setDocumentId(String documentId) {
+		this.documentId = documentId;
 	}
 
 	public String getName() {

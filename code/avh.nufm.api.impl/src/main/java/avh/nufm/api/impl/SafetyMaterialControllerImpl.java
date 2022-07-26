@@ -80,7 +80,7 @@ public SafetyMaterial updateSafetyMaterial(String sftId,SafetyMaterial newSafety
 	updatedSft.setName(newSafetyMaterial.getName());
 	updatedSft.setStatus(newSafetyMaterial.getStatus());
 	updatedSft.setSafetyMaterialType(newSafetyMaterial.getSafetyMaterialType());
-	updatedSft.setDocumentid(newSafetyMaterial.getDocumentid());
+	updatedSft.setDocumentId(newSafetyMaterial.getDocumentId());
 	//we can save this material to database then assign the workers to it
 	repo.getSafmtrrepo().save(updatedSft);
 	//now we need to delete the old assigned workers

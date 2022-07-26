@@ -19,7 +19,7 @@ public class SafetyMaterialTransformer {
 		SafetyMaterialType sftyp=new SafetyMaterialType();
 		sftyp.setEid(sftin.getType());
 		res.setSafetyMaterialType(sftyp);
-		res.setDocumentid(sftin.getMaterialImage());
+		res.setDocumentId(sftin.getMaterialImage());
 		return res;
 	}
 	
@@ -29,7 +29,7 @@ public class SafetyMaterialTransformer {
 		res.setName(sft.getName());
 		res.setStatus(sft.getStatus());
 		res.setType(sft.getSafetyMaterialType().getEid());
-		res.setMaterialImage(sft.getDocumentid());
+		res.setMaterialImage(sft.getDocumentId());
 		return res;
 	}
 	
