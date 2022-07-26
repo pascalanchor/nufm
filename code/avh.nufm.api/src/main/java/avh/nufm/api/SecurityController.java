@@ -71,6 +71,7 @@ public class SecurityController {
             	throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format("the user %s is not confirmed", username));
             }
             APIUserOut lr = UserTransformer.UserFromModel(usr);
+            lr.setToken(jwt);
             List<UserRole> mbs = rep.getUserrolerepo().findByNufmUser(usr);
             mbs.stream().forEach(m -> lr.addRole(m.getNufmRole().getName()));
             return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwt).body(lr);
