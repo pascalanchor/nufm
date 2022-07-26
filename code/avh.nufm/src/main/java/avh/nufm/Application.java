@@ -2,7 +2,8 @@ package avh.nufm;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+@EntityScan("avh.nufm.business.model")
 @SpringBootApplication
 public class Application {
 

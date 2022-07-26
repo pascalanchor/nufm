@@ -51,7 +51,7 @@ public class WorkerController {
     public ResponseEntity<String> createWorker(@RequestParam("profileImage") MultipartFile profileImage,@RequestParam("data") String data) {
     	try {
     		//image storage path 
-    		String path = "D:\\AVH projects\\Workspaces\\NufmWorkspace\\nufm\\code\\avh.nufm\\src\\main\\resources\\storage\\profile\\worker";
+    		String path = "C:\\nufm_storage\\profile\\worker";
     		APIWorkerIn workerIn = new ObjectMapper().readValue(data, APIWorkerIn.class); 
     		// create the user without roles
     		NufmUser workerModel = WorkerTransformer.ModelFromWorker(workerIn);

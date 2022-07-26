@@ -107,9 +107,9 @@ public ResponseEntity<APIFacilityOut> updateFaclity(@RequestParam("profileImage"
 	
 	try {
 		//image storage path 
-		String ipath = "D:\\AVH projects\\Workspaces\\NufmWorkspace\\nufm\\code\\avh.nufm\\src\\main\\resources\\storage\\profile\\occupant";
+		String ipath = "C:\\nufm_storage\\profile\\occupant";
 		//facility docs path
-		String fpath = "D:\\AVH projects\\Workspaces\\NufmWorkspace\\nufm\\code\\avh.nufm\\src\\main\\resources\\storage\\facility\\docs";
+		String fpath = "D:\\nufm_storage\\facility\\docs";
 		APIOccupantIn occupantIn = new ObjectMapper().readValue(occupantData, APIOccupantIn.class);	
 		APIFacilityIn fc = new ObjectMapper().readValue(facilityData, APIFacilityIn.class);
 		//1-create the facility

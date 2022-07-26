@@ -86,7 +86,7 @@ public class SecurityController {
     @PostMapping(SecurityCte.RegisterServletPath)
     public String registerUser(@RequestParam("profileImage") MultipartFile profileImage, @RequestParam("data") String data) {
     	try {
-    		String path = "D:\\AVH projects\\Workspaces\\NufmWorkspace\\nufm\\code\\avh.nufm\\src\\main\\resources\\storage\\profile\\admin";
+    		String path = "C:\\storage\\profile\\admin";
     		APIUserIn userIn = new ObjectMapper().readValue(data, APIUserIn.class);  		// any registered user with the same name ?
     		Optional<NufmUser> ou = rep.getNfuserrepo().findById(userIn.getEmail());
     		if (ou.isPresent())

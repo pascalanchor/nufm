@@ -39,7 +39,7 @@ public ResponseEntity<APISafetyMaterialOut> addSafetyMaterial(@RequestParam("mat
 	try {
 		APISafetyMaterialOut res;
 		//image storage path 
-		String path = "D:\\AVH projects\\Workspaces\\NufmWorkspace\\nufm\\code\\avh.nufm\\src\\main\\resources\\storage\\safety";
+		String path = "C:\\nufm_storage\\safety";
 		 APISafetyMaterialIn sftin=new ObjectMapper().readValue(data, APISafetyMaterialIn.class);
 		SafetyMaterial sft=SafetyMaterialTransformer.sftToModel(sftin);
 		//save and assign the image

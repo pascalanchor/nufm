@@ -52,7 +52,7 @@ public class ContractorController {
     public ResponseEntity<String> createContractor(@RequestParam("profileImage") MultipartFile profileImage,@RequestParam("data") String data) {
     	try {
     		//image storage path 
-    		String path = "D:\\AVH projects\\Workspaces\\NufmWorkspace\\nufm\\code\\avh.nufm\\src\\main\\resources\\storage\\profile\\contractor";
+    		String path = "C:\\nufm_storage\\profile\\contractor";
     		APIContractorIn contractorIn = new ObjectMapper().readValue(data, APIContractorIn.class);
     		// create the user without roles
     		NufmUser contractorModel = ContractorTransformer.ModelFromContractor(contractorIn);
