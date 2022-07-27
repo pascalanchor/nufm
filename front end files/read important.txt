@@ -1,0 +1,1 @@
+put the nufm_storage folder in the C drive 
