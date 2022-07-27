@@ -1,1 +1,9 @@
-put the nufm_storage folder in the C drive 
+1-go to google drive and download both zip files
+2-extract the nufm_storage zip file
+3-place the extracted folder in the c drive directly
+4-extract the jar zip file
+5-open cmd
+6-navigate to the directory where the jar is located
+7-run this command: *java -jar avh.nufm-0.0.1-SNAPSHOT.jar*
+!!make sure you have maven and jdk 17 installed in your system env variable!!
+!!don't forget to setup the db on your machine!!
