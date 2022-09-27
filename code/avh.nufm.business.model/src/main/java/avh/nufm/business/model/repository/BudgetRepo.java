@@ -10,6 +10,6 @@ import avh.nufm.business.model.Budget;
 
 @Repository
 public interface BudgetRepo extends CrudRepository<Budget, String> {
-	public Optional<Budget> findById(String id);
+	public Optional<Budget> findByIid(String iid);
 	public List<Budget> findAll();
 }

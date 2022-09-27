@@ -5,13 +5,13 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the budget_type database table.
+ * The persistent class for the contract_type database table.
  * 
  */
 @Entity
-@Table(name="budget_type")
-@NamedQuery(name="BudgetType.findAll", query="SELECT b FROM BudgetType b")
-public class BudgetType implements Serializable {
+@Table(name="contract_type")
+@NamedQuery(name="ContractType.findAll", query="SELECT c FROM ContractType c")
+public class ContractType implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -19,7 +19,7 @@ public class BudgetType implements Serializable {
 
 	private String name;
 
-	public BudgetType() {
+	public ContractType() {
 	}
 
 	public String getEid() {

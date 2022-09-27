@@ -46,7 +46,7 @@ public ResponseEntity<APISafetyMaterialOut> addSafetyMaterial(@RequestParam("mat
 		//save and assign the image
 		String imagePath = fss.storeFile(materialImage, path);
 		Document doc = new Document();
-		doc.setSafetyMaterial(sft);
+		doc.setSafetyMaterialId(sft.getEid());
 		doc.setDocumentPath(imagePath);
 		sftimpl.addSafetyDocument(doc);
 		res=SafetyMaterialTransformer.sftFromModel(sftimpl.addSafetyMaterial(sft, sftin.getWorkers()));
@@ -84,7 +84,7 @@ public ResponseEntity<APISafetyMaterialOut> updateSafetyMaterials(@RequestParam(
 		//save and assign the image
 		String imagePath = fss.storeFile(materialImage, path);
 		Document doc = new Document();
-		doc.setSafetyMaterial(sft);
+		doc.setSafetyMaterialId(sft.getEid());
 		doc.setDocumentPath(imagePath);
 		sftimpl.addSafetyDocument(doc);
 		res=SafetyMaterialTransformer.sftFromModel(sftimpl.updateSafetyMaterial(oldSftId,sft, sftin.getWorkers()));

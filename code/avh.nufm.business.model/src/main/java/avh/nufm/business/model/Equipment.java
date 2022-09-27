@@ -28,13 +28,14 @@ public class Equipment implements Serializable {
 	@Column(name="purchase_date")
 	private String purchaseDate;
 
-	private String type;
+	@Column(name="type_id")
+	private String typeId;
 
 	@Column(name="unit_cost")
 	private double unitCost;
 
-	@Column(name="vendor_name")
-	private String vendorName;
+	@Column(name="vendor_id")
+	private String vendorId;
 
 	@Column(name="zip_code")
 	private String zipCode;
@@ -90,12 +91,12 @@ public class Equipment implements Serializable {
 		this.purchaseDate = purchaseDate;
 	}
 
-	public String getType() {
-		return this.type;
+	public String getTypeId() {
+		return this.typeId;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setTypeId(String typeId) {
+		this.typeId = typeId;
 	}
 
 	public double getUnitCost() {
@@ -106,12 +107,12 @@ public class Equipment implements Serializable {
 		this.unitCost = unitCost;
 	}
 
-	public String getVendorName() {
-		return this.vendorName;
+	public String getVendorId() {
+		return this.vendorId;
 	}
 
-	public void setVendorName(String vendorName) {
-		this.vendorName = vendorName;
+	public void setVendorId(String vendorId) {
+		this.vendorId = vendorId;
 	}
 
 	public String getZipCode() {

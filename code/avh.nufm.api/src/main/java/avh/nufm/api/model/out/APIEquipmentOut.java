@@ -1,7 +1,5 @@
 package avh.nufm.api.model.out;
 
-import java.sql.Timestamp;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,5 +9,4 @@ import lombok.Setter;
 @Setter
 public class APIEquipmentOut {
 	private String eid;
-	private Timestamp createdAt;
 }

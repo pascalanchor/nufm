@@ -21,6 +21,9 @@ public class Budget implements Serializable {
 
 	private Integer estimation;
 
+	@Column(name="facility_id")
+	private String facilityId;
+
 	@Column(name="income_tax")
 	private Integer incomeTax;
 
@@ -31,17 +34,10 @@ public class Budget implements Serializable {
 	@Column(name="submission_date")
 	private Timestamp submissionDate;
 
+	@Column(name="type_id")
+	private String typeId;
+
 	private Integer year;
-
-	//uni-directional many-to-one association to BudgetType
-	@ManyToOne
-	@JoinColumn(name="type")
-	private BudgetType budgetType;
-
-	//uni-directional many-to-one association to Facility
-	@ManyToOne
-	@JoinColumn(name="facility_id")
-	private Facility facility;
 
 	public Budget() {
 	}
@@ -68,6 +64,14 @@ public class Budget implements Serializable {
 
 	public void setEstimation(Integer estimation) {
 		this.estimation = estimation;
+	}
+
+	public String getFacilityId() {
+		return this.facilityId;
+	}
+
+	public void setFacilityId(String facilityId) {
+		this.facilityId = facilityId;
 	}
 
 	public Integer getIncomeTax() {
@@ -102,28 +106,20 @@ public class Budget implements Serializable {
 		this.submissionDate = submissionDate;
 	}
 
+	public String getTypeId() {
+		return this.typeId;
+	}
+
+	public void setTypeId(String typeId) {
+		this.typeId = typeId;
+	}
+
 	public Integer getYear() {
 		return this.year;
 	}
 
 	public void setYear(Integer year) {
 		this.year = year;
-	}
-
-	public BudgetType getBudgetType() {
-		return this.budgetType;
-	}
-
-	public void setBudgetType(BudgetType budgetType) {
-		this.budgetType = budgetType;
-	}
-
-	public Facility getFacility() {
-		return this.facility;
-	}
-
-	public void setFacility(Facility facility) {
-		this.facility = facility;
 	}
 
 }

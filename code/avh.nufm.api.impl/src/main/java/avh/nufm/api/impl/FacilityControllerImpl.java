@@ -124,7 +124,7 @@ public class FacilityControllerImpl {
 		Optional<Facility> facility = repo.getFacrepo().findById(id);
 		List<String> res = new ArrayList<>();
 		if(facility.isPresent()) {
-			List<Document> list = repo.getDocumentRepo().findByFacility(facility.get());
+			List<Document> list = repo.getDocumentRepo().findByFacilityId(facility.get().getEid());
 			list.stream().forEach(e-> res.add(e.getDocumentPath()));
 			return res;
 		}
@@ -202,10 +202,10 @@ public class FacilityControllerImpl {
 	public void addFacilityDoc(String id, String docPath) {
 		Optional<Facility> facility = repo.getFacrepo().findById(id);
 		if(facility.isPresent()) {
-			List<Document> list = repo.getDocumentRepo().findByFacility(facility.get());
+			List<Document> list = repo.getDocumentRepo().findByFacilityId(facility.get().getEid());
 			repo.getDocumentRepo().deleteAll(list);
 			Document fd = new Document();
-			fd.setFacility(facility.get());
+			fd.setFacilityId(facility.get().getEid());
 			fd.setDocumentPath(docPath);
 			repo.getDocumentRepo().save(fd);
 			}

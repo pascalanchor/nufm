@@ -367,8 +367,10 @@ CREATE TABLE CONFIRMATION_TOKEN (
 );  
 
 create table budget_type(
-    type VARCHAR(128) primary key
+    eid varchar(128) primary key,
+    name varchar(128) not null
 );
+
 --budget
 CREATE TABLE budget (
 	IID VARCHAR(128) PRIMARY    KEY,
@@ -380,24 +382,29 @@ CREATE TABLE budget (
     estimation int not null,
     income_tax int not null,
     difference int not null,
-    type varchar(128) not null,
+    type_id varchar(128) not null,
 	CONSTRAINT FK_FACILITY_BUDGET
       FOREIGN KEY(facility_id) 
 	  REFERENCES facility(eid)
 	  on delete cascade,
     CONSTRAINT FK_BUDGET_TYPE_BUDGET
-      FOREIGN KEY(type) 
-	  REFERENCES budget_type(type)
+      FOREIGN KEY(type_id) 
+	  REFERENCES budget_type(eid)
 	  on delete cascade
 );  
 
 
 --contract
+create table contract_type(
+    eid varchar(128) primary key,
+    name varchar(128) not null
+);
+
 create table contract(
     eid varchar(128) primary key,
     title varchar(128) not null,
     number varchar(128) not null,
-    type varchar(128) not null,
+    type_id varchar(128) not null,
     start_date varchar(128) not null,
     end_date date not null,
     review_date date not null,
@@ -405,20 +412,37 @@ create table contract(
     template varchar(128) not null,
     supplier varchar(128) not null,
     payment_method varchar(128) not null,
-    credit_period int not null
+    credit_period int not null,
+    CONSTRAINT FK_CONTRACT_TYPE_CONTRACT
+      FOREIGN KEY(type_id) 
+	  REFERENCES contract_type(eid)
+	  on delete cascade
 );
 --equipment
+create table equipment_type(
+    eid varchar(128) primary key,
+    name varchar(128) not null
+);
+
 create table equipment(
     eid varchar(128) primary key,
     name varchar(128) not null,
     purchase_date varchar(128) not null,
-    type varchar(128) not null,
+    type_id varchar(128) not null,
     location varchar(128) not null,
     number_of_items int not null,
     unit_cost float not null,
     zip_code varchar(20) not null,
-    vendor_name varchar(128) not null,
-    description varchar(128) not null
+    vendor_id varchar(128) not null,
+    description varchar(128) not null,
+    CONSTRAINT FK_EQUIPMENT_TYPE_EQUIPMENT
+      FOREIGN KEY(type_id) 
+	  REFERENCES equipment_type(eid)
+	  on delete cascade,
+    CONSTRAINT FK_VENDOR_EQUIPMENT
+      FOREIGN KEY(vendor_id) 
+	  REFERENCES vendor(eid)
+	  on delete cascade
 );
 --vendor
 create table vendor(

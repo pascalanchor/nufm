@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import avh.nufm.api.common.PathCte;
 import avh.nufm.api.impl.EquipmentControllerImpl;
+import avh.nufm.api.impl.services.FileStorageService;
 import avh.nufm.api.model.in.APIEquipmentIn;
 import avh.nufm.api.model.out.APIEquipmentOut;
 import avh.nufm.api.model.transformer.EquipmentTransformer;
@@ -29,14 +31,19 @@ import avh.nufm.business.model.Equipment;
 public class EquipmentController {
 	@Autowired
 	EquipmentControllerImpl equipmentConImpl;
-
+	@Autowired
+	private FileStorageService fileStorSer;
+	
 	// ADD EQUIPMENT
 	@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
 	@PostMapping(PathCte.AddEquipmentServletPath)
-	public ResponseEntity<APIEquipmentOut> createEquipment(@RequestParam("data") String data) {
+	public ResponseEntity<APIEquipmentOut> createEquipment(@RequestParam("data") String data,@RequestParam("equipmentDocs") List<MultipartFile> equipmentDocs) {
 		try {
+			String fpath = "images/docs";
 			APIEquipmentIn equipmentIn = new ObjectMapper().readValue(data, APIEquipmentIn.class);
 			Equipment equipmentModel = EquipmentTransformer.EquipmentToModel(equipmentIn);
+			equipmentModel = equipmentConImpl.addEquipment(equipmentModel,equipmentIn.getTypeId(),equipmentIn.getVendorId());
+			equipmentConImpl.addEquipmentDocs(equipmentModel.getEid(), fileStorSer.storeMultipleFile(equipmentDocs, fpath));
 			return ResponseEntity.ok().body(EquipmentTransformer.EquipmentFromModel(equipmentModel));
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());

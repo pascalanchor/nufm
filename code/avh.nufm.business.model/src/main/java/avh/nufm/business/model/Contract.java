@@ -46,7 +46,8 @@ public class Contract implements Serializable {
 
 	private String title;
 
-	private String type;
+	@Column(name="type_id")
+	private String typeId;
 
 	public Contract() {
 	}
@@ -139,12 +140,12 @@ public class Contract implements Serializable {
 		this.title = title;
 	}
 
-	public String getType() {
-		return this.type;
+	public String getTypeId() {
+		return this.typeId;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setTypeId(String typeId) {
+		this.typeId = typeId;
 	}
 
 }

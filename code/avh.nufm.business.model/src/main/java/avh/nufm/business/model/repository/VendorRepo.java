@@ -10,6 +10,6 @@ import avh.nufm.business.model.Vendor;
 
 @Repository
 public interface VendorRepo extends CrudRepository<Vendor, String> {
-	public Optional<Vendor> findById(String id);
+	public Optional<Vendor> findByEid(String eid);
 	public List<Vendor> findAll();
 }

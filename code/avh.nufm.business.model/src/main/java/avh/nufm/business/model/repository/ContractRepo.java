@@ -10,6 +10,6 @@ import avh.nufm.business.model.Contract;
 
 @Repository
 public interface ContractRepo extends CrudRepository<Contract, String> {
-	public Optional<Contract> findById(String id);
+	public Optional<Contract> findByEid(String eid);
 	public List<Contract> findAll();
 }

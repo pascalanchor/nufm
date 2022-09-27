@@ -84,12 +84,12 @@ public class BudgetController {
 	// UPDATE BUDGET
 	@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
 	@PutMapping(PathCte.UpdateBudgetServletPath)
-	public ResponseEntity<String> updateBudget(@RequestParam("data") String data,@RequestParam("budgetId") String id) {
+	public ResponseEntity<APIBudgetOut> updateBudget(@RequestParam("data") String data,@RequestParam("budgetId") String id) {
 		try {
 			APIBudgetIn budgetIn = new ObjectMapper().readValue(data, APIBudgetIn.class);
 			Budget budgetModel = BudgetTransformer.BudgetToModel(budgetIn);
 			budgetModel = budgetConImpl.updateBudget(id,budgetModel,budgetIn.getFacilityId(),budgetIn.getTypeId());
-			return ResponseEntity.ok().body("budget is updated");
+			return ResponseEntity.ok().body(BudgetTransformer.BudgetFromModel(budgetModel));
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, e.getMessage());
 		}

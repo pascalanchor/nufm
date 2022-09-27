@@ -21,7 +21,7 @@ public class BudgetControllerImpl {
 
 	@Transactional
 	public Budget getBudgetById(String budgetId) {
-		Optional<Budget> res = repo.getBudgetRepo().findById(budgetId);
+		Optional<Budget> res = repo.getBudgetRepo().findByIid(budgetId);
 		if (res.isPresent()) {
 			return res.get();
 		} else
@@ -35,23 +35,29 @@ public class BudgetControllerImpl {
 	}
 
 	@Transactional
+	public List<BudgetType> getBudgetTpes() {
+		List<BudgetType> budgetTypes = repo.getBudgetTypeRepo().findAll();
+		return budgetTypes;
+	}
+	
+	@Transactional
 	public void deleteBudget(String budgetId) {
-		Optional<Budget> res = repo.getBudgetRepo().findById(budgetId);
+		Optional<Budget> res = repo.getBudgetRepo().findByIid(budgetId);
 		repo.getBudgetRepo().delete(res.get());
 	}
 
 	@Transactional
 	public Budget addBudget(Budget budget,String facilityId, String typeId) {
 		budget.setIid(UUID.randomUUID().toString());
-		Optional<Facility> facility = repo.getFacrepo().findById(facilityId);
+		Optional<Facility> facility = repo.getFacrepo().findByEid(facilityId);
 		if (facility.isPresent()) {
-			budget.setFacility(facility.get());
+			budget.setFacilityId(facility.get().getEid());
 		} else {
 			throw new BusinessException(String.format("facility does not exist"));
 		}
-		Optional<BudgetType> budgetType = repo.getBudgetTypeRepo().findById(typeId);
+		Optional<BudgetType> budgetType = repo.getBudgetTypeRepo().findByEid(typeId);
 		if (budgetType.isPresent()) {
-			budget.setBudgetType(budgetType.get());
+			budget.setTypeId(budgetType.get().getEid());
 		} else {
 			throw new BusinessException(String.format("Budget type does not exist"));
 		}
@@ -60,20 +66,20 @@ public class BudgetControllerImpl {
 	}
 
 	public Budget updateBudget(String id, Budget budgetModel, String facilityId, String typeId) {
-		Optional<Budget> oldBudget = repo.getBudgetRepo().findById(id);
+		Optional<Budget> oldBudget = repo.getBudgetRepo().findByIid(id);
 		if (oldBudget.isEmpty()) {
 			throw new BusinessException(String.format("budget does not exist"));
 		}
 		Budget res = oldBudget.get();
-		Optional<Facility> facility = repo.getFacrepo().findById(facilityId);
+		Optional<Facility> facility = repo.getFacrepo().findByEid(facilityId);
 		if (facility.isPresent()) {
-			res.setFacility(facility.get());
+			res.setFacilityId(facility.get().getEid());
 		} else {
 			throw new BusinessException(String.format("facility does not exist"));
 		}
-		Optional<BudgetType> budgetType = repo.getBudgetTypeRepo().findById(typeId);
+		Optional<BudgetType> budgetType = repo.getBudgetTypeRepo().findByEid(typeId);
 		if (budgetType.isPresent()) {
-			res.setBudgetType(budgetType.get());
+			res.setTypeId(budgetType.get().getEid());
 		} else {
 			throw new BusinessException(String.format("Budget type does not exist"));
 		}

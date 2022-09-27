@@ -52,7 +52,7 @@ public SafetyMaterial addSafetyMaterial(SafetyMaterial sft,List<String> workerNa
 public Document addSafetyDocument(Document doc) {
 	doc.setEid(UUID.randomUUID().toString());
 	doc.setDocumentPath(doc.getDocumentPath());
-	doc.setSafetyMaterial(doc.getSafetyMaterial());
+	doc.setSafetyMaterialId(doc.getSafetyMaterialId());
 	repo.getDocumentRepo().save(doc);
 	return doc;
 }

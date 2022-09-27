@@ -29,13 +29,16 @@ import avh.nufm.business.model.Vendor;
 
 @RestController
 public class VendorController {
-	@Autowired VendorControllerImpl vendorConImpl;
-	@Autowired private FileStorageService fileStorSer;
-	
-	//ADD VENDOR
+	@Autowired
+	VendorControllerImpl vendorConImpl;
+	@Autowired
+	private FileStorageService fileStorSer;
+
+	// ADD VENDOR
 	@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
 	@PostMapping(PathCte.AddVendorServletPath)
-	public ResponseEntity<APIVendorOut> createVendor(@RequestParam("data") String data,@RequestParam("vendorDocs") List<MultipartFile> vendorDocs) {
+	public ResponseEntity<APIVendorOut> createVendor(@RequestParam("data") String data,
+			@RequestParam("vendorDocs") List<MultipartFile> vendorDocs) {
 		try {
 			String fpath = "images/docs";
 			APIVendorIn vendorIn = new ObjectMapper().readValue(data, APIVendorIn.class);
@@ -89,10 +92,15 @@ public class VendorController {
 	// UPDATE VENDOR
 	@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
 	@PutMapping(PathCte.UpdateVendorServletPath)
-	public ResponseEntity<String> updateVendor(@RequestParam("data") String data) {
+	public ResponseEntity<APIVendorOut> updateVendor(@RequestParam("data") String data, @RequestParam("vendorId") String id,
+			@RequestParam("vendorDocs") List<MultipartFile> vendorDocs) {
 		try {
-
-			return ResponseEntity.ok().body("vendor is updated");
+			String fpath = "images/docs";
+			APIVendorIn vendorIn = new ObjectMapper().readValue(data, APIVendorIn.class);
+			Vendor vendorModel = VendorTransformer.VendorToModel(vendorIn);
+			vendorModel = vendorConImpl.updateVendor(id,vendorModel);
+			vendorConImpl.addVendorDocs(vendorModel.getEid(), fileStorSer.storeMultipleFile(vendorDocs, fpath));
+			return ResponseEntity.ok().body(VendorTransformer.VendorFromModel(vendorModel));
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, e.getMessage());
 		}

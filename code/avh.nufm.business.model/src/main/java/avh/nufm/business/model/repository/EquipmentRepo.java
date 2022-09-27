@@ -10,6 +10,6 @@ import avh.nufm.business.model.Equipment;
 
 @Repository
 public interface EquipmentRepo extends CrudRepository<Equipment, String>{
-	public Optional<Equipment> findById(String id);
+	public Optional<Equipment> findByEid(String eid);
 	public List<Equipment> findAll();
 }

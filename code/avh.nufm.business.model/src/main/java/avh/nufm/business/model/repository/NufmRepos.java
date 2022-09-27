@@ -64,6 +64,10 @@ public class NufmRepos {
 	private VendorRepo vendorRepo;
 	@Autowired
 	private ContractRepo contractRepo;
+	@Autowired
+	private ContractTypeRepo contractTypeRepo;
+	@Autowired
+	private EquipmentTypeRepo equipmentTypeRepo;
 	
 	// generate getters 
 	public AttendanceRepo getAttrepo() {
@@ -147,6 +151,12 @@ public class NufmRepos {
 	}
 	public void setBudgetTypeRepo(BudgetTypeRepo budgetTypeRepo) {
 		this.budgetTypeRepo = budgetTypeRepo;
+	}
+	public void setContractTypeRepo(ContractTypeRepo contractTypeRepo) {
+		this.contractTypeRepo = contractTypeRepo;
+	}
+	public void setEquipmentTypeRepo(EquipmentTypeRepo equipmentTypeRepo) {
+		this.equipmentTypeRepo = equipmentTypeRepo;
 	}
 	
 	
