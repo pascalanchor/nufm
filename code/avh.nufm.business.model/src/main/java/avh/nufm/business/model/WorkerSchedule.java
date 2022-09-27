@@ -21,12 +21,12 @@ public class WorkerSchedule implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date date;
 
-	//bi-directional many-to-one association to NufmUser
+	//uni-directional many-to-one association to NufmUser
 	@ManyToOne
 	@JoinColumn(name="worker_id")
 	private NufmUser nufmUser;
 
-	//bi-directional many-to-one association to Task
+	//uni-directional many-to-one association to Task
 	@ManyToOne
 	@JoinColumn(name="task_id")
 	private Task task;

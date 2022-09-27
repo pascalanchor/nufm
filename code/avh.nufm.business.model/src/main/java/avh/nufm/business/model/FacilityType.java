@@ -2,7 +2,6 @@ package avh.nufm.business.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
 
 
 /**
@@ -19,10 +18,6 @@ public class FacilityType implements Serializable {
 	private String eid;
 
 	private String name;
-
-	//bi-directional many-to-one association to Facility
-	@OneToMany(mappedBy="facilityType")
-	private List<Facility> facilities;
 
 	public FacilityType() {
 	}
@@ -41,28 +36,6 @@ public class FacilityType implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public List<Facility> getFacilities() {
-		return this.facilities;
-	}
-
-	public void setFacilities(List<Facility> facilities) {
-		this.facilities = facilities;
-	}
-
-	public Facility addFacility(Facility facility) {
-		getFacilities().add(facility);
-		facility.setFacilityType(this);
-
-		return facility;
-	}
-
-	public Facility removeFacility(Facility facility) {
-		getFacilities().remove(facility);
-		facility.setFacilityType(null);
-
-		return facility;
 	}
 
 }

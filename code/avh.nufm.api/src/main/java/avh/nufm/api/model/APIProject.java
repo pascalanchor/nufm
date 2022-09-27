@@ -2,6 +2,8 @@ package avh.nufm.api.model;
 
 
 
+import java.util.Date;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,4 +18,6 @@ private String document_id;
 private String name;
 private String status;
 private String comment;
+private Date fromDate;
+private Date toDate;
 }

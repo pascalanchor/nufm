@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import avh.nufm.business.model.Document;
 import avh.nufm.business.model.Facility;
-import avh.nufm.business.model.FacilityDocument;
 
 @Repository
-public interface FacilityDocumentRepo  extends CrudRepository<FacilityDocument, String>{
-	public List<FacilityDocument> findByFacility(Facility facility);
+public interface DocumentRepo  extends CrudRepository<Document, String>{
+	public List<Document> findByFacility(Facility facility);
 }

@@ -33,6 +33,7 @@ import avh.nufm.api.model.out.APIWorkerOut;
 import avh.nufm.api.model.transformer.WorkerTransformer;
 import avh.nufm.business.model.ConfirmationToken;
 import avh.nufm.business.model.NufmUser;
+import avh.nufm.business.model.UserSpecialization;
 import avh.nufm.business.model.repository.NufmRepos;
 import avh.nufm.security.common.SecurityCte;
 
@@ -51,7 +52,7 @@ public class WorkerController {
     public ResponseEntity<String> createWorker(@RequestParam("profileImage") MultipartFile profileImage,@RequestParam("data") String data) {
     	try {
     		//image storage path 
-    		String path = "C:\\nufm_storage\\profile\\worker";
+    		String path = "images/profiles";
     		APIWorkerIn workerIn = new ObjectMapper().readValue(data, APIWorkerIn.class); 
     		// create the user without roles
     		NufmUser workerModel = WorkerTransformer.ModelFromWorker(workerIn);
@@ -70,7 +71,7 @@ public class WorkerController {
     		String tok = UUID.randomUUID().toString();
     		ct.setToken(tok);
     		rep.getConfirmationTokenRepo().save(ct);
-    		String link = "http://localhost:6338"+SecurityCte.PublicServletPath+"/register/confirm/" + tok;
+    		String link = "http://45.9.190.133:8081"+SecurityCte.PublicServletPath+"/register/confirm/" + tok;
     		String mail = emailBuilder.confirmWorker(workerIn.getFullName(),workerIn.getEmail(),pwd,link);
     		emailSender.send(workerIn.getEmail(), mail);    		
     		return ResponseEntity.ok().body("A confirmation email is sent to  "+workerIn.getEmail()+"||token = "+tok);
@@ -97,6 +98,15 @@ public class WorkerController {
     		List<NufmUser> workers = wcImpl.getWorkers();
     		List<APIWorkerOut> res = new ArrayList<>();
     		workers.stream().forEach(e-> res.add(WorkerTransformer.WorkerFromModel(e)));
+    		
+    		for (APIWorkerOut wr : res) {
+    			List<String> spec = new ArrayList<>();
+				List<UserSpecialization> ss = rep.getUserSpecrepo().findByNufmUser(rep.getNfuserrepo().findByEid(wr.getEmail()));
+				for (UserSpecialization s : ss) {
+					spec.add(s.getSpecialization().getName());
+				}
+				wr.setSpecializations(spec);
+			}
     		return ResponseEntity.ok().body(res);
     	} catch (Exception e) {
     		throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, e.getMessage());
@@ -120,7 +130,7 @@ public class WorkerController {
     public ResponseEntity<String> updateWorker(@RequestParam("profileImage") MultipartFile profileImage,@RequestParam("data") String data){
     	try {
     	//image storage path 
-		String path = "D:\\AVH projects\\Workspaces\\NufmWorkspace\\nufm\\code\\avh.nufm\\src\\main\\resources\\storage\\profile\\worker";
+		String path = "images/profiles";
 		APIWorkerIn workerIn = new ObjectMapper().readValue(data, APIWorkerIn.class); 
 		// create the user without roles
 		NufmUser workerModel = WorkerTransformer.ModelFromWorker(workerIn);

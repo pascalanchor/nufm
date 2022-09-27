@@ -2,6 +2,7 @@ package avh.nufm.api.model;
 
 import java.util.Date;
 
+import avh.nufm.business.model.NufmUser;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class APINotification {
-	private String receiverId;
+	private NufmUser receiver;
 	private String taskName;
 	private String taskType;
 	private String taskStatus;

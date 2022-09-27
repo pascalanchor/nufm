@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -26,11 +26,10 @@ public class NotificationController {
 	
 	@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR','OCCUPANT','WORKER')")
 	@PostMapping(PathCte.AddNotificationServletPath)
-	public ResponseEntity<String> sendNotification(@RequestBody APINotificationIn notificationIn,Authentication auth){
+	public ResponseEntity<String> sendNotification(@RequestBody APINotificationIn notificationIn,@RequestParam String auth){
 		try {
 			Notification res = NotificationTransformer.ModelFromNotification(notificationIn);
-			System.out.println(res.getReceiverId());
-			nci.saveNotification(res, auth.getName());
+			nci.saveNotification(res, auth);
 			return ResponseEntity.ok().body("notification sent");
 		}catch (Exception e) {
     		throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, e.getMessage());
@@ -38,10 +37,10 @@ public class NotificationController {
 	}
 	@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR','OCCUPANT','WORKER')")
 	@GetMapping(PathCte.GetNotificationsByIdServletPath)
-	public ResponseEntity<List<APINotificationOut>> getNotifications(Authentication auth){
+	public ResponseEntity<List<APINotificationOut>> getNotifications(@RequestParam String auth){
 		try {
 			
-			List<Notification> list = nci.getReceivedNotifications(auth.getName());
+			List<Notification> list = nci.getReceivedNotifications(auth);
 			List<APINotificationOut> res = new ArrayList<>();
 			list.stream().forEach(e->res.add(NotificationTransformer.NotificationFromModel(e)));
 			return ResponseEntity.ok().body(res);

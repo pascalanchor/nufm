@@ -17,15 +17,11 @@ public class FacilityEquipment implements Serializable {
 	@Id
 	private String eid;
 
-	//bi-directional many-to-one association to Equipment
-	@ManyToOne
-	@JoinColumn(name="equipment_id")
-	private Equipment equipment;
+	@Column(name="equipment_id")
+	private String equipmentId;
 
-	//bi-directional many-to-one association to Facility
-	@ManyToOne
-	@JoinColumn(name="facility_id")
-	private Facility facility;
+	@Column(name="facility_id")
+	private String facilityId;
 
 	public FacilityEquipment() {
 	}
@@ -38,20 +34,20 @@ public class FacilityEquipment implements Serializable {
 		this.eid = eid;
 	}
 
-	public Equipment getEquipment() {
-		return this.equipment;
+	public String getEquipmentId() {
+		return this.equipmentId;
 	}
 
-	public void setEquipment(Equipment equipment) {
-		this.equipment = equipment;
+	public void setEquipmentId(String equipmentId) {
+		this.equipmentId = equipmentId;
 	}
 
-	public Facility getFacility() {
-		return this.facility;
+	public String getFacilityId() {
+		return this.facilityId;
 	}
 
-	public void setFacility(Facility facility) {
-		this.facility = facility;
+	public void setFacilityId(String facilityId) {
+		this.facilityId = facilityId;
 	}
 
 }

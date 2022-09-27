@@ -30,12 +30,6 @@ public class Notification implements Serializable {
 	@Column(name="facility_name")
 	private String facilityName;
 
-	@Column(name="receiver_id")
-	private String receiverId;
-
-	@Column(name="sender_id")
-	private String senderId;
-
 	@Column(name="sender_name")
 	private String senderName;
 
@@ -51,6 +45,16 @@ public class Notification implements Serializable {
 
 	@Column(name="task_type")
 	private String taskType;
+
+	//uni-directional many-to-one association to NufmUser
+	@ManyToOne
+	@JoinColumn(name="receiver_id")
+	private NufmUser receiver;
+
+	//uni-directional many-to-one association to NufmUser
+	@ManyToOne
+	@JoinColumn(name="sender_id")
+	private NufmUser sender;
 
 	public Notification() {
 	}
@@ -95,22 +99,6 @@ public class Notification implements Serializable {
 		this.facilityName = facilityName;
 	}
 
-	public String getReceiverId() {
-		return this.receiverId;
-	}
-
-	public void setReceiverId(String receiverId) {
-		this.receiverId = receiverId;
-	}
-
-	public String getSenderId() {
-		return this.senderId;
-	}
-
-	public void setSenderId(String senderId) {
-		this.senderId = senderId;
-	}
-
 	public String getSenderName() {
 		return this.senderName;
 	}
@@ -150,5 +138,23 @@ public class Notification implements Serializable {
 	public void setTaskType(String taskType) {
 		this.taskType = taskType;
 	}
+
+	public NufmUser getReceiver() {
+		return receiver;
+	}
+
+	public void setReceiver(NufmUser receiver) {
+		this.receiver = receiver;
+	}
+
+	public NufmUser getSender() {
+		return sender;
+	}
+
+	public void setSender(NufmUser sender) {
+		this.sender = sender;
+	}
+
+	
 
 }

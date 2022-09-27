@@ -13,5 +13,6 @@ import lombok.Setter;
 @Setter
 public class APITaskOut extends APITask{
 private String eid;
+private String comment;
 
 }

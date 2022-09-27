@@ -7,4 +7,5 @@ import avh.nufm.business.model.SafetyMaterial;
 @Repository
 public interface SafetyMaterialRepo extends CrudRepository<SafetyMaterial, String>{
 
+	public SafetyMaterial findByEid(String eid);
 }

@@ -3,7 +3,6 @@ package avh.nufm.business.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 
 /**
@@ -35,23 +34,15 @@ public class Project implements Serializable {
 
 	private String status;
 
-	//bi-directional many-to-one association to Contractor
-	@ManyToOne
-	@JoinColumn(name="contractor_id")
-	private Contractor contractor;
-
-	//bi-directional many-to-one association to Facility
+	//uni-directional many-to-one association to Facility
 	@ManyToOne
 	@JoinColumn(name="facility_id")
 	private Facility facility;
 
-	//bi-directional many-to-one association to ProjectWorker
-	@OneToMany(mappedBy="project")
-	private List<ProjectWorker> projectWorkers;
-
-	//bi-directional many-to-one association to Task
-	@OneToMany(mappedBy="project")
-	private List<Task> tasks;
+	//uni-directional many-to-one association to NufmUser
+	@ManyToOne
+	@JoinColumn(name="contractor_id")
+	private NufmUser nufmUser;
 
 	public Project() {
 	}
@@ -112,14 +103,6 @@ public class Project implements Serializable {
 		this.status = status;
 	}
 
-	public Contractor getContractor() {
-		return this.contractor;
-	}
-
-	public void setContractor(Contractor contractor) {
-		this.contractor = contractor;
-	}
-
 	public Facility getFacility() {
 		return this.facility;
 	}
@@ -128,48 +111,12 @@ public class Project implements Serializable {
 		this.facility = facility;
 	}
 
-	public List<ProjectWorker> getProjectWorkers() {
-		return this.projectWorkers;
+	public NufmUser getNufmUser() {
+		return this.nufmUser;
 	}
 
-	public void setProjectWorkers(List<ProjectWorker> projectWorkers) {
-		this.projectWorkers = projectWorkers;
-	}
-
-	public ProjectWorker addProjectWorker(ProjectWorker projectWorker) {
-		getProjectWorkers().add(projectWorker);
-		projectWorker.setProject(this);
-
-		return projectWorker;
-	}
-
-	public ProjectWorker removeProjectWorker(ProjectWorker projectWorker) {
-		getProjectWorkers().remove(projectWorker);
-		projectWorker.setProject(null);
-
-		return projectWorker;
-	}
-
-	public List<Task> getTasks() {
-		return this.tasks;
-	}
-
-	public void setTasks(List<Task> tasks) {
-		this.tasks = tasks;
-	}
-
-	public Task addTask(Task task) {
-		getTasks().add(task);
-		task.setProject(this);
-
-		return task;
-	}
-
-	public Task removeTask(Task task) {
-		getTasks().remove(task);
-		task.setProject(null);
-
-		return task;
+	public void setNufmUser(NufmUser nufmUser) {
+		this.nufmUser = nufmUser;
 	}
 
 }

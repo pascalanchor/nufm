@@ -24,6 +24,7 @@ import avh.nufm.api.impl.services.FileStorageService;
 import avh.nufm.api.model.in.APISafetyMaterialIn;
 import avh.nufm.api.model.out.APISafetyMaterialOut;
 import avh.nufm.api.model.transformer.SafetyMaterialTransformer;
+import avh.nufm.business.model.Document;
 import avh.nufm.business.model.SafetyMaterial;
 
 @RestController
@@ -39,12 +40,15 @@ public ResponseEntity<APISafetyMaterialOut> addSafetyMaterial(@RequestParam("mat
 	try {
 		APISafetyMaterialOut res;
 		//image storage path 
-		String path = "C:\\nufm_storage\\safety";
+		String path = "images/safety";
 		 APISafetyMaterialIn sftin=new ObjectMapper().readValue(data, APISafetyMaterialIn.class);
 		SafetyMaterial sft=SafetyMaterialTransformer.sftToModel(sftin);
 		//save and assign the image
 		String imagePath = fss.storeFile(materialImage, path);
-		sft.setDocumentId(imagePath);
+		Document doc = new Document();
+		doc.setSafetyMaterial(sft);
+		doc.setDocumentPath(imagePath);
+		sftimpl.addSafetyDocument(doc);
 		res=SafetyMaterialTransformer.sftFromModel(sftimpl.addSafetyMaterial(sft, sftin.getWorkers()));
 		res.setWorkers(sftwrimpl.getWorkersForMaterial(res.getEid()));
 		return ResponseEntity.ok().body(res);
@@ -71,15 +75,18 @@ public ResponseEntity<List<APISafetyMaterialOut>> getAllSafetyMaterials(){
 
 @PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
 @PutMapping(PathCte.UpdateSafetyMaterialServletPath)
-public ResponseEntity<APISafetyMaterialOut> updateSafetyMaterials(@RequestParam("materialImage") MultipartFile materialImage,@RequestParam("data") String data,@RequestParam String oldSftId){
+public ResponseEntity<APISafetyMaterialOut> updateSafetyMaterials(@RequestParam("materialImage") MultipartFile materialImage,@RequestParam("data") String data,@RequestParam("oldSftId") String oldSftId){
 	try {
 		APISafetyMaterialOut res;
-		String path = "D:\\AVH projects\\Workspaces\\NufmWorkspace\\nufm\\code\\avh.nufm\\src\\main\\resources\\storage\\safety";
+		String path = "images/safety";
 		APISafetyMaterialIn sftin=new ObjectMapper().readValue(data, APISafetyMaterialIn.class);
 		SafetyMaterial sft=SafetyMaterialTransformer.sftToModel(sftin);
 		//save and assign the image
 		String imagePath = fss.storeFile(materialImage, path);
-		sft.setDocumentId(imagePath);
+		Document doc = new Document();
+		doc.setSafetyMaterial(sft);
+		doc.setDocumentPath(imagePath);
+		sftimpl.addSafetyDocument(doc);
 		res=SafetyMaterialTransformer.sftFromModel(sftimpl.updateSafetyMaterial(oldSftId,sft, sftin.getWorkers()));
 		res.setWorkers(sftwrimpl.getWorkersForMaterial(res.getEid()));
 		return ResponseEntity.ok().body(res);
@@ -93,6 +100,20 @@ public ResponseEntity<APISafetyMaterialOut> updateSafetyMaterials(@RequestParam(
 public ResponseEntity<Boolean> deleteSafetyMaterial(@RequestParam String sftId){
 	try {
 		return ResponseEntity.ok().body(sftimpl.deleteSafetyMaterial(sftId));
+	} catch (Exception e) {
+		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED,e.getMessage());
+	}
+}
+
+@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
+@GetMapping(PathCte.GetSafetyMaterialsById)
+public ResponseEntity<APISafetyMaterialOut> getSafetyMaterialsById(@RequestParam String id){
+	try {
+		APISafetyMaterialOut res= SafetyMaterialTransformer.sftFromModel(sftimpl.getSafetyMaterialsById(id));
+		
+			res.setWorkers(sftwrimpl.getWorkersForMaterial(res.getEid()));
+		
+		return  ResponseEntity.ok().body(res);
 	} catch (Exception e) {
 		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED,e.getMessage());
 	}

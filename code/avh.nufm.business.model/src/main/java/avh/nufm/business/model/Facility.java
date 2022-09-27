@@ -2,8 +2,8 @@ package avh.nufm.business.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.Date;
 import java.sql.Timestamp;
-import java.util.List;
 
 
 /**
@@ -18,47 +18,63 @@ public class Facility implements Serializable {
 	@Id
 	private String eid;
 
+	private String address;
+
+	@Column(name="business_id")
+	private String businessId;
+
+	@Column(name="const_year")
+	private Integer constYear;
+
 	@Column(name="creation_date")
 	private Timestamp creationDate;
+
+	@Temporal(TemporalType.DATE)
+	@Column(name="date_opened")
+	private Date dateOpened;
+
+	private String description;
+
+	@Column(name="floors_count")
+	private Integer floorsCount;
 
 	private String location;
 
 	private String name;
 
-	//bi-directional many-to-one association to Facility
+	@Column(name="organizational_unit")
+	private String organizationalUnit;
+
+	@Column(name="primary_email")
+	private String primaryEmail;
+
+	@Temporal(TemporalType.DATE)
+	@Column(name="schedule_from")
+	private Date scheduleFrom;
+
+	@Temporal(TemporalType.DATE)
+	@Column(name="schedule_to")
+	private Date scheduleTo;
+
+	private String street;
+
+	@Column(name="zip_code")
+	private String zipCode;
+
+	//uni-directional many-to-one association to Facility
 	@ManyToOne
 	@JoinColumn(name="parent_id")
 	private Facility facility;
 
-	//bi-directional many-to-one association to Facility
-	@OneToMany(mappedBy="facility")
-	private List<Facility> facilities;
-
-	//bi-directional many-to-one association to FacilityType
+	//uni-directional many-to-one association to FacilityType
 	@ManyToOne
 	@JoinColumn(name="type_id")
 	private FacilityType facilityType;
 
-	//bi-directional many-to-one association to NufmUser
-	@ManyToOne(cascade = {CascadeType.REMOVE})
+	//uni-directional many-to-one association to NufmUser
+	@ManyToOne
 	@JoinColumn(name="occupant_id")
 	private NufmUser nufmUser;
-
-	//bi-directional many-to-one association to FacilityDocument
-	@OneToMany(mappedBy="facility",cascade = {CascadeType.REMOVE})
-	private List<FacilityDocument> facilityDocuments;
-
-	//bi-directional many-to-one association to FacilityEquipment
-	@OneToMany(mappedBy="facility")
-	private List<FacilityEquipment> facilityEquipments;
-
-	//bi-directional many-to-one association to Project
-	@OneToMany(mappedBy="facility",cascade = {CascadeType.REMOVE})
-	private List<Project> projects;
-
-	//bi-directional many-to-one association to Task
-	@OneToMany(mappedBy="facility",cascade = {CascadeType.REMOVE})
-	private List<Task> tasks;
 
 	public Facility() {
 	}
@@ -71,12 +87,60 @@ public class Facility implements Serializable {
 		this.eid = eid;
 	}
 
+	public String getAddress() {
+		return this.address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getBusinessId() {
+		return this.businessId;
+	}
+
+	public void setBusinessId(String businessId) {
+		this.businessId = businessId;
+	}
+
+	public Integer getConstYear() {
+		return this.constYear;
+	}
+
+	public void setConstYear(Integer constYear) {
+		this.constYear = constYear;
+	}
+
 	public Timestamp getCreationDate() {
 		return this.creationDate;
 	}
 
 	public void setCreationDate(Timestamp creationDate) {
 		this.creationDate = creationDate;
+	}
+
+	public Date getDateOpened() {
+		return this.dateOpened;
+	}
+
+	public void setDateOpened(Date dateOpened) {
+		this.dateOpened = dateOpened;
+	}
+
+	public String getDescription() {
+		return this.description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Integer getFloorsCount() {
+		return this.floorsCount;
+	}
+
+	public void setFloorsCount(Integer floorsCount) {
+		this.floorsCount = floorsCount;
 	}
 
 	public String getLocation() {
@@ -95,34 +159,60 @@ public class Facility implements Serializable {
 		this.name = name;
 	}
 
+	public String getOrganizationalUnit() {
+		return this.organizationalUnit;
+	}
+
+	public void setOrganizationalUnit(String organizationalUnit) {
+		this.organizationalUnit = organizationalUnit;
+	}
+
+	public String getPrimaryEmail() {
+		return this.primaryEmail;
+	}
+
+	public void setPrimaryEmail(String primaryEmail) {
+		this.primaryEmail = primaryEmail;
+	}
+
+	public Date getScheduleFrom() {
+		return this.scheduleFrom;
+	}
+
+	public void setScheduleFrom(Date scheduleFrom) {
+		this.scheduleFrom = scheduleFrom;
+	}
+
+	public Date getScheduleTo() {
+		return this.scheduleTo;
+	}
+
+	public void setScheduleTo(Date scheduleTo) {
+		this.scheduleTo = scheduleTo;
+	}
+
+	public String getStreet() {
+		return this.street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
+	public String getZipCode() {
+		return this.zipCode;
+	}
+
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
+	}
+
 	public Facility getFacility() {
 		return this.facility;
 	}
 
 	public void setFacility(Facility facility) {
 		this.facility = facility;
-	}
-
-	public List<Facility> getFacilities() {
-		return this.facilities;
-	}
-
-	public void setFacilities(List<Facility> facilities) {
-		this.facilities = facilities;
-	}
-
-	public Facility addFacility(Facility facility) {
-		getFacilities().add(facility);
-		facility.setFacility(this);
-
-		return facility;
-	}
-
-	public Facility removeFacility(Facility facility) {
-		getFacilities().remove(facility);
-		facility.setFacility(null);
-
-		return facility;
 	}
 
 	public FacilityType getFacilityType() {
@@ -139,94 +229,6 @@ public class Facility implements Serializable {
 
 	public void setNufmUser(NufmUser nufmUser) {
 		this.nufmUser = nufmUser;
-	}
-
-	public List<FacilityDocument> getFacilityDocuments() {
-		return this.facilityDocuments;
-	}
-
-	public void setFacilityDocuments(List<FacilityDocument> facilityDocuments) {
-		this.facilityDocuments = facilityDocuments;
-	}
-
-	public FacilityDocument addFacilityDocument(FacilityDocument facilityDocument) {
-		getFacilityDocuments().add(facilityDocument);
-		facilityDocument.setFacility(this);
-
-		return facilityDocument;
-	}
-
-	public FacilityDocument removeFacilityDocument(FacilityDocument facilityDocument) {
-		getFacilityDocuments().remove(facilityDocument);
-		facilityDocument.setFacility(null);
-
-		return facilityDocument;
-	}
-
-	public List<FacilityEquipment> getFacilityEquipments() {
-		return this.facilityEquipments;
-	}
-
-	public void setFacilityEquipments(List<FacilityEquipment> facilityEquipments) {
-		this.facilityEquipments = facilityEquipments;
-	}
-
-	public FacilityEquipment addFacilityEquipment(FacilityEquipment facilityEquipment) {
-		getFacilityEquipments().add(facilityEquipment);
-		facilityEquipment.setFacility(this);
-
-		return facilityEquipment;
-	}
-
-	public FacilityEquipment removeFacilityEquipment(FacilityEquipment facilityEquipment) {
-		getFacilityEquipments().remove(facilityEquipment);
-		facilityEquipment.setFacility(null);
-
-		return facilityEquipment;
-	}
-
-	public List<Project> getProjects() {
-		return this.projects;
-	}
-
-	public void setProjects(List<Project> projects) {
-		this.projects = projects;
-	}
-
-	public Project addProject(Project project) {
-		getProjects().add(project);
-		project.setFacility(this);
-
-		return project;
-	}
-
-	public Project removeProject(Project project) {
-		getProjects().remove(project);
-		project.setFacility(null);
-
-		return project;
-	}
-
-	public List<Task> getTasks() {
-		return this.tasks;
-	}
-
-	public void setTasks(List<Task> tasks) {
-		this.tasks = tasks;
-	}
-
-	public Task addTask(Task task) {
-		getTasks().add(task);
-		task.setFacility(this);
-
-		return task;
-	}
-
-	public Task removeTask(Task task) {
-		getTasks().remove(task);
-		task.setFacility(null);
-
-		return task;
 	}
 
 }

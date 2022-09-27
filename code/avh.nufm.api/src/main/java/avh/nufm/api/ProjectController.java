@@ -31,7 +31,9 @@ public ResponseEntity<APIProjectOut> addProject(@RequestBody APIProjectIn prjIn)
 	try {
 		APIProjectOut res;
 		Project prj=ProjectTransformer.projectToModel(prjIn);
+		System.out.println("-111-11-11-1-1-111-1--1-1--1-1");
 		res=ProjectTransformer.projectFromModel(prjIm.addProject(prj));
+		System.out.println("77777777777777777777777");
 		return ResponseEntity.ok().body(res);
 	}catch (Exception e) {
 		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED,e.getMessage());

@@ -42,6 +42,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 		}
 		 try {
 	            String jwt = getJWTFromRequest(request);
+	            System.out.println(jwt);
 	            if (StringUtils.hasText(jwt)) {
 	            	UsernamePasswordAuthenticationToken authentication = tokenProvider.validateToken(jwt);
 	                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

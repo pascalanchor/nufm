@@ -15,7 +15,7 @@ public class TaskTransformer {
 	
 	public static APITaskOut taskFromModel(Task tsk) {
 		APITaskOut res=new APITaskOut();
-		//res.setComment(tsk.getComment());
+		res.setComment(tsk.getComment());
 		//res.setDate_from(tsk.getDateFrom());
 		//res.setDate_to(tsk.getDateTo());
 		//res.setDocumentId(tsk.getDocumentId());

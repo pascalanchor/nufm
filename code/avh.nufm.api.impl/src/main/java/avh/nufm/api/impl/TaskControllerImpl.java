@@ -226,4 +226,22 @@ public boolean deleteTask(String id) {
 		return false;
 	return true;
 }
+
+
+
+public Iterable<Task> getAllDoneTasks(String email) {
+	
+	List<WorkerTask> workerTask = repo.getWorktaskrepo().findByNufmUser(repo.getNfuserrepo().findByEid(email));
+	
+	List<Task> taskList = new ArrayList<Task>();
+	for (WorkerTask wt : workerTask) {
+		if(wt.getTask().getStatus().equals(ETaskStatus.finished.toString())) {
+			taskList.add(wt.getTask());
+		}
+	}
+	
+	Iterable<Task> itr = taskList;
+	
+	return itr;
+}
 }

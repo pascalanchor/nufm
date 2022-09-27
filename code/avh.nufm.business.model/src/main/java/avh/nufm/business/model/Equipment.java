@@ -2,8 +2,6 @@ package avh.nufm.business.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.util.List;
 
 
 /**
@@ -18,24 +16,28 @@ public class Equipment implements Serializable {
 	@Id
 	private String eid;
 
-	@Column(name="created_at")
-	private Timestamp createdAt;
+	private String description;
 
 	private String location;
 
-	@Column(name="monitoring_rules")
-	private String monitoringRules;
-
 	private String name;
 
-	private String specification;
+	@Column(name="number_of_items")
+	private Integer numberOfItems;
 
-	@Column(name="updated_at")
-	private Timestamp updatedAt;
+	@Column(name="purchase_date")
+	private String purchaseDate;
 
-	//bi-directional many-to-one association to FacilityEquipment
-	@OneToMany(mappedBy="equipment")
-	private List<FacilityEquipment> facilityEquipments;
+	private String type;
+
+	@Column(name="unit_cost")
+	private double unitCost;
+
+	@Column(name="vendor_name")
+	private String vendorName;
+
+	@Column(name="zip_code")
+	private String zipCode;
 
 	public Equipment() {
 	}
@@ -48,12 +50,12 @@ public class Equipment implements Serializable {
 		this.eid = eid;
 	}
 
-	public Timestamp getCreatedAt() {
-		return this.createdAt;
+	public String getDescription() {
+		return this.description;
 	}
 
-	public void setCreatedAt(Timestamp createdAt) {
-		this.createdAt = createdAt;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public String getLocation() {
@@ -64,14 +66,6 @@ public class Equipment implements Serializable {
 		this.location = location;
 	}
 
-	public String getMonitoringRules() {
-		return this.monitoringRules;
-	}
-
-	public void setMonitoringRules(String monitoringRules) {
-		this.monitoringRules = monitoringRules;
-	}
-
 	public String getName() {
 		return this.name;
 	}
@@ -80,42 +74,52 @@ public class Equipment implements Serializable {
 		this.name = name;
 	}
 
-	public String getSpecification() {
-		return this.specification;
+	public Integer getNumberOfItems() {
+		return this.numberOfItems;
 	}
 
-	public void setSpecification(String specification) {
-		this.specification = specification;
+	public void setNumberOfItems(Integer numberOfItems) {
+		this.numberOfItems = numberOfItems;
 	}
 
-	public Timestamp getUpdatedAt() {
-		return this.updatedAt;
+	public String getPurchaseDate() {
+		return this.purchaseDate;
 	}
 
-	public void setUpdatedAt(Timestamp updatedAt) {
-		this.updatedAt = updatedAt;
+	public void setPurchaseDate(String purchaseDate) {
+		this.purchaseDate = purchaseDate;
 	}
 
-	public List<FacilityEquipment> getFacilityEquipments() {
-		return this.facilityEquipments;
+	public String getType() {
+		return this.type;
 	}
 
-	public void setFacilityEquipments(List<FacilityEquipment> facilityEquipments) {
-		this.facilityEquipments = facilityEquipments;
+	public void setType(String type) {
+		this.type = type;
 	}
 
-	public FacilityEquipment addFacilityEquipment(FacilityEquipment facilityEquipment) {
-		getFacilityEquipments().add(facilityEquipment);
-		facilityEquipment.setEquipment(this);
-
-		return facilityEquipment;
+	public double getUnitCost() {
+		return this.unitCost;
 	}
 
-	public FacilityEquipment removeFacilityEquipment(FacilityEquipment facilityEquipment) {
-		getFacilityEquipments().remove(facilityEquipment);
-		facilityEquipment.setEquipment(null);
+	public void setUnitCost(double unitCost) {
+		this.unitCost = unitCost;
+	}
 
-		return facilityEquipment;
+	public String getVendorName() {
+		return this.vendorName;
+	}
+
+	public void setVendorName(String vendorName) {
+		this.vendorName = vendorName;
+	}
+
+	public String getZipCode() {
+		return this.zipCode;
+	}
+
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
 	}
 
 }

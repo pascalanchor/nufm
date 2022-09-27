@@ -29,7 +29,7 @@ public class ConfirmationToken implements Serializable {
 
 	private String token;
 
-	//bi-directional many-to-one association to NufmUser
+	//uni-directional many-to-one association to NufmUser
 	@ManyToOne
 	@JoinColumn(name="user_id")
 	private NufmUser nufmUser;

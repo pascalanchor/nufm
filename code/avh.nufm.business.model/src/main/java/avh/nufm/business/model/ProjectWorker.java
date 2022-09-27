@@ -17,12 +17,12 @@ public class ProjectWorker implements Serializable {
 	@Id
 	private String eid;
 
-	//bi-directional many-to-one association to NufmUser
+	//uni-directional many-to-one association to NufmUser
 	@ManyToOne
 	@JoinColumn(name="worker_id")
 	private NufmUser nufmUser;
 
-	//bi-directional many-to-one association to Project
+	//uni-directional many-to-one association to Project
 	@ManyToOne
 	@JoinColumn(name="project_id")
 	private Project project;

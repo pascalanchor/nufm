@@ -3,7 +3,6 @@ package avh.nufm.business.model;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 
 /**
@@ -31,35 +30,33 @@ public class Task implements Serializable {
 	@Column(name="date_to")
 	private Date dateTo;
 
-	@Column(name="document_id")
-	private String documentId;
+	private String frequency;
 
 	private String name;
 
+	private String priority;
+
 	private String status;
 
-	//bi-directional many-to-one association to Facility
+	//uni-directional many-to-one association to Facility
 	@ManyToOne
 	@JoinColumn(name="facility_id")
 	private Facility facility;
 
-	//bi-directional many-to-one association to Project
+	//uni-directional many-to-one association to Project
 	@ManyToOne
 	@JoinColumn(name="project_id")
 	private Project project;
 
-	//bi-directional many-to-one association to TaskType
+	//uni-directional many-to-one association to Task
+	@ManyToOne
+	@JoinColumn(name="parent_id")
+	private Task task;
+
+	//uni-directional many-to-one association to TaskType
 	@ManyToOne
 	@JoinColumn(name="type_id")
 	private TaskType taskType;
-
-	//bi-directional many-to-one association to WorkerSchedule
-	@OneToMany(mappedBy="task")
-	private List<WorkerSchedule> workerSchedules;
-
-	//bi-directional many-to-one association to WorkerTask
-	@OneToMany(mappedBy="task")
-	private List<WorkerTask> workerTasks;
 
 	public Task() {
 	}
@@ -104,12 +101,12 @@ public class Task implements Serializable {
 		this.dateTo = dateTo;
 	}
 
-	public String getDocumentId() {
-		return this.documentId;
+	public String getFrequency() {
+		return this.frequency;
 	}
 
-	public void setDocumentId(String documentId) {
-		this.documentId = documentId;
+	public void setFrequency(String frequency) {
+		this.frequency = frequency;
 	}
 
 	public String getName() {
@@ -118,6 +115,14 @@ public class Task implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getPriority() {
+		return this.priority;
+	}
+
+	public void setPriority(String priority) {
+		this.priority = priority;
 	}
 
 	public String getStatus() {
@@ -144,56 +149,20 @@ public class Task implements Serializable {
 		this.project = project;
 	}
 
+	public Task getTask() {
+		return this.task;
+	}
+
+	public void setTask(Task task) {
+		this.task = task;
+	}
+
 	public TaskType getTaskType() {
 		return this.taskType;
 	}
 
 	public void setTaskType(TaskType taskType) {
 		this.taskType = taskType;
-	}
-
-	public List<WorkerSchedule> getWorkerSchedules() {
-		return this.workerSchedules;
-	}
-
-	public void setWorkerSchedules(List<WorkerSchedule> workerSchedules) {
-		this.workerSchedules = workerSchedules;
-	}
-
-	public WorkerSchedule addWorkerSchedule(WorkerSchedule workerSchedule) {
-		getWorkerSchedules().add(workerSchedule);
-		workerSchedule.setTask(this);
-
-		return workerSchedule;
-	}
-
-	public WorkerSchedule removeWorkerSchedule(WorkerSchedule workerSchedule) {
-		getWorkerSchedules().remove(workerSchedule);
-		workerSchedule.setTask(null);
-
-		return workerSchedule;
-	}
-
-	public List<WorkerTask> getWorkerTasks() {
-		return this.workerTasks;
-	}
-
-	public void setWorkerTasks(List<WorkerTask> workerTasks) {
-		this.workerTasks = workerTasks;
-	}
-
-	public WorkerTask addWorkerTask(WorkerTask workerTask) {
-		getWorkerTasks().add(workerTask);
-		workerTask.setTask(this);
-
-		return workerTask;
-	}
-
-	public WorkerTask removeWorkerTask(WorkerTask workerTask) {
-		getWorkerTasks().remove(workerTask);
-		workerTask.setTask(null);
-
-		return workerTask;
 	}
 
 }

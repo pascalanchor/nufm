@@ -21,12 +21,12 @@ public class UserRole implements Serializable {
 	@Column(name="creation_date")
 	private Timestamp creationDate;
 
-	//bi-directional many-to-one association to NufmRole
+	//uni-directional many-to-one association to NufmRole
 	@ManyToOne
 	@JoinColumn(name="role_id")
 	private NufmRole nufmRole;
 
-	//bi-directional many-to-one association to NufmUser
+	//uni-directional many-to-one association to NufmUser
 	@ManyToOne
 	@JoinColumn(name="user_id")
 	private NufmUser nufmUser;

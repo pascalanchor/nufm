@@ -16,9 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import avh.nufm.api.impl.errors.BusinessException;
+import avh.nufm.business.model.Document;
 import avh.nufm.business.model.Equipment;
 import avh.nufm.business.model.Facility;
-import avh.nufm.business.model.FacilityDocument;
 import avh.nufm.business.model.FacilityEquipment;
 import avh.nufm.business.model.FacilityType;
 import avh.nufm.business.model.NufmUser;
@@ -75,8 +75,8 @@ public class FacilityControllerImpl {
 		if(eqpmnt.isPresent()) {
 			FacilityEquipment fe = new FacilityEquipment();
 			fe.setEid(UUID.randomUUID().toString());
-			fe.setEquipment(eqpmnt.get());
-			fe.setFacility(facility.get());
+			fe.setEquipmentId(eqpmnt.get().getEid());
+			fe.setFacilityId(facility.get().getEid());
 			repo.getFacilityEquipmentRepo().save(fe);
 			res.add(fe);
 		}
@@ -98,8 +98,8 @@ public class FacilityControllerImpl {
 		if(eqpmnt.isPresent()) {
 			FacilityEquipment fe = new FacilityEquipment();
 			fe.setEid(UUID.randomUUID().toString());
-			fe.setEquipment(eqpmnt.get());
-			fe.setFacility(facility.get());
+			fe.setEquipmentId(eqpmnt.get().getEid());
+			fe.setFacilityId(facility.get().getEid());
 			repo.getFacilityEquipmentRepo().save(fe);
 			res.add(fe);
 		}
@@ -124,8 +124,8 @@ public class FacilityControllerImpl {
 		Optional<Facility> facility = repo.getFacrepo().findById(id);
 		List<String> res = new ArrayList<>();
 		if(facility.isPresent()) {
-			List<FacilityDocument> list = repo.getFacilityDocumentRepo().findByFacility(facility.get());
-			list.stream().forEach(e-> res.add(e.getDocPath()));
+			List<Document> list = repo.getDocumentRepo().findByFacility(facility.get());
+			list.stream().forEach(e-> res.add(e.getDocumentPath()));
 			return res;
 		}
 		else 
@@ -202,12 +202,12 @@ public class FacilityControllerImpl {
 	public void addFacilityDoc(String id, String docPath) {
 		Optional<Facility> facility = repo.getFacrepo().findById(id);
 		if(facility.isPresent()) {
-			List<FacilityDocument> list = repo.getFacilityDocumentRepo().findByFacility(facility.get());
-			repo.getFacilityDocumentRepo().deleteAll(list);
-			FacilityDocument fd = new FacilityDocument();
+			List<Document> list = repo.getDocumentRepo().findByFacility(facility.get());
+			repo.getDocumentRepo().deleteAll(list);
+			Document fd = new Document();
 			fd.setFacility(facility.get());
-			fd.setDocPath(docPath);
-			repo.getFacilityDocumentRepo().save(fd);
+			fd.setDocumentPath(docPath);
+			repo.getDocumentRepo().save(fd);
 			}
 			else
 				throw new BusinessException(String.format("file was not uploaded"));	

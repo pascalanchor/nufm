@@ -17,12 +17,12 @@ public class SafetyWorker implements Serializable {
 	@Id
 	private String eid;
 
-	//bi-directional many-to-one association to NufmUser
+	//uni-directional many-to-one association to NufmUser
 	@ManyToOne
 	@JoinColumn(name="worker_id")
 	private NufmUser nufmUser;
 
-	//bi-directional many-to-one association to SafetyMaterial
+	//uni-directional many-to-one association to SafetyMaterial
 	@ManyToOne
 	@JoinColumn(name="material_id")
 	private SafetyMaterial safetyMaterial;

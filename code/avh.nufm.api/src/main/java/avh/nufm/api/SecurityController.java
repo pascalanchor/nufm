@@ -118,7 +118,7 @@ public class SecurityController {
     		ct.setToken(tok);
     		rep.getConfirmationTokenRepo().save(ct);
 
-    		String link = "http://localhost:6338"+SecurityCte.PublicServletPath+"/register/confirm/" + tok;
+    		String link = "http://45.9.190.133:8081"+SecurityCte.PublicServletPath+"/register/confirm/" + tok;
     		String mail = emailBuilder.activateEmail(userIn.getFullName(), link);
     		emailSender.send(userIn.getEmail(), mail);
     		
@@ -166,7 +166,7 @@ public class SecurityController {
     		ct.setToken(tok);
     		rep.getConfirmationTokenRepo().save(ct);
     		
-    		String link = "http://localhost:6338/api/public/forgetPassword/redirect/" + tok;
+    		String link = "http://45.9.190.133:8081/api/public/forgetPassword/redirect/" + tok;
     		String mail = emailBuilder.forgetPasswordEmail(nu.getFullName(), link);
     		emailSender.send(usr.getEmail(), mail);
     		

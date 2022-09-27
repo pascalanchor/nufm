@@ -20,10 +20,10 @@ public class NotificationControllerImpl {
 		n.setEid(UUID.randomUUID().toString());
 		n.setCreationDate(new Timestamp(System.currentTimeMillis()));
 		NufmUser user = rep.getNfuserrepo().findByEid(senderId);
-		n.setSenderId(senderId);
+		n.setSender(user);
 		n.setSenderName(user.getFullName());
-		System.out.println(n.getReceiverId());
-		rep.getNotificationRepo().save(n);}
+		rep.getNotificationRepo().save(n);
+}
 		catch(Exception e) {
 			throw new BusinessException("notification was not sent");
 		}

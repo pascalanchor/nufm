@@ -120,5 +120,19 @@ public class InvoiceControllerImpl {
 		return res;
 			
 	}
+
+
+	public Invoice getInvoiceById(String id) {
+		if(id==null || id.equals(""))
+			throw new BusinessException("you must enter the invoice id !!");
+		
+		//check the invoice id
+		Optional<Invoice> oldInvList =repo.getInvrepo().findById(id);
+		if(oldInvList==null || oldInvList.isEmpty())
+			throw new BusinessException(String.format("invalid invoice id:%s", id));
+		Invoice oldInv=oldInvList.get();
+		
+		return oldInv;
+	}
 	
 }

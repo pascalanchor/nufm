@@ -2,6 +2,7 @@ package avh.nufm.business.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 
@@ -17,6 +18,11 @@ public class Invoice implements Serializable {
 	@Id
 	private String eid;
 
+	@Column(name="client_location")
+	private String clientLocation;
+
+	private String currency;
+
 	private Timestamp date;
 
 	@Column(name="deliver_to")
@@ -24,23 +30,26 @@ public class Invoice implements Serializable {
 
 	private String description;
 
+	@Column(name="invoice_number")
+	private String invoiceNumber;
+
 	@Column(name="invoice_to")
 	private String invoiceTo;
 
 	@Column(name="invoice_total")
-	private double invoiceTotal;
+	private BigDecimal invoiceTotal;
 
-	private double price;
+	private BigDecimal price;
 
-	private double quantity;
+	private BigDecimal quantity;
 
 	@Column(name="sales_tax")
-	private double salesTax;
+	private BigDecimal salesTax;
 
 	private String status;
 
 	@Column(name="sub_total")
-	private double subTotal;
+	private BigDecimal subTotal;
 
 	public Invoice() {
 	}
@@ -51,6 +60,22 @@ public class Invoice implements Serializable {
 
 	public void setEid(String eid) {
 		this.eid = eid;
+	}
+
+	public String getClientLocation() {
+		return this.clientLocation;
+	}
+
+	public void setClientLocation(String clientLocation) {
+		this.clientLocation = clientLocation;
+	}
+
+	public String getCurrency() {
+		return this.currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
 	}
 
 	public Timestamp getDate() {
@@ -77,6 +102,14 @@ public class Invoice implements Serializable {
 		this.description = description;
 	}
 
+	public String getInvoiceNumber() {
+		return this.invoiceNumber;
+	}
+
+	public void setInvoiceNumber(String invoiceNumber) {
+		this.invoiceNumber = invoiceNumber;
+	}
+
 	public String getInvoiceTo() {
 		return this.invoiceTo;
 	}
@@ -85,35 +118,35 @@ public class Invoice implements Serializable {
 		this.invoiceTo = invoiceTo;
 	}
 
-	public double getInvoiceTotal() {
+	public BigDecimal getInvoiceTotal() {
 		return this.invoiceTotal;
 	}
 
-	public void setInvoiceTotal(double invoiceTotal) {
+	public void setInvoiceTotal(BigDecimal invoiceTotal) {
 		this.invoiceTotal = invoiceTotal;
 	}
 
-	public double getPrice() {
+	public BigDecimal getPrice() {
 		return this.price;
 	}
 
-	public void setPrice(double price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 
-	public double getQuantity() {
+	public BigDecimal getQuantity() {
 		return this.quantity;
 	}
 
-	public void setQuantity(double quantity) {
+	public void setQuantity(BigDecimal quantity) {
 		this.quantity = quantity;
 	}
 
-	public double getSalesTax() {
+	public BigDecimal getSalesTax() {
 		return this.salesTax;
 	}
 
-	public void setSalesTax(double salesTax) {
+	public void setSalesTax(BigDecimal salesTax) {
 		this.salesTax = salesTax;
 	}
 
@@ -125,11 +158,11 @@ public class Invoice implements Serializable {
 		this.status = status;
 	}
 
-	public double getSubTotal() {
+	public BigDecimal getSubTotal() {
 		return this.subTotal;
 	}
 
-	public void setSubTotal(double subTotal) {
+	public void setSubTotal(BigDecimal subTotal) {
 		this.subTotal = subTotal;
 	}
 

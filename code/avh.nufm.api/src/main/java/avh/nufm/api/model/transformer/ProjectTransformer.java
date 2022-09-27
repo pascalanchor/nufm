@@ -6,6 +6,7 @@ import java.util.List;
 import avh.nufm.api.model.in.APIProjectIn;
 import avh.nufm.api.model.out.APIProjectOut;
 import avh.nufm.business.model.Facility;
+import avh.nufm.business.model.NufmUser;
 import avh.nufm.business.model.Project;
 
 public class ProjectTransformer {
@@ -13,12 +14,14 @@ public class ProjectTransformer {
 	public static APIProjectOut projectFromModel(Project prj) {
 		APIProjectOut res=new APIProjectOut();
 		res.setComment(prj.getComment());
-		res.setContractor_id(prj.getContractor().getEid());
+		res.setContractor_id(prj.getNufmUser().getEid());
 		res.setDocument_id(prj.getDocumentId());
 		res.setEid(prj.getEid());
 		res.setFacility_id(prj.getFacility().getEid());
 		res.setName(prj.getName());
 		res.setStatus(prj.getStatus());
+		res.setFromDate(prj.getDateFrom());
+		res.setToDate(prj.getDateTo());
 		return res;
 		
 	}
@@ -29,9 +32,15 @@ public class ProjectTransformer {
 		res.setComment(prjIn.getComment());
 		res.setDocumentId(prjIn.getDocument_id());
 		Facility fc=new Facility();
+		fc.setEid(prjIn.getFacility_id());
+		NufmUser usr = new NufmUser();
+		usr.setEid(prjIn.getContractor_id());
+		res.setNufmUser(usr);
 		res.setFacility(fc);
 		res.setName(prjIn.getName());
 		res.setStatus(prjIn.getStatus());
+		res.setDateFrom(prjIn.getFromDate());
+		res.setDateTo(prjIn.getToDate());
 		return res;
 	}
 	 

@@ -102,7 +102,8 @@ public class OccupantControllerImpl {
 	public NufmUser getOccupantById(String occupantId) {
 		NufmUser res = repo.getNfuserrepo().findByEid(occupantId);
 		List<String> roles = new ArrayList<>();
-		res.getUserRoles().stream().forEach(e->roles.add(e.getNufmRole().getName()));
+		List<UserRole> urole = repo.getUserrolerepo().findByNufmUser(res);
+		urole.stream().forEach(e->roles.add(e.getNufmRole().getName()));
 		if(roles.contains(SecurityCte.RoleOccupant))
 			{return res;}
 		else {throw new BusinessException(String.format("user %s is not an occupant", res.getFullName()));}

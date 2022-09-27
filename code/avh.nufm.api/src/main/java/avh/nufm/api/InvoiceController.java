@@ -88,4 +88,16 @@ public ResponseEntity<List<APIInvoiceOut>> searchInvoice(@RequestParam String in
 		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED,e.getMessage());
 	}
 }
+
+@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
+@GetMapping(PathCte.GetInvoiceById)
+public ResponseEntity<APIInvoiceOut> getInvoiceById(@RequestParam String id){
+	try {
+//		Invoice inv=InvoiceTransformer.InvoiceToModel(invIn);
+		APIInvoiceOut res=InvoiceTransformer.InvoiceFromModel(invImp.getInvoiceById(id));
+		return ResponseEntity.ok().body(res);
+	} catch (Exception e) {
+		throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED,e.getMessage());
+	}
+}
 }

@@ -58,6 +58,20 @@ public class TaskController {
 		}
 	}
 	
+	@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR','WORKER','OCCUPANT')")
+	@GetMapping(PathCte.GetAllDoneTasksServletPath)
+	public ResponseEntity<List<APITaskOut>> getAllDoneTasks(@RequestParam String email){
+		try {
+			List<APITaskOut> res=TaskTransformer.listTaskFromItr(tkimp.getAllDoneTasks(email));
+			for(APITaskOut tsk:res) {
+				tsk.setWorkersName(wrktskimp.getWorkersForTask(tsk.getEid()));
+			}
+			return ResponseEntity.ok().body(res);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED,e.getMessage());
+		}
+	}
+	
 	
 	@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
 	@GetMapping(PathCte.GetTaskByIdServletPath)

@@ -52,7 +52,7 @@ public class ContractorController {
     public ResponseEntity<String> createContractor(@RequestParam("profileImage") MultipartFile profileImage,@RequestParam("data") String data) {
     	try {
     		//image storage path 
-    		String path = "C:\\nufm_storage\\profile\\contractor";
+    		String path = "images/contractor";
     		APIContractorIn contractorIn = new ObjectMapper().readValue(data, APIContractorIn.class);
     		// create the user without roles
     		NufmUser contractorModel = ContractorTransformer.ModelFromContractor(contractorIn);
@@ -71,7 +71,8 @@ public class ContractorController {
     		String tok = UUID.randomUUID().toString();
     		ct.setToken(tok);
     		rep.getConfirmationTokenRepo().save(ct);
-    		String link = "http://localhost:6338"+SecurityCte.PublicServletPath+"/register/confirm/" + tok;
+    		//http://45.9.190.133:3000/
+    		String link = "http://45.9.190.133:8081"+SecurityCte.PublicServletPath+"/register/confirm/" + tok;
     		String mail = emailBuilder.confirmContractor(contractorIn.getFullName(),contractorIn.getEmail(),pwd,link);
     		emailSender.send(contractorIn.getEmail(), mail);    		
     		return ResponseEntity.ok().body("A confirmation email is sent to  "+contractorIn.getEmail()+"||token = "+tok);
@@ -91,7 +92,7 @@ public class ContractorController {
     	}
     }
     //GET CONTRACTORS
-	@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
+	@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR','WORKER','OCCUPANT')")
     @GetMapping(PathCte.GetContractorsServletPath)
     public ResponseEntity<List<APIContractorOut>> getContractors(){
     	try {
@@ -120,7 +121,7 @@ public class ContractorController {
     public ResponseEntity<String> updateContractor(@RequestParam("profileImage") MultipartFile profileImage,@RequestParam("data") String data){
     	try {
     	//image storage path 
-		String path = "D:\\AVH projects\\Workspaces\\NufmWorkspace\\nufm\\code\\avh.nufm\\src\\main\\resources\\storage\\profile\\contractor";
+		String path = "images/contractor";
 		APIContractorIn contractorIn = new ObjectMapper().readValue(data, APIContractorIn.class); 
 		// create the user without roles
 		NufmUser contractorModel = ContractorTransformer.ModelFromContractor(contractorIn);

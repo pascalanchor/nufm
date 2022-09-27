@@ -14,39 +14,63 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
-
 
 @Service
 public class FileStorageService {
 
-
-    @Autowired
-    public FileStorageService(){
-
-    }
-
-    public String storeFile(MultipartFile file,String path) throws FileStorageException {
-        // Normalize file name
-    	String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
-        String fileName = UUID.randomUUID().toString()+"_"+originalFileName;
-        Path fileStorageLocation = Paths.get(path)
-                .toAbsolutePath().normalize();
-        try {
-            // Check if the file's name contains invalid characters
-            if(fileName.contains("..")) {
-                throw new FileStorageException("Sorry! Filename contains invalid path sequence " + originalFileName);
-            }
-
-            // Copy file to the target location (Replacing existing file with the same name)
-            Path targetLocation = fileStorageLocation.resolve(fileName);
-            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-
-            return path+"\\"+fileName;
-        } catch (IOException ex) {
-            throw new FileStorageException("Could not store file " + originalFileName + ". Please try again!\n"+ ex);
-        }
-    	
-    }
+	@Autowired
+	public FileStorageService() {
 
 	}
+
+	public String storeFile(MultipartFile file, String path) throws FileStorageException {
+		// Normalize file name
+		String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
+		String fileName = UUID.randomUUID().toString() + "_" + originalFileName;
+		Path fileStorageLocation = Paths.get(path).toAbsolutePath().normalize();
+		try {
+			// Check if the file's name contains invalid characters
+			if (fileName.contains("..")) {
+				throw new FileStorageException("Sorry! Filename contains invalid path sequence " + originalFileName);
+			}
+
+			// Copy file to the target location (Replacing existing file with the same name)
+			Path targetLocation = fileStorageLocation.resolve(fileName);
+			Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+
+			return path + "\\" + fileName;
+		} catch (IOException ex) {
+			throw new FileStorageException("Could not store file " + originalFileName + ". Please try again!\n" + ex);
+		}
+
+	}
+
+	public List<String> storeMultipleFile(List<MultipartFile> files,String path) throws FileStorageException {
+		List<String> filePaths = new ArrayList<String>();
+        // Normalize file name
+		for (MultipartFile file : files) {
+			String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
+			String fileName = UUID.randomUUID().toString()+"_"+originalFileName;
+			Path fileStorageLocation = Paths.get(path)
+	                .toAbsolutePath().normalize();
+			try {
+	            // Check if the file's name contains invalid characters
+	            if(fileName.contains("..")) {
+	                throw new FileStorageException("Sorry! Filename contains invalid path sequence " + originalFileName);
+	            }
+
+	            // Copy file to the target location (Replacing existing file with the same name)
+	            Path targetLocation = fileStorageLocation.resolve(fileName);
+	            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+
+	            filePaths.add(path+"\\"+fileName) ;
+	        } catch (IOException ex) {
+	            throw new FileStorageException("Could not store file " + originalFileName + ". Please try again!\n"+ ex);
+	        }
+		}
+		return filePaths;
+    }
+}

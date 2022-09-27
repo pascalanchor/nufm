@@ -17,12 +17,12 @@ public class UserSpecialization implements Serializable {
 	@Id
 	private String eid;
 
-	//bi-directional many-to-one association to NufmUser
+	//uni-directional many-to-one association to NufmUser
 	@ManyToOne
 	@JoinColumn(name="user_id")
 	private NufmUser nufmUser;
 
-	//bi-directional many-to-one association to Specialization
+	//uni-directional many-to-one association to Specialization
 	@ManyToOne
 	@JoinColumn(name="specialization_id")
 	private Specialization specialization;

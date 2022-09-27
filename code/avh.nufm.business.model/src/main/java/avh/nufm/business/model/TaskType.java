@@ -2,7 +2,6 @@ package avh.nufm.business.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
 
 
 /**
@@ -19,10 +18,6 @@ public class TaskType implements Serializable {
 	private String eid;
 
 	private String name;
-
-	//bi-directional many-to-one association to Task
-	@OneToMany(mappedBy="taskType")
-	private List<Task> tasks;
 
 	public TaskType() {
 	}
@@ -41,28 +36,6 @@ public class TaskType implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public List<Task> getTasks() {
-		return this.tasks;
-	}
-
-	public void setTasks(List<Task> tasks) {
-		this.tasks = tasks;
-	}
-
-	public Task addTask(Task task) {
-		getTasks().add(task);
-		task.setTaskType(this);
-
-		return task;
-	}
-
-	public Task removeTask(Task task) {
-		getTasks().remove(task);
-		task.setTaskType(null);
-
-		return task;
 	}
 
 }

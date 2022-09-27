@@ -2,7 +2,6 @@ package avh.nufm.business.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
 
 
 /**
@@ -18,21 +17,14 @@ public class SafetyMaterial implements Serializable {
 	@Id
 	private String eid;
 
-	@Column(name="document_id")
-	private String documentId;
-
 	private String name;
 
 	private String status;
 
-	//bi-directional many-to-one association to SafetyMaterialType
+	//uni-directional many-to-one association to SafetyMaterialType
 	@ManyToOne
 	@JoinColumn(name="type")
 	private SafetyMaterialType safetyMaterialType;
-
-	//bi-directional many-to-one association to SafetyWorker
-	@OneToMany(mappedBy="safetyMaterial")
-	private List<SafetyWorker> safetyWorkers;
 
 	public SafetyMaterial() {
 	}
@@ -43,14 +35,6 @@ public class SafetyMaterial implements Serializable {
 
 	public void setEid(String eid) {
 		this.eid = eid;
-	}
-
-	public String getDocumentId() {
-		return this.documentId;
-	}
-
-	public void setDocumentId(String documentId) {
-		this.documentId = documentId;
 	}
 
 	public String getName() {
@@ -75,28 +59,6 @@ public class SafetyMaterial implements Serializable {
 
 	public void setSafetyMaterialType(SafetyMaterialType safetyMaterialType) {
 		this.safetyMaterialType = safetyMaterialType;
-	}
-
-	public List<SafetyWorker> getSafetyWorkers() {
-		return this.safetyWorkers;
-	}
-
-	public void setSafetyWorkers(List<SafetyWorker> safetyWorkers) {
-		this.safetyWorkers = safetyWorkers;
-	}
-
-	public SafetyWorker addSafetyWorker(SafetyWorker safetyWorker) {
-		getSafetyWorkers().add(safetyWorker);
-		safetyWorker.setSafetyMaterial(this);
-
-		return safetyWorker;
-	}
-
-	public SafetyWorker removeSafetyWorker(SafetyWorker safetyWorker) {
-		getSafetyWorkers().remove(safetyWorker);
-		safetyWorker.setSafetyMaterial(null);
-
-		return safetyWorker;
 	}
 
 }

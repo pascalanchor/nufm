@@ -9,8 +9,7 @@ import avh.nufm.business.model.Notification;
 public class NotificationTransformer {
 	public static Notification ModelFromNotification(APINotificationIn in) {
 		Notification res = new Notification();
-		System.out.println(in.getReceiverId());
-		res.setReceiverId(in.getReceiverId());
+		res.setReceiver(in.getReceiver());
 		res.setTaskName(in.getTaskName());
 		res.setTaskType(in.getTaskType());
 		res.setTaskStatus(in.getTaskStatus());
@@ -24,9 +23,9 @@ public class NotificationTransformer {
 	public static APINotificationOut NotificationFromModel(Notification notification) {
 		APINotificationOut res = new APINotificationOut();
 		res.setEid(notification.getEid());
-		res.setSenderId(notification.getSenderId());
+		res.setSender(notification.getSender());
 		res.setSenderName(notification.getSenderName());
-		res.setReceiverId(notification.getReceiverId());
+		res.setReceiver(notification.getReceiver());
 		res.setTaskName(notification.getTaskName());
 		res.setTaskType(notification.getTaskType());
 		res.setTaskStatus(notification.getTaskStatus());

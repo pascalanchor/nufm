@@ -55,9 +55,9 @@ public class FacilityController {
 			@RequestParam("occupantData") String occupantData) {
 	try {
 		//image storage path 
-		String ipath = "D:\\AVH projects\\Workspaces\\NufmWorkspace\\nufm\\code\\avh.nufm\\src\\main\\resources\\storage\\profile\\occupant";
+		String ipath = "images/occupant";
 		//facility docs path
-		String fpath = "D:\\AVH projects\\Workspaces\\NufmWorkspace\\nufm\\code\\avh.nufm\\src\\main\\resources\\storage\\facility\\docs";
+		String fpath = "images/docs";
 		APIOccupantIn occupantIn = new ObjectMapper().readValue(occupantData, APIOccupantIn.class);	
 		APIFacilityIn fc = new ObjectMapper().readValue(facilityData, APIFacilityIn.class);
 		//1-create the facility
@@ -77,7 +77,7 @@ public class FacilityController {
 		String pwd = ocImpl.createOccupant(occupantModel,imagePath);
 		ucImpl.addRoleToUser(occupantIn.getEmail(), SecurityCte.RoleOccupant);
 		String tok = ctImpl.createConfirmationToken(occupantIn.getEmail());
-		String link = "http://localhost:6338"+SecurityCte.PublicServletPath+"/register/confirm/" + tok;
+		String link = "http://45.9.190.133:8081"+SecurityCte.PublicServletPath+"/register/confirm/" + tok;
 		String mail = emailBuilder.confirmOccupant(occupantIn.getFullName(),occupantIn.getEmail(),pwd,link);
 		emailSender.send(occupantIn.getEmail(), mail);
 		fci.addOccupantToFacility(fct.getEid(),occupantModel.getEid());
@@ -107,9 +107,9 @@ public ResponseEntity<APIFacilityOut> updateFaclity(@RequestParam("profileImage"
 	
 	try {
 		//image storage path 
-		String ipath = "C:\\nufm_storage\\profile\\occupant";
+		String ipath = "images/occupant";
 		//facility docs path
-		String fpath = "D:\\nufm_storage\\facility\\docs";
+		String fpath = "images/docs";
 		APIOccupantIn occupantIn = new ObjectMapper().readValue(occupantData, APIOccupantIn.class);	
 		APIFacilityIn fc = new ObjectMapper().readValue(facilityData, APIFacilityIn.class);
 		//1-create the facility
@@ -143,13 +143,14 @@ public ResponseEntity<APIFacilityOut> getFacilityById(@PathVariable("facilityId"
 		APIFacilityOut res= FacilityTransformer.FacilityFromModel(fci.getFacilityById(fid));
 		res.setOccupant(OccupantTransformer.OccupantFromModel(facility.getNufmUser()));
 		res.setDocs(fci.getFacilityDocuments(fid));
+		
 		return ResponseEntity.ok().body(res);
 	} catch (Exception e) {
 		throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, e.getMessage());
 	}
 }
 
-@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
+@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR','WORKER','OCCUPANT')")
 @GetMapping(PathCte.GetFacilitiesServletPath)
 public ResponseEntity<List<APIFacilityOut>> getFacilities() {
 	try {

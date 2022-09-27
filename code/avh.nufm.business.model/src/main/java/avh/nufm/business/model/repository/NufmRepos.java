@@ -13,9 +13,9 @@ public class NufmRepos {
 	@Autowired
 	private AttendanceRepo attrepo;
 	@Autowired
-	private ContractoRepo contrepo;
-	@Autowired
 	private EquipmentRepo eqmtrepo;
+	@Autowired
+	private FacilityEquipmentRepo facilityEquipmentRepo;
 	@Autowired
 	private FacilityRepo facrepo;
 	@Autowired
@@ -51,20 +51,23 @@ public class NufmRepos {
 	@Autowired
 	private UserSpecializationRepo userSpecrepo;
 	@Autowired
-	private FacilityEquipmentRepo facilityEquipmentRepo;
-	@Autowired 
-	private FacilityDocumentRepo facilityDocumentRepo;
-	@Autowired
 	private NotificationRepo notificationRepo;
 	@Autowired
 	private SafetyMaterialTyeRepo safmtrtyperepo;
+	@Autowired
+	private DocumentRepo documentRepo;
+	@Autowired
+	private BudgetRepo budgetRepo;
+	@Autowired
+	private BudgetTypeRepo budgetTypeRepo;
+	@Autowired
+	private VendorRepo vendorRepo;
+	@Autowired
+	private ContractRepo contractRepo;
 	
 	// generate getters 
 	public AttendanceRepo getAttrepo() {
 		return attrepo;
-	}
-	public ContractoRepo getContrepo() {
-		return contrepo;
 	}
 	public EquipmentRepo getEqmtrepo() {
 		return eqmtrepo;
@@ -126,6 +129,24 @@ public class NufmRepos {
 	
 	public SafetyMaterialTyeRepo getSafmtrTyperepo() {
 		return safmtrtyperepo;
+	}
+	public void setFacilityEquipmentRepo(FacilityEquipmentRepo facilityEquipmentRepo) {
+		this.facilityEquipmentRepo = facilityEquipmentRepo;
+	}
+	public void setDocumentRepo(DocumentRepo documentRepo) {
+		this.documentRepo = documentRepo;
+	}
+	public void setBudgetRepo(BudgetRepo budgetRepo) {
+		this.budgetRepo = budgetRepo;
+	}
+	public void setVendorRepo(VendorRepo vendorRepo) {
+		this.vendorRepo = vendorRepo;
+	}
+	public void setContractRepo(ContractRepo contractRepo) {
+		this.contractRepo = contractRepo;
+	}
+	public void setBudgetTypeRepo(BudgetTypeRepo budgetTypeRepo) {
+		this.budgetTypeRepo = budgetTypeRepo;
 	}
 	
 	

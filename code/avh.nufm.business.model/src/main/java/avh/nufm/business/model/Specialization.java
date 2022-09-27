@@ -2,7 +2,6 @@ package avh.nufm.business.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
 
 
 /**
@@ -20,10 +19,6 @@ public class Specialization implements Serializable {
 	private String name;
 
 	private String type;
-
-	//bi-directional many-to-one association to UserSpecialization
-	@OneToMany(mappedBy="specialization")
-	private List<UserSpecialization> userSpecializations;
 
 	public Specialization() {
 	}
@@ -50,28 +45,6 @@ public class Specialization implements Serializable {
 
 	public void setType(String type) {
 		this.type = type;
-	}
-
-	public List<UserSpecialization> getUserSpecializations() {
-		return this.userSpecializations;
-	}
-
-	public void setUserSpecializations(List<UserSpecialization> userSpecializations) {
-		this.userSpecializations = userSpecializations;
-	}
-
-	public UserSpecialization addUserSpecialization(UserSpecialization userSpecialization) {
-		getUserSpecializations().add(userSpecialization);
-		userSpecialization.setSpecialization(this);
-
-		return userSpecialization;
-	}
-
-	public UserSpecialization removeUserSpecialization(UserSpecialization userSpecialization) {
-		getUserSpecializations().remove(userSpecialization);
-		userSpecialization.setSpecialization(null);
-
-		return userSpecialization;
 	}
 
 }
