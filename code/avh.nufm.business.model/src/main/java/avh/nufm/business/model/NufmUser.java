@@ -37,12 +37,18 @@ public class NufmUser implements Serializable {
 	@Column(name="job_title")
 	private String jobTitle;
 
+	@Column(name="national_identity")
+	private String nationalIdentity;
+
 	private String password;
 
 	private String phone;
 
 	@Column(name="profile_image")
 	private String profileImage;
+
+	@Column(name="spec_id")
+	private String specId;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name="start_date")
@@ -58,11 +64,6 @@ public class NufmUser implements Serializable {
 
 	@Column(name="zip_code")
 	private String zipCode;
-
-	//uni-directional many-to-one association to Specialization
-	@ManyToOne
-	@JoinColumn(name="spec_id")
-	private Specialization specialization;
 
 	public NufmUser() {
 	}
@@ -131,6 +132,14 @@ public class NufmUser implements Serializable {
 		this.jobTitle = jobTitle;
 	}
 
+	public String getNationalIdentity() {
+		return this.nationalIdentity;
+	}
+
+	public void setNationalIdentity(String nationalIdentity) {
+		this.nationalIdentity = nationalIdentity;
+	}
+
 	public String getPassword() {
 		return this.password;
 	}
@@ -153,6 +162,14 @@ public class NufmUser implements Serializable {
 
 	public void setProfileImage(String profileImage) {
 		this.profileImage = profileImage;
+	}
+
+	public String getSpecId() {
+		return this.specId;
+	}
+
+	public void setSpecId(String specId) {
+		this.specId = specId;
 	}
 
 	public Date getStartDate() {
@@ -193,14 +210,6 @@ public class NufmUser implements Serializable {
 
 	public void setZipCode(String zipCode) {
 		this.zipCode = zipCode;
-	}
-
-	public Specialization getSpecialization() {
-		return this.specialization;
-	}
-
-	public void setSpecialization(Specialization specialization) {
-		this.specialization = specialization;
 	}
 
 }

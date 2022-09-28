@@ -12,6 +12,7 @@ public class UserTransformer {
 		NufmUser res = new NufmUser();
 		res.setFullName(u.getFullName());
 		res.setPhone(u.getPhone());
+		res.setNationalIdentity(u.getNationalIdentity());
 		return res;
 	}
 	

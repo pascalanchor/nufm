@@ -35,8 +35,8 @@ public class UserService implements UserDetailsService{
 		// - convert role into SimpleGrantedAuthority
 		List<SimpleGrantedAuthority> aus = new ArrayList<>();
 		for (UserRole m : ms) {
-			SimpleGrantedAuthority sga = new SimpleGrantedAuthority(m.getNufmRole().getName());
-			System.out.println(m.getNufmRole().getName());
+			SimpleGrantedAuthority sga = new SimpleGrantedAuthority(m.getNufmRole().getEid());
+			System.out.println(m.getNufmRole().getEid());
 			aus.add(sga);
 		}
 		

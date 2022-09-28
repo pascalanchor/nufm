@@ -53,6 +53,7 @@ public class VendorControllerImpl {
 			repo.getDocumentRepo().deleteAll(list);
 			for (String docPath : docsPaths) {
 				Document fd = new Document();
+				fd.setEid(UUID.randomUUID().toString());
 				fd.setVendorId(vendor.get().getEid());
 				fd.setDocumentPath(docPath);
 				repo.getDocumentRepo().save(fd);

@@ -43,10 +43,11 @@ create table nufm_user(
     enabled boolean NULL DEFAULT false,
     profile_image varchar not null,
     phone varchar(128)  null,
+    national_identity varchar(128) not null,
     city varchar(128)  null,
     street varchar(128)  null,
     zip_code varchar(128)  null,
-    spec_id varchar(128) not null,
+    spec_id varchar(128) null,
     address varchar(128)  null,
     dob date  null,
     job_title varchar(128)  null,
@@ -512,5 +513,5 @@ insert into nufm_role values ('ROLE_CONTRACTOR','CONTRACTOR','CONTRACTOR');
 insert into nufm_user values ('ahmadkhouja@gmail.com','Ahmad Khouja','ahmadkhouja@gmail.com','$2a$11$gX3qXpymejq7rBwYA/qrqucYbeqNITEBGsjypDqcdEnKz8WPbnC8K','+96171846002','Lebanon','2020-12-12 01:24:23','2020-12-12 01:24:23');
 
 --insert membership for user
-insert into nufm_membership values ('membership1','ahmadkhouja@gmail.com','ROLE_ADMIN','2020-12-12 01:24:23');
-insert into nufm_membership values ('membership2','ahmadkhouja@gmail.com','ROLE_PROPERTY_OWNER','2020-12-12 01:24:23');
+insert into user_role values ('membership1','ahmadkhouja@gmail.com','ROLE_ADMIN','2020-12-12 01:24:23');
+insert into user_role values ('membership2','ahmadkhouja@gmail.com','ROLE_PROPERTY_OWNER','2020-12-12 01:24:23');

@@ -41,8 +41,11 @@ public class VendorController {
 			@RequestParam("vendorDocs") List<MultipartFile> vendorDocs) {
 		try {
 			String fpath = "images/docs";
+			System.out.println("0000000000000000000");
 			APIVendorIn vendorIn = new ObjectMapper().readValue(data, APIVendorIn.class);
+			System.out.println("111111111111111");
 			Vendor vendorModel = VendorTransformer.VendorToModel(vendorIn);
+			System.out.println("2222222222222222");
 			vendorModel = vendorConImpl.addVendor(vendorModel);
 			vendorConImpl.addVendorDocs(vendorModel.getEid(), fileStorSer.storeMultipleFile(vendorDocs, fpath));
 			return ResponseEntity.ok().body(VendorTransformer.VendorFromModel(vendorModel));
