@@ -30,10 +30,18 @@ public class NotificationControllerImpl {
 	}
 	
 	public List<Notification> getSendedNotifications(String userId){
-		return rep.getNotificationRepo().findBySenderId(userId);
+		NufmUser user=rep.getNfuserrepo().findByEid(userId);
+		if(user==null) {
+			throw new BusinessException("user was not found");
+		}
+		return rep.getNotificationRepo().findBySender(user);
 	}
 	
 	public List<Notification> getReceivedNotifications(String userId){
-		return rep.getNotificationRepo().findByReceiverId(userId);
+		NufmUser user=rep.getNfuserrepo().findByEid(userId);
+		if(user==null) {
+			throw new BusinessException("user was not found");
+		}
+		return rep.getNotificationRepo().findByReceiver(user);
 	}
 }

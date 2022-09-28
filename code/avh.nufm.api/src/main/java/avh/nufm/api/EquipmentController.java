@@ -33,17 +33,20 @@ public class EquipmentController {
 	EquipmentControllerImpl equipmentConImpl;
 	@Autowired
 	private FileStorageService fileStorSer;
-	
+
 	// ADD EQUIPMENT
 	@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
 	@PostMapping(PathCte.AddEquipmentServletPath)
-	public ResponseEntity<APIEquipmentOut> createEquipment(@RequestParam("data") String data,@RequestParam("equipmentDocs") List<MultipartFile> equipmentDocs) {
+	public ResponseEntity<APIEquipmentOut> createEquipment(@RequestParam("data") String data,
+			@RequestParam("equipmentDocs") List<MultipartFile> equipmentDocs) {
 		try {
 			String fpath = "images/docs";
 			APIEquipmentIn equipmentIn = new ObjectMapper().readValue(data, APIEquipmentIn.class);
 			Equipment equipmentModel = EquipmentTransformer.EquipmentToModel(equipmentIn);
-			equipmentModel = equipmentConImpl.addEquipment(equipmentModel,equipmentIn.getTypeId(),equipmentIn.getVendorId());
-			equipmentConImpl.addEquipmentDocs(equipmentModel.getEid(), fileStorSer.storeMultipleFile(equipmentDocs, fpath));
+			equipmentModel = equipmentConImpl.addEquipment(equipmentModel, equipmentIn.getTypeId(),
+					equipmentIn.getVendorId());
+			equipmentConImpl.addEquipmentDocs(equipmentModel.getEid(),
+					fileStorSer.storeMultipleFile(equipmentDocs, fpath));
 			return ResponseEntity.ok().body(EquipmentTransformer.EquipmentFromModel(equipmentModel));
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());
@@ -91,10 +94,17 @@ public class EquipmentController {
 	// UPDATE EQUIPMENT
 	@PreAuthorize("hasAnyRole('ADMIN','CONTRACTOR')")
 	@PutMapping(PathCte.UpdateEquipmentServletPath)
-	public ResponseEntity<String> updateEquipment(@RequestParam("data") String data) {
+	public ResponseEntity<APIEquipmentOut> updateEquipment(@RequestParam("data") String data,
+			@RequestParam("equipmentDocs") List<MultipartFile> equipmentDocs, @RequestParam("equipmentId") String id) {
 		try {
-
-			return ResponseEntity.ok().body("Equipment is updated");
+			String fpath = "images/docs";
+			APIEquipmentIn equipmentIn = new ObjectMapper().readValue(data, APIEquipmentIn.class);
+			Equipment equipmentModel = EquipmentTransformer.EquipmentToModel(equipmentIn);
+			equipmentModel = equipmentConImpl.updateEquipment(id,equipmentModel, equipmentIn.getTypeId(),
+					equipmentIn.getVendorId());
+			equipmentConImpl.addEquipmentDocs(equipmentModel.getEid(),
+					fileStorSer.storeMultipleFile(equipmentDocs, fpath));
+			return ResponseEntity.ok().body(EquipmentTransformer.EquipmentFromModel(equipmentModel));
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, e.getMessage());
 		}

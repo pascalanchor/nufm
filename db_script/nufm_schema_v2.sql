@@ -1,4 +1,4 @@
---drop tables
+rop tables
 drop table if exists specialization cascade;
 drop table if exists nufm_user cascade;
 drop table if exists nufm_role cascade;
@@ -405,11 +405,12 @@ create table contract(
     title varchar(128) not null,
     number varchar(128) not null,
     type_id varchar(128) not null,
-    start_date varchar(128) not null,
+    start_date date not null,
     end_date date not null,
     review_date date not null,
     notice_date date not null,
     template varchar(128) not null,
+    description varchar(128) not null,
     supplier varchar(128) not null,
     payment_method varchar(128) not null,
     credit_period int not null,

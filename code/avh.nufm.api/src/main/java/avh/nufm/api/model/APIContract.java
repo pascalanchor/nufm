@@ -16,9 +16,10 @@ public class APIContract {
 	private String number;
 	private String paymentMethod;
 	private Date reviewDate;
-	private String startDate;
+	private Date startDate;
 	private String supplier;
 	private String template;
 	private String title;
-	private String type;
+	private String typeId;
+	private String description;
 }

@@ -20,6 +20,8 @@ public class Contract implements Serializable {
 	@Column(name="credit_period")
 	private Integer creditPeriod;
 
+	private String description;
+
 	@Temporal(TemporalType.DATE)
 	@Column(name="end_date")
 	private Date endDate;
@@ -37,8 +39,9 @@ public class Contract implements Serializable {
 	@Column(name="review_date")
 	private Date reviewDate;
 
+	@Temporal(TemporalType.DATE)
 	@Column(name="start_date")
-	private String startDate;
+	private Date startDate;
 
 	private String supplier;
 
@@ -66,6 +69,14 @@ public class Contract implements Serializable {
 
 	public void setCreditPeriod(Integer creditPeriod) {
 		this.creditPeriod = creditPeriod;
+	}
+
+	public String getDescription() {
+		return this.description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public Date getEndDate() {
@@ -108,11 +119,11 @@ public class Contract implements Serializable {
 		this.reviewDate = reviewDate;
 	}
 
-	public String getStartDate() {
+	public Date getStartDate() {
 		return this.startDate;
 	}
 
-	public void setStartDate(String startDate) {
+	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
 

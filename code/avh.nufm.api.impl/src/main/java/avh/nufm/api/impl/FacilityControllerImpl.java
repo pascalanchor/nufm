@@ -91,7 +91,7 @@ public class FacilityControllerImpl {
 		List<FacilityEquipment> res = new ArrayList<>();
 		Optional<Facility> facility = repo.getFacrepo().findById(facilityId);
 		if(facility.isPresent()) {
-			List<FacilityEquipment> oldEqpmnts = repo.getFacilityEquipmentRepo().findByFacility(facility.get());
+			List<FacilityEquipment> oldEqpmnts = repo.getFacilityEquipmentRepo().findByFacilityId(facility.get().getEid());
 			repo.getFacilityEquipmentRepo().deleteAll(oldEqpmnts);
 		for(String e : equipmentIds) {
 		Optional<Equipment> eqpmnt = repo.getEqmtrepo().findById(e);

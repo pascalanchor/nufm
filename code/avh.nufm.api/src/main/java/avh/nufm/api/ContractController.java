@@ -43,7 +43,7 @@ public class ContractController {
 			String fpath = "images/docs";
 			APIContractIn contractIn = new ObjectMapper().readValue(data, APIContractIn.class);
 			Contract contractModel = ContractTransformer.ContractToModel(contractIn);
-			contractModel = contractConImpl.addContract(contractModel, contractIn.getType());
+			contractModel = contractConImpl.addContract(contractModel, contractIn.getTypeId());
 			contractConImpl.addContractDocs(contractModel.getEid(), fileStorSer.storeMultipleFile(contractDocs, fpath));
 			return ResponseEntity.ok().body(ContractTransformer.ContractFromModel(contractModel));
 		} catch (Exception e) {
@@ -98,7 +98,7 @@ public class ContractController {
 			String fpath = "images/docs";
 			APIContractIn contractIn = new ObjectMapper().readValue(data, APIContractIn.class);
 			Contract contractModel = ContractTransformer.ContractToModel(contractIn);
-			contractModel = contractConImpl.updateContract(id,contractModel, contractIn.getType());
+			contractModel = contractConImpl.updateContract(id,contractModel, contractIn.getTypeId());
 			contractConImpl.addContractDocs(contractModel.getEid(), fileStorSer.storeMultipleFile(contractDocs, fpath));
 			return ResponseEntity.ok().body(ContractTransformer.ContractFromModel(contractModel));
 		} catch (Exception e) {

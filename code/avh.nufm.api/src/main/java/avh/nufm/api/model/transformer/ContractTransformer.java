@@ -17,6 +17,7 @@ public class ContractTransformer {
 		res.setSupplier(cin.getSupplier());
 		res.setTemplate(cin.getTemplate());
 		res.setTitle(cin.getTitle());
+		res.setDescription(cin.getDescription());
 		return res;
 	}
 
