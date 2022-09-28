@@ -20,7 +20,15 @@ public class BudgetTransformer {
 	public static APIBudgetOut BudgetFromModel(Budget budget) {
 		APIBudgetOut res = new APIBudgetOut();
 		res.setEid(budget.getIid());
+		res.setName(budget.getName());
+		res.setDifference(budget.getDifference());
+		res.setIncomeTax(budget.getIncomeTax());
+		res.setEstimation(budget.getEstimation());
 		res.setSubmissionDate(budget.getSubmissionDate());
+		res.setYear(budget.getYear());
+		res.setMonth(budget.getMonth());
+		res.setFacilityId(budget.getFacilityId());
+		res.setTypeId(budget.getTypeId());
 		return res;
 	}
 }

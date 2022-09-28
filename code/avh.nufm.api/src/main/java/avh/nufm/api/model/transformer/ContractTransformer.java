@@ -24,6 +24,18 @@ public class ContractTransformer {
 	public static APIContractOut ContractFromModel(Contract contract) {
 		APIContractOut res = new APIContractOut();
 		res.setEid(contract.getEid());
+		res.setCreditPeriod(contract.getCreditPeriod());
+		res.setEndDate(contract.getEndDate());
+		res.setNoticeDate(contract.getNoticeDate());
+		res.setNumber(contract.getNumber());
+		res.setPaymentMethod(contract.getPaymentMethod());
+		res.setReviewDate(contract.getReviewDate());
+		res.setStartDate(contract.getStartDate());
+		res.setSupplier(contract.getSupplier());
+		res.setTemplate(contract.getTemplate());
+		res.setTitle(contract.getTitle());
+		res.setDescription(contract.getDescription());
+		res.setTypeId(contract.getTypeId());
 		return res;
 	}
 }

@@ -22,6 +22,15 @@ public class VendorTransformer {
 	public static APIVendorOut VendorFromModel(Vendor vendor) {
 		APIVendorOut res = new APIVendorOut();
 		res.setEid(vendor.getEid());
+		res.setCompanyName(vendor.getCompanyName());
+		res.setContactName(vendor.getContactName());
+		res.setEmail(vendor.getEmail());
+		res.setWebsite(vendor.getWebsite());
+		res.setPhoneNumber(vendor.getPhoneNumber());
+		res.setCity(vendor.getCity());
+		res.setStreet(vendor.getStreet());
+		res.setZipCode(vendor.getZipCode());
+		res.setLocation(vendor.getLocation());
 		return res;
 	}
 }

@@ -20,6 +20,15 @@ public class EquipmentTransformer {
 	public static APIEquipmentOut EquipmentFromModel(Equipment equipment) {
 		APIEquipmentOut res = new APIEquipmentOut();
 		res.setEid(equipment.getEid());
+		res.setName(equipment.getName());
+		res.setDescription(equipment.getDescription());
+		res.setLocation(equipment.getLocation());
+		res.setNumberOfItems(equipment.getNumberOfItems());
+		res.setPurchaseDate(equipment.getPurchaseDate());
+		res.setUnitCost(equipment.getUnitCost());
+		res.setZipCode(equipment.getZipCode());
+		res.setVendorId(equipment.getVendorId());
+		res.setTypeId(equipment.getTypeId());
 		return res;
 	}
 }
